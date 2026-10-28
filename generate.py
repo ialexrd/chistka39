@@ -1433,7 +1433,7 @@ def render_service_page(s):
     intro_html = "".join(f"<p>{esc(p)}</p>" for p in s["intro"])
     if s.get("hero_img"):
         # Картинка справа, наполовину уходит за край экрана
-        hero_side = f'<div class="hero-bleed"><img src="{asset("assets/img/" + s["hero_img"])}" alt="{esc(s["h1"])}" width="1086" height="406" fetchpriority="high"></div>'
+        hero_side = f'<div class="hero-bleed"><img src="{asset("assets/img/" + s["hero_img"])}" alt="{esc(s["h1"])}" width="1080" height="564" fetchpriority="high"></div>'
     else:
         hero_side = f"""<div class="hero-card">
       <h3>Цена от {s["price_from"]} ₽</h3>
