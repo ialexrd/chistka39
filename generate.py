@@ -35,7 +35,7 @@ SITE = {
         "Центральный район", "Московский район", "Ленинградский район",
         "Балтийский район", "Гурьевск", "Светлогорск", "Зеленоградск", "Пионерский",
     ],
-    "vk": "#", "telegram": "#", "instagram": "#",
+    "vk": "#", "telegram": "#", "max": "#", "instagram": "#",
     "year_placeholder": "[ГГГГ]",
 }
 
@@ -1421,7 +1421,8 @@ def render_index():
       <p class="hero-lead">Чистим диваны, кресла, матрасы, стулья, ковры и другой текстиль прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос и парогенератор, сертифицированная химия, выезд в день обращения.</p>
       <div class="hero-cta-row">
         <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary" data-track-call>{icon("phone", 17)} {SITE["phone_display"]}</a>
-        <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" class="btn btn-ghost">{icon("whatsapp", 17)} Написать в WhatsApp</a>
+        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-max.png" alt="" width="24" height="24"> Max</a>
+        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-telegram.png" alt="" width="24" height="24"> Telegram</a>
       </div>
       <div class="hero-trust">
         <div class="trust-item"><span class="dot">{icon("shield", 15)}</span>Гарантия на работы</div>
@@ -1429,14 +1430,10 @@ def render_index():
         <div class="trust-item"><span class="dot">{icon("clock", 15)}</span>{esc(SITE["work_hours_short"])}</div>
       </div>
     </div>
-    <div class="hero-card">
-      <h3>Популярные услуги</h3>
-      <p class="muted">Полный прайс — на странице «Цены»</p>
-      <ul class="hero-price-list">
-        {"".join(f'<li><span>{esc(x["nav"])}</span><b>от {x["price_from"]} ₽</b></li>' for x in [SERVICE_BY_SLUG["divana"], SERVICE_BY_SLUG["kresla"], SERVICE_BY_SLUG["matrasa"], SERVICE_BY_SLUG["kovrov"]])}
-      </ul>
-      <a href="ceny.html" class="btn btn-ghost btn-block">Смотреть весь прайс-лист</a>
-    </div>
+    <picture class="hero-photo">
+      <source srcset="assets/img/hero-master.webp" type="image/webp">
+      <img src="assets/img/hero-master.jpg" alt="Мастер выездной химчистки чистит диван у клиента дома в Калининграде" width="900" height="939" fetchpriority="high">
+    </picture>
   </div>
 </section>
 """

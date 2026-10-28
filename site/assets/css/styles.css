@@ -143,6 +143,9 @@ button{ font-family: inherit; cursor: pointer; }
 .trust-item{ display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 700; color: var(--color-ink); }
 .trust-item .dot{ width: 30px; height: 30px; border-radius: 50%; background: var(--color-primary-light); color: var(--color-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
+.btn-messenger img{ width: 24px; height: 24px; flex-shrink: 0; object-fit: contain; }
+.hero-photo{ display: block; }
+.hero-photo img{ width: 100%; height: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
 .hero-card{ background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 26px; }
 .hero-card h3{ font-size: 18px; margin-bottom: 4px; }
 .hero-card .muted{ color: var(--color-ink-soft); font-size: 13.5px; margin-bottom: 16px; }
@@ -293,6 +296,9 @@ button{ font-family: inherit; cursor: pointer; }
   .burger{ display: flex; }
   .header-phone{ display: none; }
   .hero{ padding: 34px 0 40px; }
+  .hero-cta-row .btn-primary{ flex: 1 1 100%; }
+  .hero-cta-row .btn-messenger{ flex: 1 1 0; }
+  .hero-photo img{ max-height: 420px; object-fit: cover; object-position: center 30%; }
   .section{ padding: 40px 0; }
   .steps, .grid-3, .grid-4, .grid-2{ grid-template-columns: 1fr; }
   .form-row{ grid-template-columns: 1fr; }
