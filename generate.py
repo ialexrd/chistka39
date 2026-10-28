@@ -9,6 +9,7 @@ import os
 import re
 import glob
 import json
+import hashlib
 import html as htmlmod
 from datetime import date
 
@@ -1036,6 +1037,11 @@ CORE_NAV_LINKS = NAV_LINKS  # alias for clarity below
 def esc(s):
     return htmlmod.escape(str(s), quote=True)
 
+def asset(path):
+    """Путь к файлу в site/ с ?v=<хэш содержимого>: после правки файла браузер не возьмёт старый из кэша."""
+    with open(os.path.join(OUT, path), "rb") as f:
+        return f"{path}?v={hashlib.md5(f.read()).hexdigest()[:8]}"
+
 def url(path):
     return SITE["domain"] + "/" + path
 
@@ -1260,7 +1266,7 @@ def page_shell(path, title, description, body, schemas=None):
 <meta property="og:locale" content="ru_RU">
 <meta name="twitter:card" content="summary">
 <meta name="robots" content="index, follow">
-<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="{asset("assets/css/styles.css")}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -1270,7 +1276,7 @@ def page_shell(path, title, description, body, schemas=None):
 {header(path)}
 {body}
 {footer()}
-<script src="assets/js/script.js" defer></script>
+<script src="{asset("assets/js/script.js")}" defer></script>
 </body>
 </html>"""
 
@@ -1351,8 +1357,8 @@ def hero_cta(order_href="#zayavka"):
     return f"""
       <div class="hero-cta-row">
         <a href="{order_href}" class="btn btn-primary">Оставить заявку</a>
-        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-max.png" alt="" width="24" height="24"> Max</a>
-        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-telegram.png" alt="" width="24" height="24"> Telegram</a>
+        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="24" height="24"> Max</a>
+        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="24" height="24"> Telegram</a>
       </div>"""
 
 def cta_banner(title_text="Готовы избавить мебель от пятен и запахов?", sub="Позвоните или напишите — рассчитаем стоимость и запишем мастера на удобное время."):
@@ -1386,7 +1392,7 @@ def types_block(s):
         return ""
     cards = []
     for name, img, price, desc in s["types"]:
-        media = f'<img src="assets/img/{img}" alt="{esc(name)} — химчистка в Калининграде" width="800" height="600" loading="lazy">'
+        media = f'<img src="{asset("assets/img/" + img)}" alt="{esc(name)} — химчистка в Калининграде" width="800" height="600" loading="lazy">'
         if price == "цена по фото":
             media += '<span class="type-card-question" aria-hidden="true">?</span>'
 
@@ -1590,8 +1596,8 @@ def render_index():
       </div>
     </div>
     <picture class="hero-photo">
-      <source srcset="assets/img/hero-master.webp" type="image/webp">
-      <img src="assets/img/hero-master.jpg" alt="Мастер выездной химчистки чистит диван у клиента дома в Калининграде" width="900" height="939" fetchpriority="high">
+      <source srcset="{asset("assets/img/hero-master.webp")}" type="image/webp">
+      <img src="{asset("assets/img/hero-master.jpg")}" alt="Мастер выездной химчистки чистит диван у клиента дома в Калининграде" width="900" height="939" fetchpriority="high">
     </picture>
   </div>
 </section>
