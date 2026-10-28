@@ -25,6 +25,14 @@
     el.textContent = new Date().getFullYear();
   });
 
+  // Кнопка «Оставить заявку» на карточке вида — подставляем его в комментарий формы
+  document.querySelectorAll('[data-order-item]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var comment = document.querySelector('#f-comment');
+      if (comment) comment.value = btn.getAttribute('data-order-item') + '. ' + comment.value.replace(/^[^.]*\. /, '');
+    });
+  });
+
   // Обработка форм заявки — локально формируем сообщение для WhatsApp
   // (на сайте нет бэкенда; после подключения хостинга форму можно
   // переключить на отправку в CRM/почту/Telegram-бота).
