@@ -103,7 +103,7 @@ svc(
         ("Прямой диван", "divan-pryamoy.webp", "от 3000 ₽", "Могут быть разные размеры и механизмы, спинка может состоять из нескольких съёмных подушек."),
         ("Угловой диван", "divan-uglovoy.webp", "от 3500 ₽", "Может быть разной длины, с разными механизмами раскладки, спинка может состоять из съёмных подушек."),
         ("П-образный диван", "divan-p-obrazny.webp", "от 4500 ₽", "Разные размеры и форма."),
-        ("Диван другой формы", None, "цена по фото", "Модульный, круглый, кушетка, канапе или нестандартная модель — пришлите фото, рассчитаем стоимость до выезда."),
+        ("Диван другой формы", "divan-drugoy-formy.webp", "цена по фото", "Модульный, круглый, кушетка, канапе или нестандартная модель — пришлите фото, рассчитаем стоимость до выезда."),
     ],
     intro=[
         "Диван — самый нагружаемый предмет мебели в доме: на нём едят, спят, играют дети и лежат домашние животные. За несколько месяцев в обивке накапливаются пыль, жир, бактерии и пылевые клещи, которые не видны глазу, но заметны по запаху и потускневшему цвету ткани.",
@@ -640,6 +640,120 @@ svc(
     related=["pyatna-zapahi", "zapaha-sigaret", "zapaha-syrosti-i-pleseni"],
 )
 
+svc(
+    slug="kuhonnogo-ugolka", icon="sofa", nav="Химчистка кухонного уголка", acc="химчистку кухонного уголка", h1="Химчистка кухонного уголка на дому в Калининграде",
+    title="Химчистка кухонного уголка в Калининграде — цена от 2000 ₽ | выезд на дом",
+    description="Выездная химчистка мягкого кухонного уголка в Калининграде: убираем жирные пятна, следы еды и запахи кухни. Чистка на месте, без разборки и вывоза.",
+    lead="Чистим мягкие кухонные уголки и диванчики прямо на кухне — от жира, пятен от еды и въевшихся кухонных запахов.",
+    price_from="2000",
+    intro=[
+        "Кухонный уголок пачкается быстрее любой другой мягкой мебели: рядом готовят и едят, на обивку попадают жир, соусы, чай и кофе, а ткань впитывает запахи кухни. Обычной влажной уборкой такие загрязнения не вывести — жир и белковые пятна уходят только профессиональными составами.",
+        "Мастер приезжает со своим оборудованием и чистит уголок на месте: сиденья, спинки, боковины и швы. Разбирать мебель и двигать кухню не нужно, а после сушки уголком можно пользоваться в тот же день.",
+    ],
+    problems=[
+        "Жирные пятна на сиденье и спинке", "Следы соусов, чая, кофе и вина",
+        "Запах кухни, въевшийся в обивку", "Засаленные края и швы",
+        "Крошки и мусор в стыках подушек", "Пятна от детского питания",
+        "Потемнение светлой ткани", "Липкость экокожи",
+    ],
+    steps=[
+        ("Осмотр и подбор средства", "Определяем тип обивки и характер пятен, проверяем состав на незаметном участке."),
+        ("Сухая чистка", "Вычищаем крошки и пыль из стыков, швов и под подушками."),
+        ("Обезжиривание и экстракция", "Растворяем жир специальными составами, затем промываем обивку экстрактором."),
+        ("Сушка", "Просушиваем уголок турбинами, чтобы им можно было пользоваться уже в тот же день."),
+    ],
+    price_rows=[
+        ("Кухонный уголок (прямой или угловой)", "от 2000 ₽"),
+        ("Отдельные съёмные подушки", "от 300 ₽/шт"),
+        ("Стулья к уголку в комплекте", "от 300 ₽/шт"),
+        ("Кожаная / экокожаная обивка", "+50% к стоимости"),
+    ],
+    price_note="Итоговая цена зависит от размера уголка, материала и степени загрязнения — мастер согласует её до начала работ.",
+    faq=[
+        ("Отойдут ли старые жирные пятна?", "В большинстве случаев да: жир растворяется щелочными составами. Очень старые пятна мастер оценит на месте и честно скажет, какой результат реален."),
+        ("Нужно ли снимать уголок с места?", "Нет, чистим прямо на кухне. Достаточно освободить уголок от вещей и обеспечить подход к нему."),
+        ("Сколько сохнет кухонный уголок?", "Обычно 3–5 часов с проветриванием. Турбины ускоряют сушку."),
+        ("Можно ли почистить уголок вместе со стульями?", "Да, при заказе комплекта стулья к уголку считаются по сниженной цене."),
+    ],
+    related=["divana", "stulev", "nepriyatnogo-zapaha"],
+)
+
+svc(
+    slug="kafe-restoranov", filename="himchistka-mebeli-v-kafe-i-restoranah.html", icon="chair", nav="Химчистка мебели в кафе и ресторанах", acc="химчистку мебели в кафе и ресторане", h1="Химчистка мебели в кафе и ресторанах Калининграда",
+    title="Химчистка мебели в кафе и ресторане в Калининграде — диваны, стулья, банкетки",
+    description="Химчистка мягкой мебели для кафе, ресторанов и баров в Калининграде: диваны, банкетки, стулья. Работаем ночью и в выходные, по договору с юрлицами.",
+    lead="Чистим диваны, банкетки и стулья в заведениях — ночью или до открытия, чтобы не мешать гостям.",
+    price_from="250",
+    intro=[
+        "Мягкая мебель в кафе и ресторане работает в самом жёстком режиме: десятки гостей в день, еда, напитки, соусы. Через пару месяцев светлые диваны и стулья темнеют, появляются пятна и запах — и гости это замечают раньше владельца.",
+        "Мы приезжаем в нерабочее время заведения: ночью, рано утром или в выходной. Чистим диваны, банкетки, стулья и кресла на месте, работаем по договору и даём закрывающие документы. Можно настроить регулярную чистку по графику.",
+    ],
+    problems=[
+        "Пятна от еды, соусов и напитков", "Засаленные спинки и подлокотники",
+        "Запах кухни и табака в обивке", "Потемнение светлой ткани",
+        "Липкость стульев из экокожи", "Пятна от детских стульчиков",
+        "Грязь в стыках банкеток", "Неопрятный вид мебели перед проверками",
+    ],
+    steps=[
+        ("Оценка объёма", "Считаем посадочные места, диваны и банкетки, готовим расчёт."),
+        ("Время без гостей", "Планируем работу ночью, до открытия или в выходной день."),
+        ("Чистка зала", "Обрабатываем всю мягкую мебель по единой технологии, чтобы зал выглядел одинаково."),
+        ("Сушка и приёмка", "Просушиваем мебель турбинами к открытию, сдаём работу и документы."),
+    ],
+    price_rows=[
+        ("Стул с мягким сиденьем", "от 250 ₽/шт"),
+        ("Банкетка / диван (за посадочное место)", "от 500 ₽"),
+        ("Кресло", "от 700 ₽"),
+        ("Регулярная чистка по договору", "индивидуально"),
+    ],
+    price_note="Для заведений с регулярной чисткой — индивидуальные условия и скидка за объём.",
+    faq=[
+        ("Можете ли вы работать ночью?", "Да, для общепита это обычный режим: приезжаем после закрытия и заканчиваем к открытию."),
+        ("Успеет ли мебель высохнуть к открытию?", "Да, при ночной чистке мебель успевает высохнуть благодаря турбинам и проветриванию."),
+        ("Работаете ли вы по безналу?", "Да, заключаем договор с юрлицом или ИП, работаем по счёту и даём закрывающие документы."),
+        ("Как часто нужно чистить мебель в кафе?", "Обычно раз в 2–3 месяца, в заведениях с большим потоком гостей — чаще."),
+    ],
+    related=["stulev", "mebeli-dlya-biznesa", "nepriyatnogo-zapaha"],
+)
+
+svc(
+    slug="mebeli-dlya-biznesa", filename="himchistka-mebeli-dlya-biznesa.html", icon="office", nav="Химчистка мебели для бизнеса", acc="химчистку мебели для бизнеса", h1="Химчистка мебели для бизнеса в Калининграде",
+    title="Химчистка мебели для бизнеса в Калининграде — гостиницы, посуточные квартиры, салоны",
+    description="Химчистка мягкой мебели для гостиниц, посуточных квартир, салонов красоты, клиник и других компаний в Калининграде и области. Договор, график, закрывающие документы.",
+    lead="Чистим мебель для гостиниц, посуточных квартир, салонов и клиник — по договору и по графику, без простоя бизнеса.",
+    price_from="1500",
+    intro=[
+        "Для бизнеса чистая мебель — это отзывы и повторные клиенты. В посуточной квартире гость оценивает диван и матрас за первые минуты, в салоне красоты и клинике — кресла в зоне ожидания.",
+        "Мы работаем с владельцами посуточных квартир, гостиницами и апарт-отелями Калининграда, Зеленоградска и Светлогорска, а также с салонами, клиниками и шоурумами. Приезжаем между заездами или в нерабочее время, работаем по договору и можем чистить мебель регулярно по графику.",
+    ],
+    problems=[
+        "Пятна и запахи после гостей", "Подготовка квартиры к сезону",
+        "Матрасы и диваны в посуточной аренде", "Кресла в зоне ожидания",
+        "Запах табака или животных после заезда", "Плохие отзывы про чистоту",
+        "Регулярная чистка нескольких объектов", "Мебель в шоуруме и на выставке",
+    ],
+    steps=[
+        ("Расчёт объектов", "Собираем список объектов и мебели, считаем стоимость и график."),
+        ("Окно без гостей", "Приезжаем между заездами или в нерабочие часы."),
+        ("Чистка", "Чистим диваны, матрасы, кресла и стулья, при необходимости убираем запахи."),
+        ("Отчёт и документы", "Присылаем фото результата, работаем по договору с закрывающими документами."),
+    ],
+    price_rows=[
+        ("Выезд на объект (минимальный заказ)", "от 1500 ₽"),
+        ("Диван в посуточной квартире", "от 2000 ₽"),
+        ("Матрас", "от 1200 ₽"),
+        ("Регулярное обслуживание нескольких объектов", "индивидуально"),
+    ],
+    price_note="Для постоянных клиентов и сетей объектов — индивидуальные условия и скидка за объём.",
+    faq=[
+        ("Успеете между выездом и заездом гостей?", "Обычно да: чистка дивана занимает около часа, сушка 3–5 часов. Время согласуем заранее под ваше расписание."),
+        ("Работаете ли вы по области?", "Да, выезжаем в Зеленоградск, Светлогорск, Пионерский, Гурьевск и другие города области."),
+        ("Можно ли договориться о регулярной чистке?", "Да, составим график, например перед сезоном и после него, и закрепим условия договором."),
+        ("Даёте ли вы закрывающие документы?", "Да, работаем с юрлицами и ИП по договору и счёту."),
+    ],
+    related=["divana", "matrasa", "nepriyatnogo-zapaha"],
+)
+
 # =========================================================================
 # 2.1 ОТДЕЛЬНЫЕ SEO-СТРАНИЦЫ ПО ВЫВЕДЕНИЮ ЗАПАХОВ (category="zapahi")
 # =========================================================================
@@ -858,7 +972,7 @@ svc(
 svc(
     category="zapahi",
     slug="nepriyatnogo-zapaha", filename="udalenie-nepriyatnogo-zapaha-s-mebeli.html", icon="spark",
-    nav="Неприятный запах", acc="удаление неприятного запаха", h1="Удаление неприятного запаха с мебели в Калининграде",
+    nav="Выведение неприятных запахов", acc="удаление неприятного запаха", h1="Удаление неприятного запаха с мебели в Калининграде",
     title="Удаление неприятного запаха с мебели в Калининграде — цена от 400 ₽",
     description="Определяем причину неприятного запаха мебели и устраняем её: пот, еда, табак, животные, сырость. Энзимные составы и озонирование. Выезд по Калининграду в день обращения.",
     lead="Определяем причину запаха и убираем его в источнике — от запаха пота и еды до мочи, животных, табака и сырости.",
@@ -899,6 +1013,13 @@ svc(
 
 SERVICE_BY_SLUG = {s["slug"]: s for s in SERVICES}
 
+# Услуги, которые показываются на главной, в меню, подвале, на «Услугах» и в прайсе.
+# Остальные страницы генерируются, но в списках не выводятся.
+MAIN_SERVICES = [SERVICE_BY_SLUG[x] for x in (
+    "divana", "matrasa", "stulev", "kuhonnogo-ugolka", "ofisnoy-mebeli",
+    "kafe-restoranov", "mebeli-dlya-biznesa", "kovrolina", "nepriyatnogo-zapaha",
+)]
+
 NAV_LINKS = [
     ("index.html", "Главная"),
     ("uslugi.html", "Услуги"),
@@ -929,13 +1050,7 @@ def ld(schema):
 # 5. HEADER / FOOTER / БЛОКИ, ОБЩИЕ ДЛЯ ВСЕХ СТРАНИЦ
 # =========================================================================
 def header(current_path):
-    chistka_services = [s for s in SERVICES if s["category"] == "chistka"]
-    zapahi_services = [s for s in SERVICES if s["category"] == "zapahi"]
-    dropdown_items = (
-        "".join(f'<a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a>' for s in chistka_services)
-        + '<div class="dropdown-divider">Устранение запахов</div>'
-        + "".join(f'<a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a>' for s in zapahi_services)
-    )
+    dropdown_items = "".join(f'<a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a>' for s in MAIN_SERVICES)
     nav_items = ""
     for href, label in NAV_LINKS:
         current = ' aria-current="page"' if href == current_path else ""
@@ -949,11 +1064,7 @@ def header(current_path):
         else:
             nav_items += f'<a href="{href}"{current}>{label}</a>'
 
-    mobile_services = (
-        "".join(f'<a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a>' for s in chistka_services)
-        + '<div class="dropdown-divider">Устранение запахов</div>'
-        + "".join(f'<a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a>' for s in zapahi_services)
-    )
+    mobile_services = dropdown_items
     mobile_core = "".join(
         f'<a href="{href}">{label}</a>' for href, label in NAV_LINKS if href != "uslugi.html"
     )
@@ -1010,11 +1121,9 @@ def header(current_path):
 """
 
 def footer():
-    chistka_services = [s for s in SERVICES if s["category"] == "chistka"]
     service_links = "".join(
-        f'<li><a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a></li>' for s in chistka_services[:7]
+        f'<li><a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a></li>' for s in MAIN_SERVICES
     )
-    service_links += f'<li><a href="{service_filename("nepriyatnogo-zapaha")}">Устранение запахов →</a></li>'
     district_chips = "".join(f'<span class="chip">{esc(d)}</span>' for d in SITE["districts"])
     return f"""
 <footer class="site-footer">
@@ -1169,9 +1278,12 @@ def page_shell(path, title, description, body, schemas=None):
 # 6. ПОВТОРЯЮЩИЕСЯ БЛОКИ КОНТЕНТА
 # =========================================================================
 def order_form_panel(preselect_slug=None):
+    services = list(MAIN_SERVICES)
+    if preselect_slug and SERVICE_BY_SLUG[preselect_slug] not in services:
+        services.append(SERVICE_BY_SLUG[preselect_slug])
     options = "".join(
         f'<option value="{esc(s["nav"])}"' + (" selected" if s["slug"] == preselect_slug else "") + f'>{esc(s["nav"])}</option>'
-        for s in SERVICES
+        for s in services
     )
     return f"""
 <div class="order-panel">
@@ -1234,6 +1346,15 @@ def related_block(slugs):
     )
     return f'<div class="related-list">{links}</div>'
 
+def hero_cta(order_href="#zayavka"):
+    """Кнопки первого экрана: заявка + мессенджеры Max и Telegram."""
+    return f"""
+      <div class="hero-cta-row">
+        <a href="{order_href}" class="btn btn-primary">Оставить заявку</a>
+        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-max.png" alt="" width="24" height="24"> Max</a>
+        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-telegram.png" alt="" width="24" height="24"> Telegram</a>
+      </div>"""
+
 def cta_banner(title_text="Готовы избавить мебель от пятен и запахов?", sub="Позвоните или напишите — рассчитаем стоимость и запишем мастера на удобное время."):
     return f"""
 <div class="cta-banner">
@@ -1265,8 +1386,10 @@ def types_block(s):
         return ""
     cards = []
     for name, img, price, desc in s["types"]:
-        media = (f'<img src="assets/img/{img}" alt="{esc(name)} — химчистка в Калининграде" width="800" height="600" loading="lazy">'
-                 if img else f'<span class="type-card-placeholder">{icon(s["icon"], 56)}</span>')
+        media = f'<img src="assets/img/{img}" alt="{esc(name)} — химчистка в Калининграде" width="800" height="600" loading="lazy">'
+        if price == "цена по фото":
+            media += '<span class="type-card-question" aria-hidden="true">?</span>'
+
         cards.append(f"""
 <div class="card type-card">
   <div class="type-card-media">{media}</div>
@@ -1309,10 +1432,7 @@ def render_service_page(s):
       <span class="eyebrow">{icon("drop", 15)} Выезд в {esc(SITE["city"])} и области — в день обращения</span>
       <h1>{esc(s["h1"])}</h1>
       <p class="hero-lead">{esc(s["lead"])}</p>
-      <div class="hero-cta-row">
-        <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary" data-track-call>{icon("phone", 17)} {SITE["phone_display"]}</a>
-        <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" class="btn btn-ghost">{icon("whatsapp", 17)} Заказать в WhatsApp</a>
-      </div>
+      {hero_cta()}
       <div class="hero-trust">
         <div class="trust-item"><span class="dot">{icon("shield", 15)}</span>Гарантия на выполненные работы</div>
         <div class="trust-item"><span class="dot">{icon("leaf", 15)}</span>Сертифицированная гипоаллергенная химия</div>
@@ -1461,12 +1581,8 @@ def render_index():
     <div>
       <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
       <h1>Выездная химчистка мебели в Калининграде на дому и в офисе</h1>
-      <p class="hero-lead">Чистим диваны, кресла, матрасы, стулья, ковры и другой текстиль прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос и парогенератор, сертифицированная химия, выезд в день обращения.</p>
-      <div class="hero-cta-row">
-        <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary" data-track-call>{icon("phone", 17)} {SITE["phone_display"]}</a>
-        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-max.png" alt="" width="24" height="24"> Max</a>
-        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="assets/img/icon-telegram.png" alt="" width="24" height="24"> Telegram</a>
-      </div>
+      <p class="hero-lead">Чистим диваны, матрасы, стулья, кухонные уголки и ковролин прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос и парогенератор, сертифицированная химия, выезд в день обращения.</p>
+      {hero_cta()}
       <div class="hero-trust">
         <div class="trust-item"><span class="dot">{icon("shield", 15)}</span>Гарантия на работы</div>
         <div class="trust-item"><span class="dot">{icon("leaf", 15)}</span>Гипоаллергенная химия</div>
@@ -1481,34 +1597,16 @@ def render_index():
 </section>
 """
 
-    chistka_services = [s for s in SERVICES if s["category"] == "chistka"]
-    zapahi_services = [s for s in SERVICES if s["category"] == "zapahi"]
-
     services_grid = f"""
 <section class="section" id="uslugi">
   <div class="container">
     <div class="section-head">
       <span class="tag">Услуги</span>
-      <h2>Химчистка мебели и текстиля — по видам</h2>
+      <h2>Химчистка мебели — по видам</h2>
       <p>Выберите свою услугу, чтобы увидеть подробности процесса, типичные загрязнения и точные цены.</p>
     </div>
-    <div class="grid grid-4">
-      {"".join(service_card(s) for s in chistka_services)}
-    </div>
-  </div>
-</section>
-"""
-
-    zapahi_grid = f"""
-<section class="section section-soft" id="zapahi">
-  <div class="container">
-    <div class="section-head">
-      <span class="tag">Отдельная проблема</span>
-      <h2>Выведение неприятных запахов</h2>
-      <p>Запах мочи, кошки, собаки, табака или сырости — у каждой причины своя технология обработки. Выберите свой случай или закажите общую диагностику запаха.</p>
-    </div>
     <div class="grid grid-3">
-      {"".join(service_card(s) for s in zapahi_services)}
+      {"".join(service_card(s) for s in MAIN_SERVICES)}
     </div>
   </div>
 </section>
@@ -1599,7 +1697,7 @@ def render_index():
 """
 
     order = f"""
-<section class="section">
+<section class="section" id="zayavka">
   <div class="container two-col">
     <div>
       <span class="tag">Заявка</span>
@@ -1616,12 +1714,12 @@ def render_index():
 </section>
 """
 
-    body = hero + services_grid + zapahi_grid + steps + benefits + districts + reviews + order + faq
+    body = hero + services_grid + steps + benefits + districts + reviews + order + faq
     schemas = [local_business_schema()]
     return path, page_shell(
         path,
-        "Химчистка мебели на дому в Калининграде — выездная химчистка диванов, кресел, матрасов | " + SITE["short_name"],
-        "Выездная химчистка мебели в Калининграде: диваны, кресла, матрасы, стулья, ковры, шторы. Выезд мастера в день обращения, сертифицированная химия, гарантия результата.",
+        "Химчистка мебели на дому в Калининграде — выездная химчистка диванов, матрасов, стульев | " + SITE["short_name"],
+        "Выездная химчистка мебели в Калининграде: диваны, матрасы, стулья, кухонные уголки, офисная мебель и мебель для кафе. Выезд мастера в день обращения, сертифицированная химия, гарантия результата.",
         body,
         schemas,
     )
@@ -1637,33 +1735,16 @@ def render_uslugi():
   <div class="container">
     <span class="eyebrow">{icon("drop",15)} Полный список услуг</span>
     <h1>Химчистка мебели в Калининграде — все услуги</h1>
-    <p class="hero-lead">Работаем с мягкой мебелью, текстилем, коврами и автомобильными салонами. Выберите услугу ниже, чтобы посмотреть процесс чистки, типичные загрязнения и цены.</p>
+    <p class="hero-lead">Чистим мягкую мебель дома, в офисе, в кафе и на объектах бизнеса. Выберите услугу ниже, чтобы посмотреть процесс чистки, типичные загрязнения и цены.</p>
+      {hero_cta("kontakty.html#zayavka")}
   </div>
 </section>
 """
-    chistka_services = [s for s in SERVICES if s["category"] == "chistka"]
-    zapahi_services = [s for s in SERVICES if s["category"] == "zapahi"]
     grid = f"""
 <section class="section">
   <div class="container">
-    <div class="section-head left">
-      <span class="tag">Химчистка</span>
-      <h2>Химчистка мебели по видам</h2>
-    </div>
-    <div class="grid grid-4">
-      {"".join(service_card(s) for s in chistka_services)}
-    </div>
-  </div>
-</section>
-<section class="section section-soft">
-  <div class="container">
-    <div class="section-head left">
-      <span class="tag">Отдельная проблема</span>
-      <h2>Выведение неприятных запахов</h2>
-      <p>Если беспокоит именно запах, а не загрязнение обивки — выберите свою причину для точной технологии и цены.</p>
-    </div>
     <div class="grid grid-3">
-      {"".join(service_card(s) for s in zapahi_services)}
+      {"".join(service_card(s) for s in MAIN_SERVICES)}
     </div>
   </div>
 </section>
@@ -1673,7 +1754,7 @@ def render_uslugi():
     return path, page_shell(
         path,
         "Все услуги химчистки мебели в Калининграде — полный список и цены | " + SITE["short_name"],
-        "Полный список услуг выездной химчистки мебели в Калининграде: диваны, кресла, матрасы, стулья, ковры, ковролин, шторы, коляски, авто, офисная мебель, выведение запахов.",
+        "Услуги выездной химчистки мебели в Калининграде: диваны, матрасы, стулья, кухонные уголки, офисная мебель, мебель в кафе и для бизнеса, ковролин, выведение запахов.",
         body,
         schemas,
     )
@@ -1690,6 +1771,7 @@ def render_onas():
     <span class="eyebrow">{icon("shield",15)} О компании</span>
     <h1>{esc(SITE["short_name"])} — выездная химчистка мебели в Калининграде</h1>
     <p class="hero-lead">Мы приезжаем с профессиональным оборудованием прямо к вам домой или в офис и чистим мебель без вывоза — быстро, безопасно и с гарантией результата.</p>
+      {hero_cta("kontakty.html#zayavka")}
   </div>
 </section>
 """
@@ -1741,16 +1823,12 @@ def render_ceny():
     <span class="eyebrow">{icon("drop",15)} Прайс-лист</span>
     <h1>Цены на химчистку мебели в Калининграде</h1>
     <p class="hero-lead">Ниже — ориентировочные цены по каждой услуге. Итоговая стоимость зависит от размера предмета, материала обивки и степени загрязнения и всегда согласуется с вами до начала работ.</p>
+      {hero_cta("kontakty.html#zayavka")}
   </div>
 </section>
 """
     tables = ""
-    current_category = None
-    category_titles = {"chistka": "Химчистка мебели", "zapahi": "Устранение запахов"}
-    for s in SERVICES:
-        if s["category"] != current_category:
-            current_category = s["category"]
-            tables += f'<h2 style="margin-top:44px;">{esc(category_titles.get(current_category, ""))}</h2>'
+    for s in MAIN_SERVICES:
         tables += f"""
 <div style="margin-bottom:34px;">
   <h3 style="margin-bottom:12px;"><a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a></h3>
@@ -1773,7 +1851,7 @@ def render_ceny():
     return path, page_shell(
         path,
         "Цены на химчистку мебели в Калининграде — прайс-лист 2026 | " + SITE["short_name"],
-        "Актуальные цены на выездную химчистку мебели в Калининграде: диваны, кресла, матрасы, стулья, ковры, шторы, автомобильные салоны и другое.",
+        "Актуальные цены на выездную химчистку мебели в Калининграде: диваны, матрасы, стулья, кухонные уголки, офисная мебель, мебель для кафе и бизнеса, ковролин.",
         body,
         schemas,
     )
@@ -1789,7 +1867,8 @@ def render_kontakty():
   <div class="container">
     <span class="eyebrow">{icon("mappin",15)} Контакты</span>
     <h1>Свяжитесь с нами</h1>
-    <p class="hero-lead">Звоните, пишите в WhatsApp или оставьте заявку — согласуем удобное время выезда мастера.</p>
+    <p class="hero-lead">Звоните, пишите в Max или Telegram или оставьте заявку — согласуем удобное время выезда мастера.</p>
+      {hero_cta()}
   </div>
 </section>
 """
@@ -1811,7 +1890,7 @@ def render_kontakty():
         breadcrumbs_html(breadcrumbs)
         + hero
         + f'<section class="section"><div class="container">{info_cards}{districts}</div></section>'
-        + f'<section class="section section-soft"><div class="container two-col"><div><h2>Оставить заявку</h2><p>Заполните форму — перезвоним для уточнения деталей и запишем мастера на удобное время.</p></div>{order_form_panel()}</div></section>'
+        + f'<section class="section section-soft" id="zayavka"><div class="container two-col"><div><h2>Оставить заявку</h2><p>Заполните форму — перезвоним для уточнения деталей и запишем мастера на удобное время.</p></div>{order_form_panel()}</div></section>'
     )
     schemas = [breadcrumb_schema(breadcrumbs), local_business_schema()]
     return path, page_shell(
