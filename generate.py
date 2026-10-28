@@ -1267,6 +1267,9 @@ def page_shell(path, title, description, body, schemas=None):
 <meta property="og:locale" content="ru_RU">
 <meta name="twitter:card" content="summary">
 <meta name="robots" content="index, follow">
+<link rel="icon" href="{asset("favicon.ico")}" sizes="any">
+<link rel="icon" href="{asset("favicon.svg")}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{asset("apple-touch-icon.png")}">
 <link rel="stylesheet" href="{asset("assets/css/styles.css")}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
