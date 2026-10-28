@@ -98,6 +98,7 @@ svc(
     description="Выездная химчистка дивана в Калининграде: удаляем пятна, запахи и пылевых клещей прямо у вас дома. Диван сохнет 3–5 часов. Выезд мастера в день обращения, гарантия результата.",
     lead="Профессиональная чистка тканевой и кожаной обивки диванов без вывоза из квартиры — сохраняем форму, цвет и структуру ткани.",
     price_from="2000",
+    hero_img="hero-divan.webp",
     types=[
         ("Диван-книжка", "divan-knizhka.webp", "от 2000 ₽", "Состоит из двух частей, механизм «клик-кляк»."),
         ("Диван еврокнижка", "divan-evroknizhka.webp", "от 3000 ₽", "Спинка состоит из двух и более подушек, при раскладывании спинка падает вперёд."),
@@ -1430,6 +1431,18 @@ def render_service_page(s):
     path = service_filename(s["slug"])
     breadcrumbs = [("Главная", "index.html"), ("Услуги", "uslugi.html"), (s["nav"], None)]
     intro_html = "".join(f"<p>{esc(p)}</p>" for p in s["intro"])
+    if s.get("hero_img"):
+        # Картинка справа, наполовину уходит за край экрана
+        hero_side = f'<div class="hero-bleed"><img src="{asset("assets/img/" + s["hero_img"])}" alt="{esc(s["h1"])}" width="898" height="419" fetchpriority="high"></div>'
+    else:
+        hero_side = f"""<div class="hero-card">
+      <h3>Цена от {s["price_from"]} ₽</h3>
+      <p class="muted">Итоговая стоимость зависит от размера, материала и загрязнения — фиксируется мастером до начала работ.</p>
+      <ul class="hero-price-list">
+        {"".join(f'<li><span>{esc(n)}</span><b>{esc(p)}</b></li>' for n, p in s["price_rows"][:4])}
+      </ul>
+      <a href="ceny.html" class="btn btn-ghost btn-block">Смотреть весь прайс-лист</a>
+    </div>"""
 
     hero = f"""
 <section class="hero">
@@ -1445,14 +1458,7 @@ def render_service_page(s):
         <div class="trust-item"><span class="dot">{icon("truck", 15)}</span>Свой выезд, без визита в химчистку</div>
       </div>
     </div>
-    <div class="hero-card">
-      <h3>Цена от {s["price_from"]} ₽</h3>
-      <p class="muted">Итоговая стоимость зависит от размера, материала и загрязнения — фиксируется мастером до начала работ.</p>
-      <ul class="hero-price-list">
-        {"".join(f'<li><span>{esc(n)}</span><b>{esc(p)}</b></li>' for n, p in s["price_rows"][:4])}
-      </ul>
-      <a href="ceny.html" class="btn btn-ghost btn-block">Смотреть весь прайс-лист</a>
-    </div>
+    {hero_side}
   </div>
 </section>
 """
