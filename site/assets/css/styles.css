@@ -148,7 +148,7 @@ button{ font-family: inherit; cursor: pointer; }
 .hero-photo img{ width: 100%; height: auto; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
 .hero:has(.hero-bleed){ position: relative; overflow: hidden; }
 .hero-bleed{ min-height: 360px; }
-.hero-bleed img{ position: absolute; right: 0; top: 50%; transform: translate(50%, -50%); width: min(70vw, 1000px); max-width: none; height: auto; }
+.hero-bleed img{ position: absolute; right: 0; top: 50%; transform: translate(50%, -50%); width: min(60vw, 860px); max-width: none; height: auto; }
 .hero-card{ background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 26px; }
 .hero-card h3{ font-size: 18px; margin-bottom: 4px; }
 .hero-card .muted{ color: var(--color-ink-soft); font-size: 13.5px; margin-bottom: 16px; }
