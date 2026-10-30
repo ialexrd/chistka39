@@ -57,14 +57,18 @@ def icon(name, size=24, cls=""):
         "mappin": '<path d="M12 21s7-6.2 7-11.5A7 7 0 105 9.5C5 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="9.3" r="2.3" fill="none" stroke="currentColor" stroke-width="1.6"/>',
         "spark": '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
         "chevron": '<path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
-        "sofa": '<path d="M4 12V9a2 2 0 012-2h12a2 2 0 012 2v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3 12h18v4a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 16z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M4.5 17.5V19M19.5 17.5V19" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
-        "chair": '<path d="M6 4h12l-1 8H7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M6 12l-1.5 8M18 12l1.5 8M6.5 16h11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
-        "bed": '<path d="M3 19v-7a2 2 0 012-2h14a2 2 0 012 2v7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3 16h18M5 10V7a1 1 0 011-1h5v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+        "sofa": '<g fill="currentColor"><rect x="5.3" y="7.5" width="6.4" height="5" rx="1.2"/><rect x="12.3" y="7.5" width="6.4" height="5" rx="1.2"/><rect x="1" y="10" width="3.6" height="7.5" rx="1.6"/><rect x="19.4" y="10" width="3.6" height="7.5" rx="1.6"/><rect x="5.3" y="13.2" width="13.4" height="4.3" rx="1"/><rect x="2.2" y="17.5" width="1.4" height="1.8" rx=".4"/><rect x="20.4" y="17.5" width="1.4" height="1.8" rx=".4"/></g>',
+        "chair": '<g fill="currentColor"><rect x="7" y="2.5" width="10" height="8.5" rx="1.2"/><rect x="6" y="11.8" width="12" height="2.4" rx=".7"/><rect x="7" y="14.2" width="1.6" height="7.3" rx=".4"/><rect x="15.4" y="14.2" width="1.6" height="7.3" rx=".4"/></g>',
+        "bed": '<g fill="currentColor"><rect x="1.5" y="5" width="2.3" height="15" rx=".6"/><rect x="20.2" y="9.5" width="2.3" height="10.5" rx=".6"/><ellipse cx="7.3" cy="10.3" rx="2.4" ry="1.1"/><ellipse cx="13" cy="10.3" rx="2.4" ry="1.1"/><rect x="4.6" y="12" width="14.8" height="3" rx=".8"/><rect x="4.6" y="15.8" width="14.8" height="2" rx=".4"/></g>',
+        "armchair": '<g fill="currentColor"><rect x="7.6" y="4.5" width="8.8" height="7.5" rx="2.2"/><rect x="3" y="8.5" width="3.8" height="9" rx="1.9"/><rect x="17.2" y="8.5" width="3.8" height="9" rx="1.9"/><rect x="7.6" y="12.8" width="8.8" height="4.7" rx="1"/><path d="M5.2 17.5h1.6l-.8 3H4.6zM17.2 17.5h1.6l.6 3h-1.4z"/></g>',
+        "dining": '<g fill="currentColor"><rect x="7.2" y="10" width="9.6" height="1.6" rx=".5"/><rect x="8.4" y="11.6" width="1.3" height="8.9" rx=".4"/><rect x="14.3" y="11.6" width="1.3" height="8.9" rx=".4"/><rect x="1.5" y="6" width="1.3" height="14.5" rx=".4"/><rect x="1.5" y="12.8" width="4.3" height="1.3" rx=".4"/><rect x="4.6" y="14.1" width="1.2" height="6.4" rx=".4"/><rect x="21.2" y="6" width="1.3" height="14.5" rx=".4"/><rect x="18.2" y="12.8" width="4.3" height="1.3" rx=".4"/><rect x="18.2" y="14.1" width="1.2" height="6.4" rx=".4"/></g>',
+        "desk": '<g fill="currentColor"><rect x="1.5" y="7.5" width="21" height="1.8" rx=".5"/><rect x="2.8" y="9.3" width="1.5" height="11" rx=".4"/><rect x="14" y="10" width="7.2" height="3.2" rx=".5"/><rect x="14" y="13.9" width="7.2" height="3.2" rx=".5"/><rect x="14" y="17.8" width="7.2" height="2.5" rx=".5"/></g>',
+        "cafe": '<g fill="currentColor"><path d="M12 2.5C7 2.5 3 5.6 2.5 9.5h19C21 5.6 17 2.5 12 2.5z"/><rect x="11.3" y="9.5" width="1.4" height="11"/><rect x="7" y="14" width="10" height="1.4" rx=".5"/><rect x="7.6" y="15.4" width="1.3" height="5.1"/><rect x="15.1" y="15.4" width="1.3" height="5.1"/><rect x="1.5" y="16.6" width="3.6" height="1.2" rx=".4"/><rect x="1.9" y="17.8" width="1.1" height="2.7"/><rect x="3.6" y="17.8" width="1.1" height="2.7"/><rect x="18.9" y="16.6" width="3.6" height="1.2" rx=".4"/><rect x="19.3" y="17.8" width="1.1" height="2.7"/><rect x="21" y="17.8" width="1.1" height="2.7"/></g>',
         "carpet": '<rect x="3" y="5" width="18" height="14" rx="1.3" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="6.3" y="8" width="11.4" height="8" rx=".7" fill="none" stroke="currentColor" stroke-width="1.4"/>',
         "curtain": '<path d="M4 4h16M6 4v15c2-1 3-3 3-6s-1-5-3-9zM12 4v15c1.2-1.4 2-3.6 2-7s-.8-6-2-8zM18 4v15c2-1.5 2.5-4 2.5-7.5S20 5 18 4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>',
         "stroller": '<circle cx="7" cy="19" r="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="19" r="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4 19h1.6M8.5 19h6M17.5 19H19M6 17l1-8 8-1 3 4-2 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M7 9V5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
         "car": '<path d="M4 16v-3l2-4.5A2 2 0 018 7.3h8a2 2 0 011.9 1.4L19 13v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><rect x="3" y="13" width="18" height="4.5" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="7.5" cy="18.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="16.5" cy="18.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/>',
-        "office": '<rect x="3" y="3" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="3" width="8" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="10" width="8" height="11" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="13" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+        "office": '<g fill="currentColor"><rect x="7" y="2" width="10" height="9" rx="3"/><rect x="4.6" y="9.3" width="1.6" height="4.5" rx=".8"/><rect x="17.8" y="9.3" width="1.6" height="4.5" rx=".8"/><rect x="6" y="11.8" width="12" height="2.8" rx="1.3"/><rect x="11.2" y="14.6" width="1.6" height="3.6" rx=".4"/><path d="M12 17.6l-6 2.2.5 1.2L12 19l5.5 2 .5-1.2z"/><circle cx="6" cy="21.2" r="1.1"/><circle cx="18" cy="21.2" r="1.1"/><circle cx="12" cy="21.2" r="1.1"/></g>',
         "pouf": '<ellipse cx="12" cy="9" rx="7" ry="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 9v5c0 2.2 3.1 4 7 4s7-1.8 7-4V9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
         "bug": '<circle cx="12" cy="13" r="5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 8V5M9 6l-1.5-2M15 6l1.5-2M6 13H3M21 13h-3M7 17l-2 2M17 17l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>',
         "ozone": '<circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="2 3"/>',
@@ -182,7 +186,7 @@ svc(
 )
 
 svc(
-    slug="kresla", icon="chair", nav="Химчистка кресла", acc="химчистку кресла", h1="Химчистка кресла на дому в Калининграде",
+    slug="kresla", icon="armchair", nav="Химчистка кресла", acc="химчистку кресла", h1="Химчистка кресла на дому в Калининграде",
     title="Химчистка кресла в Калининграде на дому — цена от 600 ₽ | быстрый выезд",
     description="Химчистка кресел любого типа: тканевых, кожаных, компьютерных и кресел-качалок. Выезд мастера на дом в Калининграде, чистка за 30–50 минут, сухость через 2–4 часа.",
     lead="Возвращаем креслу опрятный вид и убираем запахи — от классических кресел до компьютерных и кресел-качалок.",
@@ -643,7 +647,7 @@ svc(
 )
 
 svc(
-    slug="kuhonnogo-ugolka", icon="sofa", nav="Химчистка кухонного уголка", acc="химчистку кухонного уголка", h1="Химчистка кухонного уголка на дому в Калининграде",
+    slug="kuhonnogo-ugolka", icon="dining", nav="Химчистка кухонного уголка", acc="химчистку кухонного уголка", h1="Химчистка кухонного уголка на дому в Калининграде",
     title="Химчистка кухонного уголка в Калининграде — цена от 2000 ₽ | выезд на дом",
     description="Выездная химчистка мягкого кухонного уголка в Калининграде: убираем жирные пятна, следы еды и запахи кухни. Чистка на месте, без разборки и вывоза.",
     lead="Чистим мягкие кухонные уголки и диванчики прямо на кухне — от жира, пятен от еды и въевшихся кухонных запахов.",
@@ -681,7 +685,7 @@ svc(
 )
 
 svc(
-    slug="kafe-restoranov", filename="himchistka-mebeli-v-kafe-i-restoranah.html", icon="chair", nav="Химчистка мебели в кафе и ресторанах", acc="химчистку мебели в кафе и ресторане", h1="Химчистка мебели в кафе и ресторанах Калининграда",
+    slug="kafe-restoranov", filename="himchistka-mebeli-v-kafe-i-restoranah.html", icon="cafe", nav="Химчистка мебели в кафе и ресторанах", acc="химчистку мебели в кафе и ресторане", h1="Химчистка мебели в кафе и ресторанах Калининграда",
     title="Химчистка мебели в кафе и ресторане в Калининграде — диваны, стулья, банкетки",
     description="Химчистка мягкой мебели для кафе, ресторанов и баров в Калининграде: диваны, банкетки, стулья. Работаем ночью и в выходные, по договору с юрлицами.",
     lead="Чистим диваны, банкетки и стулья в заведениях — ночью или до открытия, чтобы не мешать гостям.",
@@ -719,7 +723,7 @@ svc(
 )
 
 svc(
-    slug="mebeli-dlya-biznesa", filename="himchistka-mebeli-dlya-biznesa.html", icon="office", nav="Химчистка мебели для бизнеса", acc="химчистку мебели для бизнеса", h1="Химчистка мебели для бизнеса в Калининграде",
+    slug="mebeli-dlya-biznesa", filename="himchistka-mebeli-dlya-biznesa.html", icon="desk", nav="Химчистка мебели для бизнеса", acc="химчистку мебели для бизнеса", h1="Химчистка мебели для бизнеса в Калининграде",
     title="Химчистка мебели для бизнеса в Калининграде — гостиницы, посуточные квартиры, салоны",
     description="Химчистка мягкой мебели для гостиниц, посуточных квартир, салонов красоты, клиник и других компаний в Калининграде и области. Договор, график, закрывающие документы.",
     lead="Чистим мебель для гостиниц, посуточных квартир, салонов и клиник — по договору и по графику, без простоя бизнеса.",
@@ -1297,7 +1301,11 @@ def page_shell(path, title, description, body, schemas=None):
 # =========================================================================
 # 6. ПОВТОРЯЮЩИЕСЯ БЛОКИ КОНТЕНТА
 # =========================================================================
-def order_form_panel(preselect_slug=None, current_path=""):
+def consent_html(input_id):
+    return (f'<label class="consent" for="{input_id}"><input type="checkbox" id="{input_id}" name="consent" required> '
+            f'<span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>')
+
+def order_form_panel(preselect_slug=None):
     services = list(MAIN_SERVICES)
     if preselect_slug and SERVICE_BY_SLUG[preselect_slug] not in services:
         services.append(SERVICE_BY_SLUG[preselect_slug])
@@ -1331,11 +1339,9 @@ def order_form_panel(preselect_slug=None, current_path=""):
       <label for="f-comment">Комментарий</label>
       <textarea id="f-comment" name="comment" rows="3" placeholder="Адрес, удобное время, детали заказа"></textarea>
     </div>
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Отправить заявку</button>
-      <a href="{quiz_href(current_path)}" class="btn btn-ghost">Рассчитать стоимость</a>
-    </div>
-    <p class="form-note">Нажимая кнопку, вы соглашаетесь с <a href="politika-konfidencialnosti.html">политикой обработки персональных данных</a>.</p>
+    {consent_html("f-consent")}
+    <div class="form-gift">{icon("spark", 16)} Получите скидку 10% на первый заказ</div>
+    <button type="submit" class="btn btn-primary btn-block">Отправить заявку и рассчитать стоимость</button>
     <div class="form-success"></div>
   </form>
 </div>
@@ -1375,23 +1381,26 @@ def quiz_href(current_path):
     """Ссылка на калькулятор: на своей странице — якорь, иначе — на главную."""
     return "#kalkulyator" if current_path in QUIZ_PAGES else "index.html#kalkulyator"
 
+# Доплаты калькулятора: [от, до] в рублях
+QUIZ_EXTRAS = {"cushion": [500, 650], "stains": [300, 1000], "odor": [500, 3000]}
+
 # Калькулятор: цены берутся из прайса. kind: options — выбор варианта, qty — штуки, area — м², fixed — одна цена.
 QUIZ_ITEMS = [
-    {"id": "divan", "label": "Диван", "icon": "sofa", "kind": "options", "question": "Какой у вас диван?",
+    {"id": "divan", "label": "Диван", "icon": "sofa", "kind": "options", "cushions": True, "question": "Какой у вас диван?",
      "options": [["Диван-книжка", 2000], ["Еврокнижка", 3000], ["Прямой диван", 3000], ["Угловой диван", 3500], ["П-образный диван", 4500]]},
     {"id": "matras", "label": "Матрас", "icon": "bed", "kind": "options", "question": "Какой размер матраса?",
      "options": [["Детский", 700], ["Односпальный", 900], ["Полуторный", 1200], ["Двуспальный / King Size", 1600]]},
     {"id": "stul", "label": "Стулья", "icon": "chair", "kind": "qty", "question": "Сколько стульев?", "unit": 300, "leather_unit": 350},
-    {"id": "kreslo", "label": "Кресло", "icon": "pouf", "kind": "options", "question": "Какое кресло?",
+    {"id": "kreslo", "label": "Кресло", "icon": "armchair", "kind": "options", "cushions": True, "question": "Какое кресло?",
      "options": [["Офисное / компьютерное", 500], ["Стандартное", 600], ["Большое / кресло-качалка", 900]]},
-    {"id": "ugolok", "label": "Кухонный уголок", "icon": "sofa", "kind": "fixed", "price": 2000},
+    {"id": "ugolok", "label": "Кухонный уголок", "icon": "dining", "kind": "fixed", "cushions": True, "price": 2000},
     {"id": "kovrolin", "label": "Ковролин", "icon": "carpet", "kind": "area", "question": "Какая площадь ковролина?", "unit": 150, "min": 1500},
 ]
 
 def quiz_block(preselect=None):
     preselect_map = {"divana": "divan", "uglovogo-divana": "divan", "matrasa": "matras", "stulev": "stul",
                      "kresla": "kreslo", "kuhonnogo-ugolka": "ugolok", "kovrolina": "kovrolin"}
-    config = {"items": [dict(it, icon_svg=icon(it["icon"], 30)) for it in QUIZ_ITEMS],
+    config = {"items": [dict(it, icon_svg=icon(it["icon"], 44)) for it in QUIZ_ITEMS], "extras": QUIZ_EXTRAS,
               "preselect": preselect_map.get(preselect)}
     return f"""
 <section class="section quiz-section" id="kalkulyator">
@@ -1440,7 +1449,7 @@ def cta_banner(title_text="Готовы избавить мебель от пя�
 def service_card(s):
     return f"""
 <div class="card service-card">
-  <div class="service-icon">{icon(s["icon"], 26)}</div>
+  <div class="service-icon">{icon(s["icon"], 34)}</div>
   <h3>{esc(short(s))}</h3>
   <p>{esc(s["lead"])}</p>
   <div class="price-from">от {s["price_from"]} ₽</div>
@@ -1599,7 +1608,7 @@ def render_service_page(s):
         <span class="badge">{icon("leaf",14)} Безопасно для детей и животных</span>
       </div>
     </div>
-    {order_form_panel(preselect_slug=s["slug"], current_path=path)}
+    {order_form_panel(preselect_slug=s["slug"])}
   </div>
 </section>
 """
@@ -1808,7 +1817,7 @@ def render_index():
         <span class="badge">{icon("leaf",14)} Безопасно для детей и животных</span>
       </div>
     </div>
-    {order_form_panel(current_path=path)}
+    {order_form_panel()}
   </div>
 </section>
 """

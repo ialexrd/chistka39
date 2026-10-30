@@ -86,16 +86,20 @@
     var cfg = JSON.parse(root.getAttribute('data-quiz'));
     var items = {};
     cfg.items.forEach(function (it) { items[it.id] = it; });
-    var st = { item: null, option: null, qty: 4, area: 15, leather: false, stains: false, odor: false };
+    function fresh() { return { item: null, option: null, qty: 4, area: 15, leather: false, cushions: null, cushionQty: 2, stains: false, odor: false }; }
+    var st = fresh(), ex = cfg.extras;
     var step = 0;
 
     function rub(n) { return n.toLocaleString('ru-RU') + ' ₽'; }
+    function range(a, b) { return a === b ? 'от ' + rub(a) : 'от ' + a.toLocaleString('ru-RU') + ' до ' + rub(b); }
+    function r10(n) { return Math.round(n / 10) * 10; }
     function steps() {
       var it = items[st.item];
       var list = ['item'];
       if (!it) return list;
       if (it.kind !== 'fixed') list.push('detail');
       if (it.kind !== 'area') list.push('material');
+      if (it.cushions) list.push('cushions');
       list.push('dirt', 'result');
       return list;
     }
@@ -109,16 +113,20 @@
       }
       if (it.kind === 'area') p = Math.max(it.unit * st.area, it.min);
       if (st.leather && it.kind !== 'qty') p *= 1.5;
-      if (st.stains) p = it.kind === 'area' ? p * 1.2 : p + 300;
-      if (st.odor) p += 500;
-      return Math.round(p / 10) * 10;
+      var lo = p, hi = p;
+      [['cushion', st.cushions === 'clean' ? st.cushionQty : 0], ['stains', st.stains ? 1 : 0], ['odor', st.odor ? 1 : 0]].forEach(function (e) {
+        lo += ex[e[0]][0] * e[1]; hi += ex[e[0]][1] * e[1];
+      });
+      return [r10(lo), r10(hi)];
     }
     function summary() {
       var it = items[st.item], parts = [it.kind === 'options' ? it.label + ': ' + it.options[st.option][0].toLowerCase() : it.label];
       if (it.kind === 'qty') parts.push(st.qty + ' шт');
       if (it.kind === 'area') parts.push(st.area + ' м²');
       if (it.kind !== 'area') parts.push(st.leather ? 'кожа / экокожа' : 'ткань');
-      if (st.stains) parts.push('пятна');
+      if (st.cushions === 'clean') parts.push('съёмные подушки: ' + st.cushionQty + ' шт');
+      if (st.cushions === 'self') parts.push('чехлы подушек клиент стирает сам');
+      if (st.stains) parts.push('сложные пятна');
       if (st.odor) parts.push('запах');
       return parts.join(', ');
     }
@@ -155,21 +163,33 @@
         html += '<h3>Из чего обивка?</h3><div class="quiz-opts quiz-opts-list">' +
           choice('Ткань', 'велюр, рогожка, флок и другие', !st.leather && st._mat, 'data-leather="0"') +
           choice('Кожа или экокожа', it.kind === 'qty' ? 'от ' + rub(it.leather_unit) + ' за стул' : '+50% к стоимости', st.leather, 'data-leather="1"') + '</div>';
+      } else if (name === 'cushions') {
+        html += '<h3>Есть ли съёмные подушки на спинке?</h3><div class="quiz-opts quiz-opts-list">' +
+          choice('Нет', 'подушки не снимаются', st.cushions === 'no', 'data-cushions="no"') +
+          choice('Да, почистить со всех сторон', '+' + ex.cushion[0] + '–' + ex.cushion[1] + ' ₽ за подушку', st.cushions === 'clean', 'data-cushions="clean"') +
+          choice('Да, постираю чехлы сам', 'бесплатно', st.cushions === 'self', 'data-cushions="self"') + '</div>';
+        if (st.cushions === 'clean') {
+          html += '<p class="quiz-hint">Сколько подушек?</p><div class="quiz-number"><button type="button" class="quiz-step-btn" data-delta="-1">−</button>' +
+            '<input type="number" min="1" max="20" value="' + st.cushionQty + '" data-num>' +
+            '<button type="button" class="quiz-step-btn" data-delta="1">+</button><span>шт</span></div>' +
+            '<div class="quiz-nav"><button type="button" class="btn btn-ghost" data-back>Назад</button><button type="button" class="btn btn-primary" data-next>Далее</button></div>';
+        }
       } else if (name === 'dirt') {
         html += '<h3>Что нужно убрать?</h3><p class="quiz-hint">Можно выбрать несколько вариантов.</p><div class="quiz-opts quiz-opts-list">' +
-          choice('Пятна', it.kind === 'area' ? '+20% к стоимости' : '+300 ₽', st.stains, 'data-toggle="stains"') +
-          choice('Запах: моча, животные, пот', '+500 ₽', st.odor, 'data-toggle="odor"') + '</div>' +
+          choice('Сложные пятна', 'клей, лак, ручка и др.<br>+' + ex.stains[0] + '–' + ex.stains[1].toLocaleString('ru-RU') + ' ₽', st.stains, 'data-toggle="stains"') +
+          choice('Запах', 'моча, рвота и др.<br>+' + ex.odor[0] + '–' + ex.odor[1].toLocaleString('ru-RU') + ' ₽', st.odor, 'data-toggle="odor"') + '</div>' +
           '<div class="quiz-nav"><button type="button" class="btn btn-ghost" data-back>Назад</button><button type="button" class="btn btn-primary" data-next>' + (st.stains || st.odor ? 'Рассчитать' : 'Только общая чистка') + '</button></div>';
       } else {
-        var p = price(), d = Math.round(p * 0.9 / 10) * 10;
+        var p = price();
         html += '<h3>Предварительная стоимость</h3><div class="quiz-summary">' + summary() + '</div>' +
-          '<div class="quiz-price"><span class="quiz-price-old">от ' + rub(p) + '</span><span class="quiz-price-new">от ' + rub(d) + '</span></div>' +
+          '<div class="quiz-price"><span class="quiz-price-old">' + range(p[0], p[1]) + '</span><span class="quiz-price-new">' + range(r10(p[0] * 0.9), r10(p[1] * 0.9)) + '</span></div>' +
           '<p class="quiz-hint">Цена со скидкой 10% на первый заказ. Финальную стоимость мастер подтвердит на месте.</p>' +
           '<form class="quiz-form" data-quiz-form><div class="form-row">' +
           '<div class="field"><label>Имя</label><input name="name" type="text" placeholder="Как к вам обращаться" required></div>' +
           '<div class="field"><label>Телефон</label><input name="phone" type="tel" placeholder="+7 (___) ___-__-__" required></div></div>' +
-          '<button type="submit" class="btn btn-primary btn-block">Получить скидку и записаться</button>' +
-          '<p class="form-note">Нажимая кнопку, вы соглашаетесь с <a href="politika-konfidencialnosti.html">политикой обработки персональных данных</a>.</p>' +
+          '<label class="consent"><input type="checkbox" name="consent" required> <span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>' +
+          '<div class="form-gift">Получите скидку 10% на первый заказ</div>' +
+          '<button type="submit" class="btn btn-primary btn-block">Отправить заявку</button>' +
           '<div class="form-success"></div></form>' +
           '<button type="button" class="quiz-restart" data-restart>Пересчитать</button>';
       }
@@ -187,6 +207,9 @@
       if (b.hasAttribute('data-item')) {
         if (st.item !== b.getAttribute('data-item')) { st.option = null; }
         st.item = b.getAttribute('data-item'); next();
+      } else if (b.hasAttribute('data-cushions')) {
+        st.cushions = b.getAttribute('data-cushions');
+        if (st.cushions === 'clean') render(); else next();
       } else if (b.hasAttribute('data-option')) { st.option = +b.getAttribute('data-option'); next(); }
       else if (b.hasAttribute('data-leather')) { st.leather = b.getAttribute('data-leather') === '1'; st._mat = true; next(); }
       else if (b.hasAttribute('data-toggle')) { var k = b.getAttribute('data-toggle'); st[k] = !st[k]; render(); }
@@ -196,13 +219,14 @@
       }
       else if (b.hasAttribute('data-next')) { readNum(); next(); }
       else if (b.hasAttribute('data-back')) { step = Math.max(0, step - 1); render(); }
-      else if (b.hasAttribute('data-restart')) { st = { item: null, option: null, qty: 4, area: 15, leather: false, stains: false, odor: false }; step = 0; render(); }
+      else if (b.hasAttribute('data-restart')) { st = fresh(); step = 0; render(); }
     });
     function readNum() {
       var inp = root.querySelector('[data-num]');
       if (!inp) return;
       var v = Math.max(1, Math.round(+inp.value || 1));
-      if (items[st.item].kind === 'qty') st.qty = v; else st.area = v;
+      if (steps()[step] === 'cushions') st.cushionQty = Math.min(v, 20);
+      else if (items[st.item].kind === 'qty') st.qty = v; else st.area = v;
     }
     root.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -212,7 +236,7 @@
       sendLead([
         'Заявка из калькулятора на сайте',
         'Что чистим: ' + summary(),
-        'Предварительно: от ' + rub(p) + ', со скидкой 10%: от ' + rub(Math.round(p * 0.9 / 10) * 10),
+        'Предварительно: ' + range(p[0], p[1]) + ', со скидкой 10%: ' + range(r10(p[0] * 0.9), r10(p[1] * 0.9)),
         'Имя: ' + form.querySelector('[name="name"]').value,
         'Телефон: ' + phone.value
       ], form.querySelector('.form-success'));

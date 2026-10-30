@@ -174,7 +174,7 @@ button{ font-family: inherit; cursor: pointer; }
 .card{ background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 24px; transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease; height: 100%; }
 .card:hover{ box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: #cfe0f3; }
 .service-card{ display: flex; flex-direction: column; gap: 10px; }
-.service-icon{ width: 48px; height: 48px; border-radius: 12px; background: var(--color-primary-light); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+.service-icon{ width: 56px; height: 56px; border-radius: 12px; background: var(--color-primary-light); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
 .service-card h3{ font-size: 17px; margin-bottom: 2px; }
 .service-card p{ color: var(--color-ink-soft); font-size: 14px; margin-bottom: 6px; }
 .service-card .price-from{ font-weight: 800; color: var(--color-primary-dark); font-size: 14.5px; margin-top: auto; }
@@ -382,3 +382,8 @@ button{ font-family: inherit; cursor: pointer; }
   .quiz-opts-list{ grid-template-columns: 1fr; }
   .quiz-price-new{ font-size: 28px; }
 }
+
+/* ===== Согласие и скидка в формах ===== */
+.consent{ display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: var(--color-ink-soft); margin: 4px 0 14px; cursor: pointer; }
+.consent input{ width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--color-primary); }
+.form-gift{ display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 700; font-size: 14.5px; color: var(--color-accent); margin-bottom: 10px; }
