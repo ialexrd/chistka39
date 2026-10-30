@@ -1454,7 +1454,7 @@ def service_card(s):
   <h3>{esc(short(s))}</h3>
   <p>{esc(s["lead"])}</p>
   <div class="price-from">от {s["price_from"]} ₽</div>
-  <a href="{service_filename(s["slug"])}" class="card-link">Подробнее и цены {icon("chevron", 15)}</a>
+  <a href="{service_filename(s["slug"])}" class="btn btn-primary card-btn">Подробнее и цены {icon("chevron", 16)}</a>
 </div>
 """
 
@@ -1476,7 +1476,7 @@ def types_block(s):
     <div class="price-from">{esc(price)}</div>
     <p>{esc(desc)}</p>
     <div class="type-card-actions">
-      <a href="#zayavka" class="btn btn-primary btn-sm" data-order-item="{esc(name)}">Оставить заявку</a>
+      <a href="#zayavka" class="btn btn-primary card-btn" data-order-item="{esc(name)}">Оставить заявку {icon("chevron", 16)}</a>
     </div>
   </div>
 </div>""")
