@@ -109,7 +109,7 @@ svc(
     ],
     intro=[
         "Диван — самый нагружаемый предмет мебели в доме: на нём едят, спят, играют дети и лежат домашние животные. За несколько месяцев в обивке накапливаются пыль, жир, бактерии и пылевые клещи, которые не видны глазу, но заметны по запаху и потускневшему цвету ткани.",
-        "Мы приезжаем со своим оборудованием — профессиональным моющим пылесосом экстракторного типа, парогенератором и сертифицированной химией — и чистим диван прямо в квартире или доме. Разбирать и вывозить мебель не нужно: чистка одного дивана занимает от 40 до 90 минут в зависимости от размера и типа обивки.",
+        "Мы приезжаем со своим оборудованием — профессиональным моющим пылесосом экстракторного типа и сертифицированной химией — и чистим диван прямо в квартире или доме. Разбирать и вывозить мебель не нужно: чистка одного дивана занимает от 40 до 90 минут в зависимости от размера и типа обивки.",
     ],
     problems=[
         "Пятна от еды, напитков, кофе и вина", "Жирные пятна и залоснившиеся подлокотники",
@@ -421,7 +421,7 @@ svc(
     price_from="150",
     intro=[
         "Шторы редко стирают — их снятие, стирка и последующая глажка занимают целый день, а плотные портьеры и римские шторы вообще не всегда можно стирать в машине без риска усадки или деформации. При этом именно шторы одними из первых впитывают уличную пыль, запахи готовки и табачного дыма.",
-        "Мы чистим шторы паровым и сухим методом прямо на карнизе, без снятия. Это исключает усадку ткани и сохраняет заданную драпировку, а сама чистка занимает от 20 минут на окно.",
+        "Мы чистим шторы влажным и сухим методом прямо на карнизе, без снятия. Это исключает усадку ткани и сохраняет заданную драпировку, а сама чистка занимает от 20 минут на окно.",
     ],
     problems=[
         "Пыль и уличная копоть на тюле", "Запах готовки на кухонных шторах",
@@ -432,7 +432,7 @@ svc(
     steps=[
         ("Осмотр ткани", "Определяем тип ткани — тюль, органза, плотный текстиль, римские или рулонные шторы."),
         ("Сухая чистка", "Удаляем пыль без намокания ткани, аккуратно обрабатывая складки драпировки."),
-        ("Паровая / влажная обработка", "Точечно выводим пятна, парогенератором освежаем ткань и снимаем запахи."),
+        ("Влажная обработка", "Точечно выводим пятна, освежаем ткань и снимаем запахи."),
         ("Финальная драпировка", "Расправляем складки на карнизе — шторы высыхают на месте, глажка не требуется."),
     ],
     price_rows=[
@@ -1022,6 +1022,17 @@ MAIN_SERVICES = [SERVICE_BY_SLUG[x] for x in (
     "kafe-restoranov", "mebeli-dlya-biznesa", "kovrolina", "nepriyatnogo-zapaha",
 )]
 
+# Короткие названия для списков услуг: «Диваны» вместо «Химчистка дивана»
+SHORT_NAMES = {
+    "divana": "Диваны", "matrasa": "Матрасы", "stulev": "Стулья",
+    "kuhonnogo-ugolka": "Кухонные уголки", "ofisnoy-mebeli": "Офисная мебель",
+    "kafe-restoranov": "Мебель в кафе и ресторанах", "mebeli-dlya-biznesa": "Мебель для бизнеса",
+    "kovrolina": "Ковролин", "nepriyatnogo-zapaha": "Выведение неприятных запахов",
+}
+
+def short(s):
+    return SHORT_NAMES.get(s["slug"], s["nav"])
+
 NAV_LINKS = [
     ("index.html", "Главная"),
     ("uslugi.html", "Услуги"),
@@ -1057,7 +1068,7 @@ def ld(schema):
 # 5. HEADER / FOOTER / БЛОКИ, ОБЩИЕ ДЛЯ ВСЕХ СТРАНИЦ
 # =========================================================================
 def header(current_path):
-    dropdown_items = "".join(f'<a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a>' for s in MAIN_SERVICES)
+    dropdown_items = "".join(f'<a href="{service_filename(s["slug"])}">{esc(short(s))}</a>' for s in MAIN_SERVICES)
     nav_items = ""
     for href, label in NAV_LINKS:
         current = ' aria-current="page"' if href == current_path else ""
@@ -1084,8 +1095,7 @@ def header(current_path):
       <span>{esc(SITE["work_hours_short"])}</span>
     </div>
     <div class="topbar-right">
-      <a href="tel:{SITE["phone_tel"]}">{icon("phone", 15)} {SITE["phone_display"]}</a>
-      <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener">{icon("whatsapp", 15)} WhatsApp</a>
+      <a href="{quiz_href(current_path)}" class="topbar-promo">{icon("spark", 15)} Скидка 10% на первый заказ</a>
     </div>
   </div>
 </div>
@@ -1129,7 +1139,7 @@ def header(current_path):
 
 def footer():
     service_links = "".join(
-        f'<li><a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a></li>' for s in MAIN_SERVICES
+        f'<li><a href="{service_filename(s["slug"])}">{esc(short(s))}</a></li>' for s in MAIN_SERVICES
     )
     district_chips = "".join(f'<span class="chip">{esc(d)}</span>' for d in SITE["districts"])
     return f"""
@@ -1287,12 +1297,12 @@ def page_shell(path, title, description, body, schemas=None):
 # =========================================================================
 # 6. ПОВТОРЯЮЩИЕСЯ БЛОКИ КОНТЕНТА
 # =========================================================================
-def order_form_panel(preselect_slug=None):
+def order_form_panel(preselect_slug=None, current_path=""):
     services = list(MAIN_SERVICES)
     if preselect_slug and SERVICE_BY_SLUG[preselect_slug] not in services:
         services.append(SERVICE_BY_SLUG[preselect_slug])
     options = "".join(
-        f'<option value="{esc(s["nav"])}"' + (" selected" if s["slug"] == preselect_slug else "") + f'>{esc(s["nav"])}</option>'
+        f'<option value="{esc(s["nav"])}"' + (" selected" if s["slug"] == preselect_slug else "") + f'>{esc(short(s))}</option>'
         for s in services
     )
     return f"""
@@ -1321,7 +1331,10 @@ def order_form_panel(preselect_slug=None):
       <label for="f-comment">Комментарий</label>
       <textarea id="f-comment" name="comment" rows="3" placeholder="Адрес, удобное время, детали заказа"></textarea>
     </div>
-    <button type="submit" class="btn btn-primary btn-block">{icon("whatsapp", 17)} Отправить заявку в WhatsApp</button>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Отправить заявку</button>
+      <a href="{quiz_href(current_path)}" class="btn btn-ghost">Рассчитать стоимость</a>
+    </div>
     <p class="form-note">Нажимая кнопку, вы соглашаетесь с <a href="politika-konfidencialnosti.html">политикой обработки персональных данных</a>.</p>
     <div class="form-success"></div>
   </form>
@@ -1351,10 +1364,55 @@ def faq_block(faq):
 
 def related_block(slugs):
     links = "".join(
-        f'<a href="{service_filename(slug)}">{esc(SERVICE_BY_SLUG[slug]["nav"])} →</a>'
+        f'<a href="{service_filename(slug)}">{esc(short(SERVICE_BY_SLUG[slug]))} →</a>'
         for slug in slugs if slug in SERVICE_BY_SLUG
     )
     return f'<div class="related-list">{links}</div>'
+
+QUIZ_PAGES = {"index.html"} | {service_filename(x["slug"]) for x in SERVICES}
+
+def quiz_href(current_path):
+    """Ссылка на калькулятор: на своей странице — якорь, иначе — на главную."""
+    return "#kalkulyator" if current_path in QUIZ_PAGES else "index.html#kalkulyator"
+
+# Калькулятор: цены берутся из прайса. kind: options — выбор варианта, qty — штуки, area — м², fixed — одна цена.
+QUIZ_ITEMS = [
+    {"id": "divan", "label": "Диван", "icon": "sofa", "kind": "options", "question": "Какой у вас диван?",
+     "options": [["Диван-книжка", 2000], ["Еврокнижка", 3000], ["Прямой диван", 3000], ["Угловой диван", 3500], ["П-образный диван", 4500]]},
+    {"id": "matras", "label": "Матрас", "icon": "bed", "kind": "options", "question": "Какой размер матраса?",
+     "options": [["Детский", 700], ["Односпальный", 900], ["Полуторный", 1200], ["Двуспальный / King Size", 1600]]},
+    {"id": "stul", "label": "Стулья", "icon": "chair", "kind": "qty", "question": "Сколько стульев?", "unit": 300, "leather_unit": 350},
+    {"id": "kreslo", "label": "Кресло", "icon": "pouf", "kind": "options", "question": "Какое кресло?",
+     "options": [["Офисное / компьютерное", 500], ["Стандартное", 600], ["Большое / кресло-качалка", 900]]},
+    {"id": "ugolok", "label": "Кухонный уголок", "icon": "sofa", "kind": "fixed", "price": 2000},
+    {"id": "kovrolin", "label": "Ковролин", "icon": "carpet", "kind": "area", "question": "Какая площадь ковролина?", "unit": 150, "min": 1500},
+]
+
+def quiz_block(preselect=None):
+    preselect_map = {"divana": "divan", "uglovogo-divana": "divan", "matrasa": "matras", "stulev": "stul",
+                     "kresla": "kreslo", "kuhonnogo-ugolka": "ugolok", "kovrolina": "kovrolin"}
+    config = {"items": [dict(it, icon_svg=icon(it["icon"], 30)) for it in QUIZ_ITEMS],
+              "preselect": preselect_map.get(preselect)}
+    return f"""
+<section class="section quiz-section" id="kalkulyator">
+  <div class="container quiz-grid">
+    <div class="quiz-intro">
+      <span class="tag">Калькулятор стоимости</span>
+      <h2>Узнайте цену за 1 минуту</h2>
+      <p>Ответьте на несколько вопросов, и мы сразу покажем предварительную стоимость.</p>
+      <ul class="check-list quiz-bullets">
+        <li>{icon("check", 18)}<span>Цена появляется сразу, без звонков и ожидания</span></li>
+        <li>{icon("check", 18)}<span>Учитываем вид мебели, обивку, пятна и запахи</span></li>
+        <li>{icon("check", 18)}<span>Финальную стоимость мастер подтвердит на месте</span></li>
+      </ul>
+      <div class="quiz-gift">{icon("spark", 20)} <span><b>−10% на первый заказ</b> за прохождение калькулятора</span></div>
+    </div>
+    <div class="quiz card" data-quiz='{esc(json.dumps(config, ensure_ascii=False))}'>
+      <noscript><p>Калькулятор работает с включённым JavaScript. <a href="#zayavka">Оставьте заявку</a>, и мы посчитаем стоимость сами.</p></noscript>
+    </div>
+  </div>
+</section>
+"""
 
 def hero_cta(order_href="#zayavka"):
     """Кнопки первого экрана: заявка + мессенджеры Max и Telegram."""
@@ -1383,7 +1441,7 @@ def service_card(s):
     return f"""
 <div class="card service-card">
   <div class="service-icon">{icon(s["icon"], 26)}</div>
-  <h3>{esc(s["nav"])}</h3>
+  <h3>{esc(short(s))}</h3>
   <p>{esc(s["lead"])}</p>
   <div class="price-from">от {s["price_from"]} ₽</div>
   <a href="{service_filename(s["slug"])}" class="card-link">Подробнее и цены {icon("chevron", 15)}</a>
@@ -1534,14 +1592,14 @@ def render_service_page(s):
     <div>
       <span class="tag">Заявка на выезд</span>
       <h2>Закажите {esc(s["acc"])} на удобное время</h2>
-      <p>Оставьте заявку, и мы перезвоним, чтобы уточнить адрес, объём работ и записать мастера. Также можно сразу позвонить или написать в WhatsApp.</p>
+      <p>Оставьте заявку, и мы перезвоним, чтобы уточнить адрес, объём работ и записать мастера. Также можно сразу позвонить или написать в Max или Telegram.</p>
       <div class="badge-list">
         <span class="badge">{icon("clock",14)} Выезд в день обращения</span>
         <span class="badge">{icon("shield",14)} Гарантия результата</span>
         <span class="badge">{icon("leaf",14)} Безопасно для детей и животных</span>
       </div>
     </div>
-    {order_form_panel(preselect_slug=s["slug"])}
+    {order_form_panel(preselect_slug=s["slug"], current_path=path)}
   </div>
 </section>
 """
@@ -1572,6 +1630,7 @@ def render_service_page(s):
         + problems
         + steps
         + price
+        + quiz_block(s["slug"])
         + order
         + faq
         + related
@@ -1596,7 +1655,7 @@ def render_index():
     <div>
       <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
       <h1>Выездная химчистка мягкой мебели в Калининграде</h1>
-      <p class="hero-lead">Чистим диваны, матрасы, стулья, кухонные уголки и ковролин прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос и парогенератор, сертифицированная химия, выезд в день обращения.</p>
+      <p class="hero-lead">Чистим диваны, матрасы, стулья, кухонные уголки и ковролин прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос, сертифицированная химия, выезд в день обращения.</p>
       {hero_cta()}
       <div class="hero-trust">
         <div class="trust-item"><span class="dot">{icon("shield", 15)}</span>Гарантия на работы</div>
@@ -1617,7 +1676,7 @@ def render_index():
   <div class="container">
     <div class="section-head">
       <span class="tag">Услуги</span>
-      <h2>Химчистка мебели — по видам</h2>
+      <h2>Что мы чистим</h2>
       <p>Выберите свою услугу, чтобы увидеть подробности процесса, типичные загрязнения и точные цены.</p>
     </div>
     <div class="grid grid-3">
@@ -1627,19 +1686,44 @@ def render_index():
 </section>
 """
 
-    steps = f"""
-<section class="section section-soft">
+    process = f"""
+<section class="section section-soft" id="tehnologiya">
   <div class="container">
     <div class="section-head">
-      <span class="tag">Как это работает</span>
-      <h2>От заявки до чистой мебели — 4 шага</h2>
+      <span class="tag">Технология</span>
+      <h2>Как проходит химчистка мебели</h2>
+      <p>Чистим в несколько этапов: каждый убирает свой тип загрязнения, поэтому грязь уходит из глубины ткани, а не размазывается по поверхности.</p>
     </div>
     {steps_block([
-        ("Заявка", "Звоните, пишите в WhatsApp или оставляете заявку на сайте — уточняем адрес и услугу."),
-        ("Выезд мастера", "Мастер приезжает со всем оборудованием в согласованное время, оценивает загрязнение и озвучивает цену."),
-        ("Чистка на месте", "Обеспыливание, экстракционная или паровая чистка, точечная обработка пятен — без вывоза мебели из дома."),
-        ("Приёмка результата", "Проверяем результат вместе с вами, даём рекомендации по сушке и уходу."),
+        ("Осмотр и тест ткани", "Определяем тип обивки и загрязнений, проверяем средство на незаметном участке, чтобы ткань не полиняла и не села."),
+        ("Сухая чистка", "Пылесосим мебель мощным пылесосом: убираем пыль, крошки, шерсть и песок из швов и складок."),
+        ("Обработка пятен", "Наносим шампунь по типу ткани и отдельно выводим пятна: от кофе, вина, жира, мочи. Щёткой поднимаем ворс."),
+        ("Экстракция и сушка", "Экстрактором промываем обивку и сразу вытягиваем воду вместе с грязью. Турбиной ускоряем сушку до 3–6 часов."),
     ])}
+    <div class="grid grid-2 tech-grid">
+      <div class="card tech-card">
+        <div class="service-icon">{icon("leaf", 26)}</div>
+        <h3>Химия</h3>
+        <p>Профессиональные сертифицированные средства. Подбираем состав под ткань и пятно, а не одно средство на всё.</p>
+        <ul class="check-list">
+          <li>{icon("check", 18)}<span>pH-нейтральные шампуни для деликатных тканей: велюр, шенилл, микрофибра</span></li>
+          <li>{icon("check", 18)}<span>Энзимные составы, которые расщепляют мочу, пот и другую органику</span></li>
+          <li>{icon("check", 18)}<span>Пятновыводители для кофе, вина, жира, чернил и косметики</span></li>
+          <li>{icon("check", 18)}<span>Нейтрализаторы запахов, безопасные для детей, аллергиков и животных</span></li>
+        </ul>
+      </div>
+      <div class="card tech-card">
+        <div class="service-icon">{icon("spark", 26)}</div>
+        <h3>Оборудование</h3>
+        <p>Привозим всё с собой. Мебель не нужно никуда вывозить, а от вас понадобится только розетка и доступ к воде.</p>
+        <ul class="check-list">
+          <li>{icon("check", 18)}<span>Профессиональный экстрактор: подаёт раствор и сразу забирает грязную воду</span></li>
+          <li>{icon("check", 18)}<span>Пылесос для сухой чистки перед мойкой</span></li>
+          <li>{icon("check", 18)}<span>Щётки и насадки разной жёсткости под тип ткани и ворса</span></li>
+          <li>{icon("check", 18)}<span>Турбина для быстрой сушки после чистки</span></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 """
@@ -1652,7 +1736,7 @@ def render_index():
       <h2>Что мы обещаем каждому клиенту</h2>
     </div>
     <div class="grid grid-3">
-      <div class="card benefit"><div class="icon">{icon("truck",22)}</div><div><h3>Выезд на дом и в офис</h3><p>Приезжаем со своим оборудованием — не нужно вывозить мебель или ехать в химчистку.</p></div></div>
+      <div class="card benefit"><div class="icon">{icon("truck",22)}</div><div><h3>Выезд к вам</h3><p>Приезжаем со своим оборудованием — не нужно вывозить мебель или ехать в химчистку.</p></div></div>
       <div class="card benefit"><div class="icon">{icon("leaf",22)}</div><div><h3>Безопасная химия</h3><p>Сертифицированные средства без резкого запаха — безопасны для детей, аллергиков и животных.</p></div></div>
       <div class="card benefit"><div class="icon">{icon("shield",22)}</div><div><h3>Гарантия на работы</h3><p>Если результат вас не устроит, вернёмся и переделаем проблемный участок.</p></div></div>
       <div class="card benefit"><div class="icon">{icon("clock",22)}</div><div><h3>Выезд в день обращения</h3><p>В большинстве случаев мастер приезжает в течение нескольких часов после заявки.</p></div></div>
@@ -1724,12 +1808,12 @@ def render_index():
         <span class="badge">{icon("leaf",14)} Безопасно для детей и животных</span>
       </div>
     </div>
-    {order_form_panel()}
+    {order_form_panel(current_path=path)}
   </div>
 </section>
 """
 
-    body = hero + services_grid + steps + benefits + districts + reviews + order + faq
+    body = hero + services_grid + process + benefits + districts + reviews + quiz_block() + order + faq
     schemas = [local_business_schema()]
     return path, page_shell(
         path,
@@ -1797,7 +1881,7 @@ def render_onas():
       <h2>Почему химчистка на дому — это удобно</h2>
       <p>Вывоз мебели в химчистку — это разбор, риск повреждения при транспортировке и мебель «в отъезде» на несколько дней. Выездная химчистка решает все эти проблемы: мы привозим профессиональное оборудование к вам и чистим мебель на месте, а уже через несколько часов после высыхания ей можно пользоваться.</p>
       <h2>Оборудование и средства</h2>
-      <p>Используем экстракционные моющие пылесосы, парогенераторы и профессиональные турбины для сушки. Для чистки применяем сертифицированные средства, подобранные отдельно под тип ткани, кожи или ковровых материалов — без резкого запаха и агрессивной химии.</p>
+      <p>Используем экстракционные моющие пылесосы и профессиональные турбины для сушки. Для чистки применяем сертифицированные средства, подобранные отдельно под тип ткани, кожи или ковровых материалов — без резкого запаха и агрессивной химии.</p>
       <h2>Безопасность для детей и животных</h2>
       <p>Для чистки детских матрасов, колясок и автокресел используем отдельные гипоаллергенные составы. После чистки мебель полностью безопасна для контакта с кожей — никаких токсичных остатков в волокнах не остаётся.</p>
       <h2>Гарантия результата</h2>
@@ -1846,7 +1930,7 @@ def render_ceny():
     for s in MAIN_SERVICES:
         tables += f"""
 <div style="margin-bottom:34px;">
-  <h3 style="margin-bottom:12px;"><a href="{service_filename(s["slug"])}">{esc(s["nav"])}</a></h3>
+  <h3 style="margin-bottom:12px;"><a href="{service_filename(s["slug"])}">{esc(short(s))}</a></h3>
   {price_table_block(s["price_rows"])}
 </div>
 """
