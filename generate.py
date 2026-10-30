@@ -13,6 +13,8 @@ import hashlib
 import html as htmlmod
 from datetime import date
 
+from PIL import Image
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "site")
 
@@ -226,7 +228,7 @@ svc(
 )
 
 svc(
-    slug="matrasa", icon="bed", nav="Химчистка матраса", acc="химчистку матраса", h1="Химчистка матраса на дому в Калининграде",
+    slug="matrasa", icon="bed", hero_img="hero-matras.webp", hide_intro=True, hide_steps=True, nav="Химчистка матраса", acc="химчистку матраса", h1="Химчистка матраса на дому в Калининграде",
     title="Химчистка матраса в Калининграде на дому — цена от 900 ₽ | без просушки на солнце",
     description="Профессиональная химчистка матраса на дому: удаление пятен, пылевых клещей и запахов, дезинфекция. Работаем в Калининграде, выезд в день заявки, сушка турбинами за 3–4 часа.",
     lead="Глубокая чистка матраса от пыли, пятен и клещей без переворачивания и выноса на улицу.",
@@ -1504,7 +1506,8 @@ def render_service_page(s):
     intro_html = "".join(f"<p>{esc(p)}</p>" for p in s["intro"])
     if s.get("hero_img"):
         # Картинка справа, наполовину уходит за край экрана
-        hero_side = f'<div class="hero-bleed"><img src="{asset("assets/img/" + s["hero_img"])}" alt="{esc(s["h1"])}" width="1080" height="564" fetchpriority="high"></div>'
+        w, h = Image.open(os.path.join(OUT, "assets/img", s["hero_img"])).size
+        hero_side = f'<div class="hero-bleed"><img src="{asset("assets/img/" + s["hero_img"])}" alt="{esc(s["h1"])}" width="{w}" height="{h}" fetchpriority="high"></div>'
     else:
         hero_side = f"""<div class="hero-card">
       <h3>Цена от {s["price_from"]} ₽</h3>
@@ -1635,10 +1638,10 @@ def render_service_page(s):
         breadcrumbs_html(breadcrumbs)
         + hero
         + types_block(s)
-        + f'<section class="section"><div class="container" style="max-width:840px">{intro_html}</div></section>'
+        + ("" if s.get("hide_intro") else f'<section class="section"><div class="container" style="max-width:840px">{intro_html}</div></section>')
         + cause_selector
         + problems
-        + steps
+        + ("" if s.get("hide_steps") else steps)
         + price
         + quiz_block(s["slug"])
         + order
