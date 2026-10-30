@@ -187,7 +187,6 @@ button{ font-family: inherit; cursor: pointer; }
 .type-card-body .price-from{ font-weight: 800; color: var(--color-primary-dark); font-size: 17px; }
 .type-card-body p{ color: var(--color-ink-soft); font-size: 14px; margin-bottom: 6px; }
 .type-card-actions{ display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
-.service-card .card-link{ font-weight: 700; font-size: 13.5px; color: var(--color-primary); display: inline-flex; align-items: center; gap: 6px; }
 
 /* ---------- Process steps ---------- */
 .steps{ counter-reset: step; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
@@ -387,3 +386,12 @@ button{ font-family: inherit; cursor: pointer; }
 .consent{ display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: var(--color-ink-soft); margin: 4px 0 14px; cursor: pointer; }
 .consent input{ width: 18px; height: 18px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--color-primary); }
 .form-gift{ display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 700; font-size: 14.5px; color: var(--color-accent); margin-bottom: 10px; }
+
+/* ===== Кнопки в карточках услуг и видов ===== */
+.card-btn{ width: 100%; padding: 12px 20px; font-size: 14.5px; margin-top: 4px; }
+.card-btn svg{ transition: transform .15s ease; }
+.card-btn:hover{ background: var(--color-primary-dark); box-shadow: 0 8px 20px rgba(24,104,193,.35); transform: translateY(-2px); }
+.card-btn:hover svg{ transform: translateX(4px); }
+.card-btn:active{ transform: translateY(0); box-shadow: var(--shadow-sm); }
+.service-card, .type-card{ transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease; }
+.service-card:hover, .type-card:hover{ box-shadow: var(--shadow-md); border-color: rgba(24,104,193,.35); }
