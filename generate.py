@@ -141,12 +141,17 @@ def gicon(name, size=24, cls=""):
     _gid[0] += 1
     i = f"gi{_gid[0]}"
     extra = f' class="{cls}"' if cls else ""
+    deco = deco.replace(f'fill="{GLASS_BLUE}"', f'fill="url(#{i}g)"')
     return (f'<svg width="{size}" height="{size}" viewBox="0 0 24 24"{extra} aria-hidden="true">'
-            f'<defs><clipPath id="{i}c">{front}</clipPath>'
+            f'<defs><linearGradient id="{i}g" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">'
+            f'<stop offset="0" stop-color="#1450d6"/><stop offset=".5" stop-color="#6f9ff0"/><stop offset="1" stop-color="#7a3ce6"/></linearGradient>'
+            f'<linearGradient id="{i}w" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">'
+            f'<stop offset="0" stop-color="#c9daf8"/><stop offset="1" stop-color="#b3c7f2"/></linearGradient>'
+            f'<clipPath id="{i}c">{front}</clipPath>'
             f'<filter id="{i}f" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.4"/></filter></defs>'
-            f'<g fill="{GLASS_BLUE}">{back}</g>'
-            f'<g fill="{GLASS_FROST}">{front}</g>'
-            f'<g clip-path="url(#{i}c)"><g fill="{GLASS_BLUE}" filter="url(#{i}f)" opacity=".85">{back}</g></g>'
+            f'<g fill="url(#{i}g)">{back}</g>'
+            f'<g fill="url(#{i}w)">{front}</g>'
+            f'<g clip-path="url(#{i}c)"><g fill="url(#{i}g)" filter="url(#{i}f)" opacity=".85">{back}</g></g>'
             f'{deco}</svg>')
 
 # =========================================================================
