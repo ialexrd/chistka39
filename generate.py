@@ -82,6 +82,73 @@ def icon(name, size=24, cls=""):
     extra = f' class="{cls}"' if cls else ""
     return f'<svg width="{size}" height="{size}" viewBox="0 0 24 24"{extra} aria-hidden="true">{inner}</svg>'
 
+# Плоские «стеклянные» иконки: синяя фигура сзади + матовая голубая поверх (сквозь неё видно размытый синий)
+GLASS_BLUE = "#1868c1"
+GLASS_FROST = "#abc9f0"
+_W = 'fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"'
+GLASS = {
+    # name: (сзади, спереди, белые детали)
+    "shield": ('<path d="M10.5 2l7 2.9v5.4c0 5-3 8.5-7 10.2-4-1.7-7-5.2-7-10.2V4.9z"/>',
+               '<circle cx="16.8" cy="16.6" r="5.4"/>',
+               f'<path d="M14.4 16.7l1.7 1.7 3.1-3.2" {_W} stroke-width="1.5"/>'),
+    "leaf": ('<path d="M21 2.5C12 2.5 7 7 7 14.5c0 1 .1 1.8.3 2.6C14.5 17 21 11.5 21 2.5z"/>',
+             '<path d="M1.8 6.5c0 8.2 4.6 14 12.4 14 .3-8-4.7-14-12.4-14z"/>',
+             f'<path d="M5 10.5c2.8 2.5 5 5.4 6.8 8.6" {_W} stroke-width="1.3"/>'),
+    "clock": ('<circle cx="17" cy="7" r="5.2"/>',
+              '<circle cx="10.8" cy="13.2" r="8.5"/>',
+              f'<path d="M10.8 8.7v4.5l3 2" {_W} stroke-width="1.7"/>'),
+    "truck": ('<path d="M14 8h4l3.5 4v4.5a1.5 1.5 0 01-1.5 1.5H14z"/>',
+              '<rect x="2" y="5" width="14" height="12" rx="2"/>',
+              f'<circle cx="7" cy="18" r="2.5" fill="{GLASS_BLUE}" stroke="#fff" stroke-width="1.3"/><circle cx="17.5" cy="18" r="2.5" fill="{GLASS_BLUE}" stroke="#fff" stroke-width="1.3"/>'),
+    "spark": ('<path d="M14 2c.8 4.6 3.4 7.2 8 8-4.6.8-7.2 3.4-8 8-.8-4.6-3.4-7.2-8-8 4.6-.8 7.2-3.4 8-8z"/>',
+              '<circle cx="7.5" cy="16.5" r="5.2"/>', ''),
+    "mappin": ('<path d="M6 13.5h12a1 1 0 01.9.6l2.7 6.2a1 1 0 01-.9 1.4H3.3a1 1 0 01-.9-1.4l2.7-6.2a1 1 0 01.9-.6z"/>',
+               '<path d="M12 2a6.3 6.3 0 016.3 6.3c0 4.5-6.3 10-6.3 10s-6.3-5.5-6.3-10A6.3 6.3 0 0112 2z"/>',
+               '<circle cx="12" cy="8.3" r="2.1" fill="#fff"/>'),
+    "sofa": ('<rect x="4" y="4.5" width="16" height="9.5" rx="2.5"/><rect x="4" y="18" width="2.2" height="3" rx=".8"/><rect x="17.8" y="18" width="2.2" height="3" rx=".8"/>',
+             '<rect x="1.5" y="9.5" width="5" height="9.5" rx="2.5"/><rect x="17.5" y="9.5" width="5" height="9.5" rx="2.5"/><rect x="5" y="13" width="14" height="6" rx="1.5"/>',
+             f'<path d="M12 14v3.6" {_W} stroke-width="1" opacity=".8"/>'),
+    "armchair": ('<rect x="6" y="3.5" width="12" height="10.5" rx="3"/><rect x="5" y="18" width="2.2" height="3" rx=".8"/><rect x="16.8" y="18" width="2.2" height="3" rx=".8"/>',
+                 '<rect x="2.5" y="9.5" width="5" height="9.5" rx="2.5"/><rect x="16.5" y="9.5" width="5" height="9.5" rx="2.5"/><rect x="6.5" y="13.2" width="11" height="5.8" rx="1.5"/>', ''),
+    "chair": ('<rect x="6.5" y="2" width="11" height="10.5" rx="2.2"/><rect x="6.3" y="13" width="2.2" height="9" rx="1.1"/><rect x="15.5" y="13" width="2.2" height="9" rx="1.1"/>',
+              '<rect x="4" y="10.8" width="16" height="4.4" rx="1.8"/>', ''),
+    "bed": ('<rect x="1.5" y="3.5" width="6" height="15.5" rx="2"/><rect x="2.5" y="18" width="2.2" height="3.5" rx=".8"/><rect x="19.3" y="17" width="2.2" height="4.5" rx=".8"/>',
+            '<rect x="8.5" y="7.5" width="6.5" height="3.8" rx="1.9"/><rect x="5" y="11" width="17.5" height="7" rx="2"/>',
+            f'<path d="M15.5 14.5h4.5" {_W} stroke-width="1.2" opacity=".85"/>'),
+    "dining": ('<rect x="1.5" y="3.5" width="5.5" height="17" rx="2.2"/><rect x="1.5" y="13.5" width="13" height="5.5" rx="1.8"/>',
+               '<rect x="10.5" y="8.5" width="12" height="3.2" rx="1.4"/><rect x="15.4" y="10.5" width="2.4" height="9" rx="1"/><rect x="12.6" y="18.8" width="8" height="2.4" rx="1.2"/>', ''),
+    "office": ('<rect x="7" y="1.8" width="10" height="10.5" rx="3.5"/><rect x="11" y="14" width="2" height="4.5"/><rect x="5.5" y="18" width="13" height="2.2" rx="1.1"/><circle cx="6.5" cy="21.6" r="1.4"/><circle cx="17.5" cy="21.6" r="1.4"/>',
+               '<rect x="4.5" y="10.5" width="15" height="4.6" rx="2.3"/>', ''),
+    "cafe": ('<rect x="9.5" y="7" width="13" height="3" rx="1.5"/><rect x="14.8" y="9" width="2.4" height="10.5" rx="1"/><rect x="12.5" y="18.8" width="7" height="2.4" rx="1.2"/><rect x="2.3" y="15" width="2" height="6.5" rx="1"/><rect x="8.2" y="15" width="2" height="6.5" rx="1"/>',
+             '<rect x="1.5" y="4" width="3.6" height="12" rx="1.8"/><rect x="1.5" y="12.3" width="10" height="3.6" rx="1.5"/>', ''),
+    "desk": ('<path d="M12 1.8l9.6 5.2a.6.6 0 01-.3 1.1H2.7a.6.6 0 01-.3-1.1z"/><rect x="1.8" y="19" width="20.4" height="3" rx="1.2"/>',
+             '<rect x="3.5" y="7.2" width="17" height="12.4" rx="1.4"/>',
+             f'<path d="M7.5 10v6.8M12 10v6.8M16.5 10v6.8" {_W} stroke-width="1.7"/>'),
+    "carpet": ('<rect x="2" y="2.5" width="20" height="6.5" rx="3.25"/>',
+               '<path d="M4 7.5h16v12a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 19.5z"/>',
+               f'<path d="M7.5 12h9M7.5 15.8h9" {_W} stroke-width="1.3" opacity=".9"/>'),
+    "nodrop": ('<path d="M10 2s6.8 7 6.8 12a6.8 6.8 0 01-13.6 0C3.2 9 10 2 10 2z"/>',
+               '<circle cx="16.8" cy="16.8" r="5.4"/>',
+               f'<path d="M14.6 14.6l4.4 4.4M19 14.6l-4.4 4.4" {_W} stroke-width="1.5"/>'),
+}
+_gid = [0]
+
+def gicon(name, size=24, cls=""):
+    """Стеклянная двухслойная иконка; если формы нет — обычная icon()."""
+    if name not in GLASS:
+        return icon(name, size, cls)
+    back, front, deco = GLASS[name]
+    _gid[0] += 1
+    i = f"gi{_gid[0]}"
+    extra = f' class="{cls}"' if cls else ""
+    return (f'<svg width="{size}" height="{size}" viewBox="0 0 24 24"{extra} aria-hidden="true">'
+            f'<defs><clipPath id="{i}c">{front}</clipPath>'
+            f'<filter id="{i}f" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.4"/></filter></defs>'
+            f'<g fill="{GLASS_BLUE}">{back}</g>'
+            f'<g fill="{GLASS_FROST}">{front}</g>'
+            f'<g clip-path="url(#{i}c)"><g fill="{GLASS_BLUE}" filter="url(#{i}f)" opacity=".85">{back}</g></g>'
+            f'{deco}</svg>')
+
 # =========================================================================
 # 3. НАВИГАЦИЯ / СПИСОК УСЛУГ
 # =========================================================================
@@ -1403,7 +1470,7 @@ QUIZ_ITEMS = [
 def quiz_block(preselect=None):
     preselect_map = {"divana": "divan", "uglovogo-divana": "divan", "matrasa": "matras", "stulev": "stul",
                      "kresla": "kreslo", "kuhonnogo-ugolka": "ugolok", "kovrolina": "kovrolin"}
-    config = {"items": [dict(it, icon_svg=icon(it["icon"], 44)) for it in QUIZ_ITEMS], "extras": QUIZ_EXTRAS,
+    config = {"items": [dict(it, icon_svg=gicon(it["icon"], 44)) for it in QUIZ_ITEMS], "extras": QUIZ_EXTRAS,
               "preselect": preselect_map.get(preselect)}
     return f"""
 <section class="section quiz-section" id="kalkulyator">
@@ -1452,7 +1519,7 @@ def cta_banner(title_text="Готовы избавить мебель от пя�
 def service_card(s):
     return f"""
 <div class="card service-card">
-  <div class="service-icon">{icon(s["icon"], 34)}</div>
+  <div class="service-icon">{gicon(s["icon"], 40)}</div>
   <h3>{esc(short(s))}</h3>
   <p>{esc(s["lead"])}</p>
   <div class="price-from">от {s["price_from"]} ₽</div>
@@ -1527,9 +1594,9 @@ def render_service_page(s):
       <p class="hero-lead">{esc(s["lead"])}</p>
       {hero_cta()}
       <div class="hero-trust">
-        <div class="trust-item"><span class="dot">{icon("shield", 15)}</span>Гарантия на выполненные работы</div>
-        <div class="trust-item"><span class="dot">{icon("leaf", 15)}</span>Сертифицированная гипоаллергенная химия</div>
-        <div class="trust-item"><span class="dot">{icon("truck", 15)}</span>Свой выезд, без визита в химчистку</div>
+        <div class="trust-item"><span class="dot">{gicon("shield", 28)}</span>Гарантия на выполненные работы</div>
+        <div class="trust-item"><span class="dot">{gicon("leaf", 28)}</span>Сертифицированная гипоаллергенная химия</div>
+        <div class="trust-item"><span class="dot">{gicon("truck", 28)}</span>Свой выезд, без визита в химчистку</div>
       </div>
     </div>
     {hero_side}
@@ -1671,9 +1738,9 @@ def render_index():
       <p class="hero-lead">Чистим диваны, матрасы, стулья, кухонные уголки и ковролин прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос, сертифицированная химия, выезд в день обращения.</p>
       {hero_cta()}
       <div class="hero-trust">
-        <div class="trust-item"><span class="dot">{icon("shield", 15)}</span>Гарантия на работы</div>
-        <div class="trust-item"><span class="dot">{icon("leaf", 15)}</span>Гипоаллергенная химия</div>
-        <div class="trust-item"><span class="dot">{icon("clock", 15)}</span>{esc(SITE["work_hours_short"])}</div>
+        <div class="trust-item"><span class="dot">{gicon("shield", 28)}</span>Гарантия на работы</div>
+        <div class="trust-item"><span class="dot">{gicon("leaf", 28)}</span>Гипоаллергенная химия</div>
+        <div class="trust-item"><span class="dot">{gicon("clock", 28)}</span>{esc(SITE["work_hours_short"])}</div>
       </div>
     </div>
     <picture class="hero-photo">
@@ -1749,12 +1816,12 @@ def render_index():
       <h2>Что мы обещаем каждому клиенту</h2>
     </div>
     <div class="grid grid-3">
-      <div class="card benefit"><div class="icon">{icon("truck",22)}</div><div><h3>Выезд к вам</h3><p>Приезжаем со своим оборудованием — не нужно вывозить мебель или ехать в химчистку.</p></div></div>
-      <div class="card benefit"><div class="icon">{icon("leaf",22)}</div><div><h3>Безопасная химия</h3><p>Сертифицированные средства без резкого запаха — безопасны для детей, аллергиков и животных.</p></div></div>
-      <div class="card benefit"><div class="icon">{icon("shield",22)}</div><div><h3>Гарантия на работы</h3><p>Если результат вас не устроит, вернёмся и переделаем проблемный участок.</p></div></div>
-      <div class="card benefit"><div class="icon">{icon("clock",22)}</div><div><h3>Выезд в день обращения</h3><p>В большинстве случаев мастер приезжает в течение нескольких часов после заявки.</p></div></div>
-      <div class="card benefit"><div class="icon">{icon("spark",22)}</div><div><h3>Быстрая сушка</h3><p>Профессиональные турбины сокращают время высыхания мебели до 3–6 часов.</p></div></div>
-      <div class="card benefit"><div class="icon">{icon("mappin",22)}</div><div><h3>Весь Калининград и область</h3><p>Работаем во всех районах города и ближайших городах области.</p></div></div>
+      <div class="card benefit"><div class="icon">{gicon("truck",28)}</div><div><h3>Выезд к вам</h3><p>Приезжаем со своим оборудованием — не нужно вывозить мебель или ехать в химчистку.</p></div></div>
+      <div class="card benefit"><div class="icon">{gicon("leaf",28)}</div><div><h3>Безопасная химия</h3><p>Сертифицированные средства без резкого запаха — безопасны для детей, аллергиков и животных.</p></div></div>
+      <div class="card benefit"><div class="icon">{gicon("shield",28)}</div><div><h3>Гарантия на работы</h3><p>Если результат вас не устроит, вернёмся и переделаем проблемный участок.</p></div></div>
+      <div class="card benefit"><div class="icon">{gicon("clock",28)}</div><div><h3>Выезд в день обращения</h3><p>В большинстве случаев мастер приезжает в течение нескольких часов после заявки.</p></div></div>
+      <div class="card benefit"><div class="icon">{gicon("spark",28)}</div><div><h3>Быстрая сушка</h3><p>Профессиональные турбины сокращают время высыхания мебели до 3–6 часов.</p></div></div>
+      <div class="card benefit"><div class="icon">{gicon("mappin",28)}</div><div><h3>Весь Калининград и область</h3><p>Работаем во всех районах города и ближайших городах области.</p></div></div>
     </div>
   </div>
 </section>
@@ -1904,9 +1971,9 @@ def render_onas():
       <div class="card" style="padding:28px;">
         <h3>Коротко о работе</h3>
         <ul style="display:flex;flex-direction:column;gap:14px;margin-top:14px;">
-          <li class="benefit"><span class="icon">{icon("truck",18)}</span><div><h3>Свой выезд</h3><p>Работаем без привязки к офису — приезжаем в любую точку {esc(SITE["city"])} и области.</p></div></li>
-          <li class="benefit"><span class="icon">{icon("clock",18)}</span><div><h3>{esc(SITE["work_hours"])}</h3><p>Без выходных, включая праздничные дни по договорённости.</p></div></li>
-          <li class="benefit"><span class="icon">{icon("leaf",18)}</span><div><h3>Гипоаллергенная химия</h3><p>Средства без резкого запаха, безопасные для детей и питомцев.</p></div></li>
+          <li class="benefit"><span class="icon">{gicon("truck",26)}</span><div><h3>Свой выезд</h3><p>Работаем без привязки к офису — приезжаем в любую точку {esc(SITE["city"])} и области.</p></div></li>
+          <li class="benefit"><span class="icon">{gicon("clock",26)}</span><div><h3>{esc(SITE["work_hours"])}</h3><p>Без выходных, включая праздничные дни по договорённости.</p></div></li>
+          <li class="benefit"><span class="icon">{gicon("leaf",26)}</span><div><h3>Гипоаллергенная химия</h3><p>Средства без резкого запаха, безопасные для детей и питомцев.</p></div></li>
         </ul>
       </div>
     </div>
