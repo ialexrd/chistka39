@@ -148,7 +148,7 @@ def gicon(name, size=24, cls=""):
             f'<linearGradient id="{i}w" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">'
             f'<stop offset="0" stop-color="#c9daf8"/><stop offset="1" stop-color="#b3c7f2"/></linearGradient>'
             f'<clipPath id="{i}c">{front}</clipPath>'
-            f'<filter id="{i}f" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.4"/></filter></defs>'
+            f'<filter id="{i}f" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation=".8"/></filter></defs>'
             f'<g fill="url(#{i}g)">{back}</g>'
             f'<g fill="url(#{i}w)">{front}</g>'
             f'<g clip-path="url(#{i}c)"><g fill="url(#{i}g)" filter="url(#{i}f)" opacity=".85">{back}</g></g>'
