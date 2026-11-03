@@ -560,6 +560,6 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 
 /* Логотип-картинка в шапке */
 .logo--img{ display:flex; align-items:center; flex-shrink:0; }
-.logo--img img{ height:44px; width:auto; display:block; }
-@media (max-width: 900px){ .logo--img img{ height:36px; } }
-@media (max-width: 420px){ .logo--img img{ height:32px; } }
+.logo--img img{ width:140px; height:29px; display:block; }
+@media (max-width: 900px){ .logo--img img{ width:126px; height:26px; } }
+@media (max-width: 420px){ .logo--img img{ width:116px; height:24px; } }
