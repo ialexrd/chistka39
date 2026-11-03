@@ -1366,7 +1366,7 @@ def page_shell(path, title, description, body, schemas=None):
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 {schemas_html}
 </head>
-<body>
+<body{' class="page-home"' if path == "index.html" else ""}>
 {header(path)}
 {body}
 {footer()}
@@ -1736,23 +1736,25 @@ def render_service_page(s):
 def render_index():
     path = "index.html"
     hero = f"""
-<section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
-      <h1>Выездная химчистка мягкой мебели в Калининграде</h1>
-      <p class="hero-lead">Чистим диваны, матрасы, стулья, кухонные уголки и ковролин прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос, сертифицированная химия, выезд в день обращения.</p>
-      {hero_cta()}
-      <div class="hero-trust">
-        <div class="trust-item"><span class="dot">{gicon("shield", 28)}</span>Гарантия на работы</div>
-        <div class="trust-item"><span class="dot">{gicon("leaf", 28)}</span>Гипоаллергенная химия</div>
-        <div class="trust-item"><span class="dot">{gicon("clock", 28)}</span>{esc(SITE["work_hours_short"])}</div>
+<section class="hero hero-main">
+  <div class="container">
+    <div class="hero-banner">
+      <picture class="hero-banner-bg">
+        <source srcset="{asset("assets/img/hero-main.webp")}" type="image/webp">
+        <img src="{asset("assets/img/hero-main.jpg")}" alt="Мастер выездной химчистки чистит кресло у клиента дома в Калининграде" width="2400" height="1600" fetchpriority="high">
+      </picture>
+      <div class="hero-banner-body">
+        <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
+        <h1>Выездная химчистка мягкой мебели в Калининграде</h1>
+        <p class="hero-lead">Чистим диваны, матрасы, стулья, кухонные уголки и ковролин прямо у вас дома — без вывоза мебели. Свой профессиональный экстракционный пылесос, сертифицированная химия, выезд в день обращения.</p>
+        {hero_cta()}
+        <div class="hero-trust">
+          <div class="trust-item"><span class="dot">{gicon("shield", 28)}</span>Гарантия на работы</div>
+          <div class="trust-item"><span class="dot">{gicon("leaf", 28)}</span>Гипоаллергенная химия</div>
+          <div class="trust-item"><span class="dot">{gicon("clock", 28)}</span>{esc(SITE["work_hours_short"])}</div>
+        </div>
       </div>
     </div>
-    <picture class="hero-photo">
-      <source srcset="{asset("assets/img/hero-master.webp")}" type="image/webp">
-      <img src="{asset("assets/img/hero-master.jpg")}" alt="Мастер выездной химчистки чистит диван у клиента дома в Калининграде" width="900" height="939" fetchpriority="high">
-    </picture>
   </div>
 </section>
 """
