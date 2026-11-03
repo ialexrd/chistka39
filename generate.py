@@ -1181,12 +1181,8 @@ def header(current_path):
 </div>
 <header class="site-header">
   <div class="container header-row">
-    <a href="index.html" class="logo">
-      <span class="logo-badge">{icon("drop", 22)}</span>
-      <span class="logo-text">
-        <span>{esc(SITE["short_name"])}</span>
-        <small class="logo-sub">Выездная химчистка мебели</small>
-      </span>
+    <a href="index.html" class="logo logo--img" aria-label="{esc(SITE["short_name"])}: на главную">
+      <img src="{asset("assets/img/logo.svg")}" alt="{esc(SITE["short_name"])}" width="1372" height="324">
     </a>
     <nav class="main-nav" aria-label="Основная навигация">
       {nav_items}
