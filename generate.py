@@ -1766,6 +1766,39 @@ def render_index():
     </div>
   </div>
 </section>
+
+<section class="home-bento">
+  <div class="container">
+    <div class="bento-panel">
+      <div class="bento-head">
+        <span class="bento-label">Что мы выводим</span>
+        <h2>В нашем арсенале есть всё самое необходимое, чтобы вернуть вашей мебели чистоту и свежесть</h2>
+      </div>
+      <div class="bento-grid">
+        <div class="bento-card">
+          <span class="bento-num">01</span>
+          <h3>Удаление общих загрязнений</h3>
+          <p>Со временем ваша мягкая мебель теряет свой прежний облик из-за засаленности, пыли, пролитых жидкостей и т.&nbsp;д.</p>
+        </div>
+        <div class="bento-card">
+          <span class="bento-num">02</span>
+          <h3>Выведение неприятных запахов</h3>
+          <ul><li>кошачья моча</li><li>человеческая моча (взрослого и ребёнка)</li><li>запахи рвоты</li><li>протухшей еды</li></ul>
+        </div>
+        <div class="bento-card">
+          <span class="bento-num">03</span>
+          <h3>Удаление сложных пятен</h3>
+          <ul><li>кровь</li><li>чай, кофе, вино, пиво</li><li>косметика</li><li>детские лизуны</li><li>застарелые пятна</li></ul>
+        </div>
+        <div class="bento-card">
+          <span class="bento-num">04</span>
+          <h3>Детские художества</h3>
+          <p>Выведем пятна от ручек, карандашей, акварели, фломастеров, маркеров и т.&nbsp;д.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 """
 
     services_grid = f"""
