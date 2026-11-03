@@ -1865,8 +1865,8 @@ def render_index():
       <div class="tech-media-grid">
         <div class="tech-media-card">
           <div class="tech-media-text">
-            <h3>Химия</h3>
-            <p>Профессиональные сертифицированные средства. Подбираем состав под ткань и пятно, а не одно средство на всё.</p>
+            <h3>Профессиональные сертифицированные средства</h3>
+            <p>Подбираем состав под ткань и пятно, а не одно средство на всё.</p>
             <ul>
               <li>pH-нейтральные шампуни для деликатных тканей: велюр, шенилл, микрофибра</li>
               <li>Энзимные составы, которые расщепляют мочу, пот и другую органику</li>
@@ -1874,7 +1874,7 @@ def render_index():
               <li>Нейтрализаторы запахов, безопасные для детей, аллергиков и животных</li>
             </ul>
           </div>
-          <img class="tech-media-img" src="{asset("assets/img/tech-himiya.webp")}" alt="Профессиональная химия для чистки мебели" width="823" height="749" loading="lazy">
+          <img class="tech-media-img tech-img-chem" src="{asset("assets/img/tech-himiya.webp")}" alt="Профессиональная химия для чистки мебели" width="823" height="749" loading="lazy">
         </div>
         <div class="tech-media-card">
           <div class="tech-media-text">

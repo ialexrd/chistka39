@@ -527,3 +527,4 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 @media (max-width: 860px){ .tech-media-img{ max-height: 300px; transform: none; } }
 @media (min-width: 861px){ .tech-img-extr{ max-height: 440px; transform: translateX(-28px) scale(1.3); } }
 @media (max-width: 860px){ .tech-img-extr{ max-height: 340px; } }
+@media (min-width: 861px){ .tech-img-chem{ max-height: 320px; transform: none; } }
