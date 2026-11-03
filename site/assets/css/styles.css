@@ -458,3 +458,14 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
   .bento-card{ padding: 20px; }
   .bento-card p, .bento-card ul{ padding-top: 12px; }
 }
+
+/* ---------- Главная, ПК: бенто-блоки почти во всю ширину экрана ---------- */
+@media (min-width: 861px){
+  .page-home .site-header .header-row{ width: calc(100% - 40px); max-width: none; padding-left: 24px; padding-right: 14px; }
+  .hero-main > .container, .home-bento > .container{ max-width: none; padding-left: 20px; padding-right: 20px; }
+  .hero-banner{ min-height: clamp(620px, 46vw, 900px); }
+  .hero-banner-body{ padding-left: clamp(52px, 5vw, 110px); padding-right: clamp(52px, 5vw, 110px); max-width: calc(640px + 2 * clamp(52px, 5vw, 110px)); }
+  .bento-panel{ padding: clamp(48px, 4vw, 80px) clamp(52px, 5vw, 110px); }
+}
+@media (min-width: 1600px){ .hero-banner-body, .bento-head, .bento-grid{ zoom: 1.1; } }
+@media (min-width: 1800px){ .hero-banner-body, .bento-head, .bento-grid{ zoom: 1.2; } }
