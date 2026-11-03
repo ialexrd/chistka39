@@ -576,3 +576,10 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 
 /* Карточка «Стулья»: кадр ниже, чтобы стулья были видны целиком */
 .svc-card-media img[src*="card-stulev"]{ object-position: 50% 88%; }
+
+/* Технология: заголовки карточек на одном уровне (прижаты к верху) */
+@media (min-width: 861px){
+  .tech-media-card{ align-content: start; grid-template-rows: auto 1fr; }
+  .tech-media-title{ align-self: start; }
+  .tech-media-img{ align-self: center; }
+}
