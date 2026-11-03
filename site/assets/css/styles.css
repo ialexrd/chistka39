@@ -563,3 +563,13 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 .logo--img img{ width:140px; height:29px; display:block; }
 @media (max-width: 900px){ .logo--img img{ width:126px; height:26px; } }
 @media (max-width: 420px){ .logo--img img{ width:116px; height:24px; } }
+
+/* Технология: на телефоне карточки в одну колонку (фото → заголовок → текст) */
+@media (max-width: 860px){
+  .tech-media-card{ grid-template-columns: 1fr; padding: 20px; row-gap: 10px; }
+  .tech-media-img{ order: -1; justify-self: center; max-width: 100%; }
+  .tech-img-extr{ transform: none; max-height: 260px; }
+  .tech-img-chem{ max-height: 220px; }
+  .tech-media-title{ grid-column: auto; order: 0; }
+  .tech-media-text{ order: 1; }
+}
