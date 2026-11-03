@@ -1885,7 +1885,7 @@ def render_index():
               <li>Щётки и насадки разной жёсткости под тип ткани и ворса</li>
             </ul>
           </div>
-          <img class="tech-media-img" src="{asset("assets/img/tech-ekstraktor.webp")}" alt="Профессиональный экстрактор для химчистки мебели" width="823" height="749" loading="lazy">
+          <img class="tech-media-img tech-img-extr" src="{asset("assets/img/tech-ekstraktor.webp")}" alt="Профессиональный экстрактор для химчистки мебели" width="823" height="749" loading="lazy">
         </div>
       </div>
     </div>
