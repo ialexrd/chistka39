@@ -419,3 +419,16 @@ button{ font-family: inherit; cursor: pointer; }
   .hero-banner::before{ background: linear-gradient(180deg, rgba(14,22,34,0) 0, rgba(14,22,34,0) 170px, #1d2733 300px, #1d2733 100%); }
   .hero-banner-body{ padding: 270px 20px 26px; }
 }
+
+/* ---------- Главная: без верхней синей панели; на телефоне — экран во всю ширину ---------- */
+.page-home .topbar{ display: none !important; }
+.sticky-cta-home{ gap: 8px; padding: 10px 10px; }
+.sticky-cta-home .btn{ padding-left: 12px; padding-right: 12px; font-size: 14.5px; white-space: nowrap; }
+.sticky-cta-home .btn-primary{ flex: 1.6 1 0; }
+.sticky-cta-home .btn-messenger{ flex: 1 1 0; gap: 6px; }
+.sticky-cta-home .btn-messenger img{ width: 22px; height: 22px; }
+@media (max-width: 860px){
+  .hero-main > .container{ width: 100%; max-width: none; padding-left: 0; padding-right: 0; }
+  .hero-banner{ border-radius: 0; }
+  .hero-banner-body{ padding-left: 20px; padding-right: 20px; }
+}

@@ -1217,7 +1217,7 @@ def header(current_path):
 </header>
 """
 
-def footer():
+def footer(current_path=""):
     service_links = "".join(
         f'<li><a href="{service_filename(s["slug"])}">{esc(short(s))}</a></li>' for s in MAIN_SERVICES
     )
@@ -1264,11 +1264,20 @@ def footer():
     </div>
   </div>
 </footer>
-<div class="sticky-cta">
+{sticky_cta(current_path)}
+"""
+
+def sticky_cta(current_path):
+    if current_path == "index.html":
+        return f"""<div class="sticky-cta sticky-cta-home">
+  <a href="#zayavka" class="btn btn-primary">Оставить заявку</a>
+  <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="22" height="22"> Max</a>
+  <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="22" height="22"> Telegram</a>
+</div>"""
+    return f"""<div class="sticky-cta">
   <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary" data-track-call>{icon("phone", 16)} Позвонить</a>
   <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" class="btn btn-accent">{icon("whatsapp", 16)} WhatsApp</a>
-</div>
-"""
+</div>"""
 
 def breadcrumbs_html(items):
     lis = []
@@ -1369,7 +1378,7 @@ def page_shell(path, title, description, body, schemas=None):
 <body{' class="page-home"' if path == "index.html" else ""}>
 {header(path)}
 {body}
-{footer()}
+{footer(path)}
 <script src="{asset("assets/js/script.js")}" defer></script>
 </body>
 </html>"""
