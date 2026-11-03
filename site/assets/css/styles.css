@@ -397,7 +397,10 @@ button{ font-family: inherit; cursor: pointer; }
 .service-card:hover, .type-card:hover{ box-shadow: var(--shadow-md); border-color: rgba(24,104,193,.35); }
 
 /* ---------- Главная: новый первый экран (фото во всю карточку) ---------- */
-.page-home .site-header{ background: #eef1f5; border-bottom: none; backdrop-filter: none; padding-top: 12px; }
+.page-home .site-header{ background: transparent; border-bottom: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding-top: 12px; pointer-events: none; }
+.page-home .site-header .header-row{ pointer-events: auto; }
+.page-home .site-header + *{ margin-top: 0; }
+body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top / 100% 240px; }
 .page-home .site-header .header-row{ width: calc(100% - 40px); max-width: calc(var(--container) - 40px); background: rgba(255,255,255,.97); border-radius: 18px; padding: 12px 14px 12px 20px; box-shadow: 0 6px 24px rgba(20,35,60,.08); backdrop-filter: saturate(180%) blur(8px); }
 .hero-main{ background: #eef1f5; padding: 12px 0 14px; }
 .hero-banner{ position: relative; overflow: hidden; border-radius: 24px; min-height: 620px; display: flex; align-items: center; background: #3a3f46; }
@@ -428,7 +431,6 @@ button{ font-family: inherit; cursor: pointer; }
 .sticky-cta-home .btn-messenger{ flex: 1 1 0; gap: 6px; }
 .sticky-cta-home .btn-messenger img{ width: 22px; height: 22px; }
 @media (max-width: 860px){
-  .hero-main > .container{ width: 100%; max-width: none; padding-left: 0; padding-right: 0; }
-  .hero-banner{ border-radius: 0; }
-  .hero-banner-body{ padding-left: 20px; padding-right: 20px; }
+  .hero-main > .container{ padding-left: 8px; padding-right: 8px; }
+  .page-home .site-header .header-row{ width: calc(100% - 16px); }
 }
