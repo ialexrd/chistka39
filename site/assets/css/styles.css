@@ -573,3 +573,6 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
   .tech-media-title{ grid-column: auto; order: 0; }
   .tech-media-text{ order: 1; }
 }
+
+/* Карточка «Стулья»: кадр ниже, чтобы стулья были видны целиком */
+.svc-card-media img[src*="card-stulev"]{ object-position: 50% 88%; }
