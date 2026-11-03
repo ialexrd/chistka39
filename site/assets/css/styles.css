@@ -521,3 +521,7 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
   .tech-media-img{ order: -1; max-height: 220px; }
 }
 .tech-media-text{ align-self: start; }
+/* Технология: картинки крупнее */
+.tech-media-card{ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; padding-right: 14px; }
+.tech-media-img{ max-height: 380px; transform: scale(1.12); transform-origin: center; }
+@media (max-width: 860px){ .tech-media-img{ max-height: 300px; transform: none; } }

@@ -1874,7 +1874,7 @@ def render_index():
               <li>Нейтрализаторы запахов, безопасные для детей, аллергиков и животных</li>
             </ul>
           </div>
-          <img class="tech-media-img" src="{asset("assets/img/tech-himiya.webp")}" alt="Профессиональная химия для чистки мебели" width="900" height="800" loading="lazy">
+          <img class="tech-media-img" src="{asset("assets/img/tech-himiya.webp")}" alt="Профессиональная химия для чистки мебели" width="823" height="749" loading="lazy">
         </div>
         <div class="tech-media-card">
           <div class="tech-media-text">
@@ -1885,7 +1885,7 @@ def render_index():
               <li>Щётки и насадки разной жёсткости под тип ткани и ворса</li>
             </ul>
           </div>
-          <img class="tech-media-img" src="{asset("assets/img/tech-ekstraktor.webp")}" alt="Профессиональный экстрактор для химчистки мебели" width="900" height="800" loading="lazy">
+          <img class="tech-media-img" src="{asset("assets/img/tech-ekstraktor.webp")}" alt="Профессиональный экстрактор для химчистки мебели" width="823" height="749" loading="lazy">
         </div>
       </div>
     </div>
