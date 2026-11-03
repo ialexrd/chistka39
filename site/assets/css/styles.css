@@ -498,3 +498,26 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 .svc-btn{ font-size: 13px; padding: 7px 12px; gap: 2px; }
 @media (max-width: 1100px){ .svc-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px){ .svc-grid{ grid-template-columns: 1fr; gap: 10px; } .svc-card h3{ font-size: 16px; } .svc-price{ font-size: 18px; } }
+
+/* ---------- Главная: блок «Технология» ---------- */
+.tech-steps{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tech-steps .bento-card{ min-height: 220px; }
+.tech-media-grid{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.tech-media-card{ background: #f3f5f8; border-radius: 18px; padding: 26px 24px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: center; }
+.tech-media-text h3{ margin: 0 0 8px; font-size: 19px; }
+.tech-media-text p{ margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: var(--color-ink-soft); }
+.tech-media-text ul{ list-style: none; margin: 0; padding: 0; font-size: 14.5px; line-height: 1.5; color: var(--color-ink); }
+.tech-media-text li{ position: relative; padding-left: 16px; margin-top: 6px; }
+.tech-media-text li::before{ content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--color-primary); opacity: .55; }
+.tech-media-img{ width: 100%; height: auto; max-height: 280px; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(20,35,60,.14)); }
+@media (min-width: 1600px){ .tech-steps, .tech-media-grid{ zoom: 1.1; } }
+@media (min-width: 1800px){ .tech-steps, .tech-media-grid{ zoom: 1.2; } }
+@media (max-width: 1100px){ .tech-media-grid{ grid-template-columns: 1fr; } }
+@media (max-width: 860px){
+  .tech-steps{ grid-template-columns: 1fr; gap: 10px; }
+  .tech-steps .bento-card{ min-height: 0; }
+  .tech-media-grid{ gap: 10px; margin-top: 10px; }
+  .tech-media-card{ grid-template-columns: 1fr; padding: 20px; }
+  .tech-media-img{ order: -1; max-height: 220px; }
+}
+.tech-media-text{ align-self: start; }
