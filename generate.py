@@ -1741,7 +1741,7 @@ def render_index():
     <div class="hero-banner">
       <picture class="hero-banner-bg">
         <source srcset="{asset("assets/img/hero-main.webp")}" type="image/webp">
-        <img src="{asset("assets/img/hero-main.jpg")}" alt="Мастер выездной химчистки чистит кресло у клиента дома в Калининграде" width="2400" height="1600" fetchpriority="high">
+        <img src="{asset("assets/img/hero-main.jpg")}" alt="Мастер выездной химчистки чистит кресло у клиента дома в Калининграде" width="3200" height="2134" fetchpriority="high">
       </picture>
       <div class="hero-banner-body">
         <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>

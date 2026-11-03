@@ -401,7 +401,7 @@ button{ font-family: inherit; cursor: pointer; }
 .page-home .site-header .header-row{ width: calc(100% - 40px); max-width: calc(var(--container) - 40px); background: rgba(255,255,255,.97); border-radius: 18px; padding: 12px 14px 12px 20px; box-shadow: 0 6px 24px rgba(20,35,60,.08); backdrop-filter: saturate(180%) blur(8px); }
 .hero-main{ background: #eef1f5; padding: 12px 0 14px; }
 .hero-banner{ position: relative; overflow: hidden; border-radius: 24px; min-height: 620px; display: flex; align-items: center; background: #3a3f46; }
-.hero-banner-bg img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 0; }
+.hero-banner-bg img{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 38%; }
 .hero-banner::before{ content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(14,22,34,.72) 0%, rgba(14,22,34,.5) 38%, rgba(14,22,34,0) 62%); }
 .hero-banner-body{ position: relative; z-index: 2; padding: 56px 52px; max-width: 640px; color: #fff; }
 .hero-banner .eyebrow{ background: rgba(255,255,255,.16); color: #fff; backdrop-filter: blur(6px); }
@@ -415,7 +415,7 @@ button{ font-family: inherit; cursor: pointer; }
 @media (max-width: 860px){
   .hero-main{ padding-top: 8px; }
   .hero-banner{ min-height: 0; align-items: flex-end; border-radius: 20px; }
-  .hero-banner-bg img{ height: 300px; bottom: auto; object-position: 80% 0; }
+  .hero-banner-bg img{ height: 300px; bottom: auto; object-position: 80% 30%; }
   .hero-banner::before{ background: linear-gradient(180deg, rgba(14,22,34,0) 0, rgba(14,22,34,0) 170px, #1d2733 300px, #1d2733 100%); }
   .hero-banner-body{ padding: 270px 20px 26px; }
 }
