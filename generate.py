@@ -1864,8 +1864,8 @@ def render_index():
       </div>
       <div class="tech-media-grid">
         <div class="tech-media-card">
+          <h3 class="tech-media-title">Профессиональные сертифицированные средства</h3>
           <div class="tech-media-text">
-            <h3>Профессиональные сертифицированные средства</h3>
             <p>Подбираем состав под ткань и пятно, а не одно средство на всё.</p>
             <ul>
               <li>pH-нейтральные шампуни для деликатных тканей: велюр, шенилл, микрофибра</li>
@@ -1877,8 +1877,8 @@ def render_index():
           <img class="tech-media-img tech-img-chem" src="{asset("assets/img/tech-himiya.webp")}" alt="Профессиональная химия для чистки мебели" width="823" height="749" loading="lazy">
         </div>
         <div class="tech-media-card">
+          <h3 class="tech-media-title">Оборудование</h3>
           <div class="tech-media-text">
-            <h3>Оборудование</h3>
             <p>Привозим всё с собой. Мебель не нужно никуда вывозить, а от вас понадобится только розетка и доступ к воде.</p>
             <ul>
               <li>Профессиональный экстрактор: подаёт раствор и сразу забирает грязную воду</li>
@@ -1893,23 +1893,49 @@ def render_index():
 </section>
 """
 
+    ba_names = ["Угловой диван", "Матрас", "Детский диванчик", "Диван", "Диван", "Тахта", "Диван-книжка", "Детский матрас"]
+    ba_cards = "".join(f"""
+        <figure class="ba-card">
+          <div class="ba" style="--pos:50%">
+            <picture><source srcset="{asset(f"assets/img/ba-{i}-posle.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/ba-{i}-posle.jpg")}" alt="{esc(n)} после химчистки" width="900" height="600" loading="lazy"></picture>
+            <picture class="ba-before"><source srcset="{asset(f"assets/img/ba-{i}-do.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/ba-{i}-do.jpg")}" alt="{esc(n)} до химчистки" width="900" height="600" loading="lazy"></picture>
+            <span class="ba-tag ba-tag-do">До</span><span class="ba-tag ba-tag-posle">После</span>
+            <span class="ba-line" aria-hidden="true"><span class="ba-knob">{icon("chevron", 14)}{icon("chevron", 14)}</span></span>
+            <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Сравнить до и после: {esc(n)}">
+          </div>
+          <figcaption>{esc(n)}</figcaption>
+        </figure>""" for i, n in enumerate(ba_names, 1))
+
     benefits = f"""
-<section class="section">
+<section class="home-bento home-why">
   <div class="container">
-    <div class="section-head">
-      <span class="tag">Почему мы</span>
-      <h2>Что мы обещаем каждому клиенту</h2>
-    </div>
-    <div class="grid grid-3">
-      <div class="card benefit"><div class="icon">{gicon("truck",28)}</div><div><h3>Выезд к вам</h3><p>Приезжаем со своим оборудованием — не нужно вывозить мебель или ехать в химчистку.</p></div></div>
-      <div class="card benefit"><div class="icon">{gicon("leaf",28)}</div><div><h3>Безопасная химия</h3><p>Сертифицированные средства без резкого запаха — безопасны для детей, аллергиков и животных.</p></div></div>
-      <div class="card benefit"><div class="icon">{gicon("shield",28)}</div><div><h3>Гарантия на работы</h3><p>Если результат вас не устроит, вернёмся и переделаем проблемный участок.</p></div></div>
-      <div class="card benefit"><div class="icon">{gicon("clock",28)}</div><div><h3>Выезд в день обращения</h3><p>В большинстве случаев мастер приезжает в течение нескольких часов после заявки.</p></div></div>
-      <div class="card benefit"><div class="icon">{gicon("spark",28)}</div><div><h3>Быстрая сушка</h3><p>Профессиональные турбины сокращают время высыхания мебели до 3–6 часов.</p></div></div>
-      <div class="card benefit"><div class="icon">{gicon("mappin",28)}</div><div><h3>Весь Калининград и область</h3><p>Работаем во всех районах города и ближайших городах области.</p></div></div>
+    <div class="bento-panel">
+      <div class="bento-head">
+        <span class="bento-label">Почему мы</span>
+        <h2>Что мы обещаем каждому клиенту</h2>
+      </div>
+      <div class="bento-grid why-grid">
+        <div class="bento-card why-card"><div class="why-icon">{gicon("truck",28)}</div><h3>Выезд к вам</h3><p>Приезжаем со своим оборудованием — не нужно вывозить мебель или ехать в химчистку.</p></div>
+        <div class="bento-card why-card"><div class="why-icon">{gicon("leaf",28)}</div><h3>Безопасная химия</h3><p>Сертифицированные средства без резкого запаха — безопасны для детей, аллергиков и животных.</p></div>
+        <div class="bento-card why-card"><div class="why-icon">{gicon("shield",28)}</div><h3>Гарантия на работы</h3><p>Если результат вас не устроит, вернёмся и переделаем проблемный участок.</p></div>
+        <div class="bento-card why-card"><div class="why-icon">{gicon("clock",28)}</div><h3>Выезд в день обращения</h3><p>В большинстве случаев мастер приезжает в течение нескольких часов после заявки.</p></div>
+      </div>
+      <div class="bento-head ba-head">
+        <span class="bento-label">До и после</span>
+        <h2>Результаты наших работ</h2>
+        <p class="bento-sub">Потяните ползунок, чтобы сравнить мебель до и после химчистки.</p>
+      </div>
+      <div class="ba-grid">{ba_cards}
+      </div>
     </div>
   </div>
 </section>
+<script>
+document.querySelectorAll('.ba').forEach(function(el){{
+  var r = el.querySelector('.ba-range');
+  r.addEventListener('input', function(){{ el.style.setProperty('--pos', r.value + '%'); }});
+}});
+</script>
 """
 
     districts = f"""

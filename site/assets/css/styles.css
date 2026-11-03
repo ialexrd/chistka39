@@ -528,3 +528,32 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 @media (min-width: 861px){ .tech-img-extr{ max-height: 440px; transform: translateX(-28px) scale(1.3); } }
 @media (max-width: 860px){ .tech-img-extr{ max-height: 340px; } }
 @media (min-width: 861px){ .tech-img-chem{ max-height: 320px; transform: none; } }
+
+/* Технология: заголовок карточки на всю ширину */
+.tech-media-title{ grid-column: 1 / -1; margin: 0; font-size: 19px; line-height: 1.25; }
+.tech-media-card{ align-items: center; row-gap: 4px; }
+@media (max-width: 860px){ .tech-media-title{ grid-column: auto; } }
+
+/* ---------- Главная: «Почему мы» + до/после ---------- */
+.why-grid .why-card{ min-height: 0; }
+.why-icon{ width: 52px; height: 52px; border-radius: 14px; background: #fff; display: flex; align-items: center; justify-content: center; }
+.why-card h3{ margin-top: 18px; }
+.why-card p{ padding-top: 8px; margin-top: 0; }
+.ba-head{ margin-top: 56px; }
+.ba-grid{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.ba-card{ margin: 0; background: #f3f5f8; border-radius: 18px; padding: 8px 8px 14px; }
+.ba-card figcaption{ margin: 12px 10px 0; font-weight: 700; font-size: 16px; }
+.ba{ position: relative; aspect-ratio: 3 / 2; border-radius: 12px; overflow: hidden; user-select: none; touch-action: pan-y; }
+.ba picture, .ba-img{ position: absolute; inset: 0; width: 100%; height: 100% !important; object-fit: cover; display: block; }
+.ba-before{ clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ba-line{ position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 6px rgba(0,0,0,.25); pointer-events: none; }
+.ba-knob{ position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: #fff; color: var(--color-primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(20,35,60,.25); }
+.ba-knob svg:first-child{ transform: scaleX(-1); margin-right: -3px; }
+.ba-tag{ position: absolute; top: 10px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.9); font-size: 12px; font-weight: 700; color: var(--color-ink); pointer-events: none; }
+.ba-tag-do{ left: 10px; } .ba-tag-posle{ right: 10px; }
+.ba-range{ position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; -webkit-appearance: none; appearance: none; }
+.ba-range::-webkit-slider-thumb{ -webkit-appearance: none; width: 44px; height: 400px; }
+@media (min-width: 1600px){ .why-grid, .ba-grid{ zoom: 1.1; } }
+@media (min-width: 1800px){ .why-grid, .ba-grid{ zoom: 1.2; } }
+@media (max-width: 1100px){ .ba-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px){ .ba-grid{ grid-template-columns: 1fr; gap: 10px; } .ba-head{ margin-top: 36px; } }
