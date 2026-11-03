@@ -439,7 +439,7 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 .home-bento{ background: #eef1f5; padding: 0 0 14px; }
 .bento-panel{ background: #fff; border-radius: 24px; padding: 48px 52px 52px; }
 .bento-head{ display: grid; grid-template-columns: 1fr; gap: 14px; max-width: 760px; margin-bottom: 40px; }
-.bento-label{ font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--color-ink-soft); }
+.bento-label{ font-size: 12.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--color-accent); }
 .bento-head h2{ margin: 0; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; font-weight: 700; letter-spacing: -.01em; }
 .bento-grid{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .bento-card{ background: #f3f5f8; border-radius: 18px; padding: 24px 24px 26px; display: flex; flex-direction: column; min-height: 280px; }
