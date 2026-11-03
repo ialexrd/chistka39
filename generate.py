@@ -1829,7 +1829,7 @@ def render_index():
         <p class="bento-sub">Выберите свою услугу, чтобы увидеть подробности процесса, типичные загрязнения и точные цены.</p>
       </div>
       <div class="svc-grid">
-        {"".join(service_photo_card(s) for s in MAIN_SERVICES)}
+        {"".join(service_photo_card(s) for s in MAIN_SERVICES if s["slug"] != "mebeli-dlya-biznesa")}
       </div>
     </div>
   </div>
