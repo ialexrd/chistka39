@@ -486,3 +486,15 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 .svc-card:hover .svc-btn{ background: var(--color-primary-dark); }
 @media (max-width: 1100px){ .svc-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px){ .svc-grid{ grid-template-columns: 1fr; gap: 10px; } .svc-card h3{ font-size: 18px; } .svc-price{ font-size: 22px; } }
+
+/* Карточки услуг компактнее: размеры как у плашек второго блока, 4 в ряд */
+.svc-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.svc-card{ padding: 8px 8px 14px; border-radius: 18px; }
+.svc-card-media{ aspect-ratio: 16 / 9; border-radius: 12px; }
+.svc-card h3{ margin: 12px 10px 0; font-size: 16px; line-height: 1.3; }
+.svc-card-foot{ margin: auto 10px 0; padding-top: 12px; }
+.svc-price{ font-size: 18px; }
+.svc-price small{ font-size: 12px; }
+.svc-btn{ font-size: 13px; padding: 7px 12px; gap: 2px; }
+@media (max-width: 1100px){ .svc-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px){ .svc-grid{ grid-template-columns: 1fr; gap: 10px; } .svc-card h3{ font-size: 16px; } .svc-price{ font-size: 18px; } }
