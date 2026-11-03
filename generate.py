@@ -1542,6 +1542,24 @@ def service_card(s):
 </div>
 """
 
+def service_photo_card(s):
+    """Карточка услуги на главной: фото, название, цена и кнопка."""
+    img = "assets/img/card-" + s["slug"]
+    href = service_filename(s["slug"])
+    return f"""
+<a href="{href}" class="svc-card">
+  <picture class="svc-card-media">
+    <source srcset="{asset(img + ".webp")}" type="image/webp">
+    <img src="{asset(img + ".jpg")}" alt="{esc(short(s))} — химчистка в Калининграде" width="960" height="720" loading="lazy">
+  </picture>
+  <h3>{esc(short(s))}</h3>
+  <div class="svc-card-foot">
+    <span class="svc-price"><small>от</small> {s["price_from"]} ₽</span>
+    <span class="svc-btn">Подробнее {icon("chevron", 15)}</span>
+  </div>
+</a>
+"""
+
 def types_block(s):
     """Карточки видов (например, видов диванов) на странице услуги."""
     if not s.get("types"):
@@ -1802,15 +1820,17 @@ def render_index():
 """
 
     services_grid = f"""
-<section class="section" id="uslugi">
+<section class="home-bento home-services" id="uslugi">
   <div class="container">
-    <div class="section-head">
-      <span class="tag">Услуги</span>
-      <h2>Что мы чистим</h2>
-      <p>Выберите свою услугу, чтобы увидеть подробности процесса, типичные загрязнения и точные цены.</p>
-    </div>
-    <div class="grid grid-3">
-      {"".join(service_card(s) for s in MAIN_SERVICES)}
+    <div class="bento-panel">
+      <div class="bento-head">
+        <span class="bento-label">Услуги</span>
+        <h2>Что мы чистим</h2>
+        <p class="bento-sub">Выберите свою услугу, чтобы увидеть подробности процесса, типичные загрязнения и точные цены.</p>
+      </div>
+      <div class="svc-grid">
+        {"".join(service_photo_card(s) for s in MAIN_SERVICES)}
+      </div>
     </div>
   </div>
 </section>
