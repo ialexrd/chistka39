@@ -1980,15 +1980,39 @@ document.querySelectorAll('.ba').forEach(function(el){{
 </script>
 """
 
+    city_d = [d for d in SITE["districts"] if d.endswith("район")]
+    region_d = [d for d in SITE["districts"] if not d.endswith("район")]
+    geo_pills = lambda items: "".join(f'<li class="geo-pill">{icon("mappin",14)} {esc(d)}</li>' for d in items)
     districts = f"""
-<section class="section section-soft">
+<section class="home-bento home-geo">
   <div class="container">
-    <div class="section-head left">
-      <span class="tag">География выезда</span>
-      <h2>Работаем по всему Калининграду и области</h2>
-      <p>Выезжаем в любой район города, а также в ближайшие города региона. Не нашли свой район — уточните по телефону, скорее всего мы всё равно приедем.</p>
+    <div class="bento-panel">
+      <div class="bento-head">
+        <span class="bento-label">География выезда</span>
+        <h2>Работаем по всему Калининграду и области</h2>
+        <p class="bento-sub">Выезжаем в любой район города, а также в ближайшие города региона.</p>
+      </div>
+      <div class="geo-grid">
+        <div class="bento-card geo-card">
+          <div class="why-icon">{gicon("mappin",28)}</div>
+          <h3>Районы Калининграда</h3>
+          <ul class="geo-list">{geo_pills([d.replace(" район", "") for d in city_d])}</ul>
+        </div>
+        <div class="bento-card geo-card">
+          <div class="why-icon">{gicon("truck",28)}</div>
+          <h3>Города области</h3>
+          <ul class="geo-list">{geo_pills(region_d)}</ul>
+        </div>
+        <div class="bento-card geo-card geo-cta">
+          <h3>Не нашли свой район?</h3>
+          <p>Уточните по телефону — скорее всего, мы всё равно приедем.</p>
+          <div class="geo-actions">
+            <a class="geo-phone" href="tel:{SITE["phone_tel"]}">{icon("phone",18)} {esc(SITE["phone_display"])}</a>
+            <a class="btn geo-btn" href="#zayavka">Оставить заявку</a>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="chip-row">{"".join(f'<span class="chip">{icon("mappin",13)} {esc(d)}</span>' for d in SITE["districts"])}</div>
   </div>
 </section>
 """

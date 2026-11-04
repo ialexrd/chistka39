@@ -583,3 +583,26 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
   .tech-media-title{ align-self: start; }
   .tech-media-img{ align-self: center; }
 }
+
+/* География выезда — бенто */
+.geo-grid{ display: grid; grid-template-columns: 1fr 1fr 1.1fr; gap: 16px; }
+.geo-card{ min-height: 0; }
+.geo-card h3{ margin-top: 18px; }
+.geo-list{ list-style: none; margin: 0; padding: 18px 0 0 !important; display: flex; flex-wrap: wrap; gap: 8px; }
+.bento-card .geo-list li.geo-pill{ padding: 9px 14px 9px 12px; background: #fff; border-radius: 999px; font-size: 14.5px; font-weight: 600; color: var(--color-ink); display: inline-flex; align-items: center; gap: 6px; }
+.bento-card .geo-list li.geo-pill::before{ display: none; }
+.geo-pill svg{ color: var(--color-primary); flex-shrink: 0; }
+.geo-cta{ background: var(--color-primary); color: #fff; justify-content: space-between; }
+.geo-cta h3{ margin-top: 4px; color: #fff; font-size: 22px; }
+.bento-card.geo-cta p{ margin: 0; padding-top: 10px; color: rgba(255,255,255,.85); }
+.geo-actions{ display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 26px; }
+.geo-phone{ color: #fff; font-weight: 700; font-size: 17px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+.geo-btn{ background: #fff; color: var(--color-primary); font-weight: 700; }
+.geo-btn:hover{ background: #eaf1fb; color: var(--color-primary-dark); }
+@media (min-width: 1600px){ .geo-grid{ zoom: 1.1; } }
+@media (min-width: 1800px){ .geo-grid{ zoom: 1.2; } }
+@media (max-width: 1100px){ .geo-grid{ grid-template-columns: 1fr 1fr; } .geo-cta{ grid-column: 1 / -1; } }
+@media (max-width: 860px){ .geo-grid{ grid-template-columns: 1fr; gap: 10px; } }
+.bento-card ul.geo-list{ margin: 0; }
+.geo-cta{ justify-content: flex-start; }
+.geo-actions{ margin-top: auto; padding-top: 26px; }
