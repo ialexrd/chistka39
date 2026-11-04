@@ -23,7 +23,7 @@ OUT = os.path.join(ROOT, "site")
 # =========================================================================
 SITE = {
     "name": "Химчистка Мебели Калининград",
-    "short_name": "ХимМебель39",
+    "short_name": "Чистка 39",
     "tagline": "Выездная химчистка мягкой мебели и текстиля на дому и в офисе",
     "phone_display": "+7 (900) 000-00-00",
     "phone_tel": "+79000000000",
@@ -1269,7 +1269,7 @@ def footer(current_path=""):
   <div class="container">
     <div class="footer-grid">
       <div>
-        <div class="footer-logo">{icon("drop", 20)} {esc(SITE["short_name"])}</div>
+        <div class="footer-logo"><img src="{asset("assets/img/logo-white.svg")}" alt="{esc(SITE["short_name"])}" width="1372" height="324"></div>
         <p>{esc(SITE["tagline"])}. Работаем по {esc(SITE["city"])} и области, выезд мастера в день обращения.</p>
         <div class="footer-social">
           <a href="{SITE["vk"]}" aria-label="VK">VK</a>
@@ -1310,7 +1310,7 @@ def footer(current_path=""):
 """
 
 def sticky_cta(current_path):
-    if current_path == "index.html":
+    if True:
         return f"""<div class="sticky-cta sticky-cta-home">
   <a href="#zayavka" class="btn btn-primary">Оставить заявку</a>
   <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="22" height="22"> Max</a>
@@ -1417,7 +1417,7 @@ def page_shell(path, title, description, body, schemas=None):
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 {schemas_html}
 </head>
-<body{' class="page-home"' if path == "index.html" else ""}>
+<body class="page-home{'' if path == "index.html" else ' page-inner'}">
 {header(path)}
 {body}
 {footer(path)}
@@ -1648,6 +1648,83 @@ def print_done(name):
 # =========================================================================
 # 7. СТРАНИЦЫ УСЛУГ (генерируются циклом по SERVICES)
 # =========================================================================
+
+# Фото для первого экрана страниц услуг (пока — фото из карточек услуг)
+HERO_PHOTO = {
+    "uglovogo-divana": "divana", "kresla": "divana", "pufika": "divana",
+    "kovrov": "kovrolina", "pyatna-zapahi": "divana", "ozonirovanie": "nepriyatnogo-zapaha",
+    "zapaha-mochi": "nepriyatnogo-zapaha", "zapaha-koshki": "nepriyatnogo-zapaha", "zapaha-sobaki": "nepriyatnogo-zapaha",
+    "zapaha-sigaret": "nepriyatnogo-zapaha", "zapaha-syrosti-i-pleseni": "nepriyatnogo-zapaha",
+}
+
+def service_hero(s):
+    slug = s["slug"]
+    if os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
+        base = f"assets/img/card-{slug}"
+    elif slug in HERO_PHOTO:
+        base = f"assets/img/card-{HERO_PHOTO[slug]}"
+    else:
+        base = "assets/img/hero-main"
+    w, hgt = Image.open(os.path.join(OUT, base + ".jpg")).size
+    return f"""
+<section class="hero hero-main hero-service">
+  <div class="container">
+    <div class="hero-banner">
+      <picture class="hero-banner-bg">
+        <source srcset="{asset(base + ".webp")}" type="image/webp">
+        <img src="{asset(base + ".jpg")}" alt="{esc(s["h1"])}" width="{w}" height="{hgt}" fetchpriority="high">
+      </picture>
+      <div class="hero-banner-body">
+        <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
+        <h1>{esc(s["h1"])}</h1>
+        <p class="hero-lead">{esc(s["lead"])}</p>
+        {hero_cta()}
+        <div class="hero-trust">
+          <div class="trust-item"><span class="dot">{gicon("shield", 28)}</span>Гарантия на работы</div>
+          <div class="trust-item"><span class="dot">{gicon("leaf", 28)}</span>Гипоаллергенная химия</div>
+          <div class="trust-item"><span class="dot">{gicon("clock", 28)}</span>{esc(SITE["work_hours_short"])}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+def service_prices(s):
+    """Блок цен на странице услуги: карточки видов с фото (если есть) и прайс."""
+    type_cards = ""
+    if s.get("types"):
+        cards = []
+        for name, img, price, desc in s["types"]:
+            q = '<span class="type-card-question" aria-hidden="true">?</span>' if price == "цена по фото" else ""
+            cards.append(f"""<div class="pc-card pc-card-photo">
+  <div class="pc-media"><img src="{asset("assets/img/" + img)}" alt="{esc(name)} — химчистка в Калининграде" width="800" height="600" loading="lazy">{q}</div>
+  <h3>{esc(name)}</h3>
+  <p>{esc(desc)}</p>
+  <div class="pc-foot"><span class="svc-price">{esc(price)}</span><a href="#zayavka" class="svc-btn" data-order-item="{esc(name)}">Заказать {icon("chevron", 15)}</a></div>
+</div>""")
+        cols = " pc-grid-3" if len(cards) % 3 == 0 else ""
+        type_cards = f'<div class="pc-grid{cols}">{"".join(cards)}</div>'
+    type_names = {t[0].lower() for t in s.get("types") or []}
+    rows = "".join(
+        f'<div class="pc-row"><span>{esc(n)}</span><b>{esc(pr)}</b></div>' for n, pr in s["price_rows"]
+        if n.lower() not in type_names)
+    return f"""
+<section class="home-bento home-prices" id="ceny">
+  <div class="container">
+    <div class="bento-panel">
+      <div class="bento-head">
+        <span class="bento-label">Цены</span>
+        <h2>Цены на {esc(s["acc"])}</h2>
+        <p class="bento-sub">{esc(s["price_note"])}</p>
+      </div>
+      {type_cards}
+      <div class="pc-list">{rows}</div>
+    </div>
+  </div>
+</section>
+"""
+
 def render_service_page(s):
     path = service_filename(s["slug"])
     breadcrumbs = [("Главная", "index.html"), ("Услуги", "uslugi.html"), (s["nav"], None)]
@@ -1782,20 +1859,25 @@ def render_service_page(s):
 </section>
 """
 
+    h = home_parts()
+    faq_new = f"""
+<section class="home-bento home-faq">
+  <div class="container">
+    <div class="bento-panel faq-bento">
+      <div class="bento-head">
+        <span class="bento-label">Вопросы и ответы</span>
+        <h2>Частые вопросы про {esc(s["acc"])}</h2>
+      </div>
+      {faq_block(s["faq"])}
+    </div>
+  </div>
+</section>
+"""
     body = (
-        breadcrumbs_html(breadcrumbs)
-        + hero
-        + types_block(s)
-        + ("" if s.get("hide_intro") else f'<section class="section"><div class="container" style="max-width:840px">{intro_html}</div></section>')
-        + cause_selector
-        + problems
-        + ("" if s.get("hide_steps") else steps)
-        + price
-        + quiz_block(s["slug"])
-        + order
-        + faq
-        + related
-        + f'<section class="section"><div class="container">{cta_banner()}</div></section>'
+        service_hero(s)
+        + service_prices(s)
+        + h["wyvodim"] + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"]
+        + quiz_block(s["slug"], bento=True) + h["order"] + faq_new
     )
 
     schemas = [
@@ -1829,8 +1911,8 @@ REVIEWS = [
 
 REV_SIZES = [(1, 260), (2, 486), (3, 364), (4, 334), (5, 424), (6, 424)]
 
-def render_index():
-    path = "index.html"
+def home_parts():
+    """Блоки главной: используются на главной и на страницах услуг."""
     hero = f"""
 <section class="hero hero-main">
   <div class="container">
@@ -2125,7 +2207,15 @@ document.querySelectorAll('.ba').forEach(function(el){{
 </section>
 """
 
-    body = hero + services_grid + process + benefits + districts + reviews + quiz_block(bento=True) + order + faq
+    hero_main, wyvodim = hero.split('\n<section class="home-bento">', 1)
+    wyvodim = '\n<section class="home-bento">' + wyvodim
+    return dict(hero=hero_main, wyvodim=wyvodim, services=services_grid, process=process, benefits=benefits,
+                districts=districts, reviews=reviews, order=order, faq=faq, faq_items=faq_items)
+
+def render_index():
+    path = "index.html"
+    h = home_parts()
+    body = h["hero"] + h["wyvodim"] + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"] + quiz_block(bento=True) + h["order"] + h["faq"]
     schemas = [local_business_schema()]
     return path, page_shell(
         path,

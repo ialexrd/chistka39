@@ -672,3 +672,52 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 @media (max-width: 960px){ .home-quiz .bento-panel.quiz-grid{ grid-template-columns: 1fr; gap: 24px; } }
 .faq-bento .faq-item summary{ padding: 20px 22px; }
 .faq-bento .faq-a{ padding: 0 22px 20px; }
+
+/* Страницы услуг: первый экран и цены */
+.hero-service .hero-banner{ min-height: 560px; }
+.hero-service .hero-banner-bg img{ object-position: 60% 50%; }
+@media (min-width: 1400px){ .hero-service .hero-banner{ min-height: clamp(560px, 42vw, 820px); } }
+.pc-grid{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+.pc-card{ background: #f3f5f8; border-radius: 18px; padding: 12px 12px 16px; display: flex; flex-direction: column; }
+.pc-media{ position: relative; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: #fff; }
+.pc-media img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.pc-card h3{ margin: 14px 6px 4px; font-size: 17px; }
+.pc-card p{ margin: 0 6px 14px; font-size: 13.5px; line-height: 1.5; color: var(--color-ink-soft); }
+.pc-foot{ margin-top: auto; padding: 0 6px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pc-list{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; }
+.pc-row{ background: #f3f5f8; border-radius: 14px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 15px; }
+.pc-row b{ white-space: nowrap; color: var(--color-primary); font-size: 16px; }
+@media (min-width: 1600px){ .pc-grid, .pc-list{ zoom: 1.1; } }
+@media (max-width: 1100px){ .pc-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px){ .pc-list{ grid-template-columns: 1fr; } }
+@media (max-width: 640px){ .pc-grid{ grid-template-columns: 1fr; } .hero-service .hero-banner{ min-height: 0; } .pc-row{ padding: 14px 16px; font-size: 14px; } }
+@media (min-width: 1101px){ .pc-grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); } .pc-grid-3 .pc-media{ aspect-ratio: 16 / 10; } }
+@media (max-width: 640px){
+  .pc-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pc-card{ padding: 8px 8px 12px; border-radius: 14px; }
+  .pc-card h3{ font-size: 14px; margin: 10px 4px 4px; }
+  .pc-card p{ font-size: 12px; margin: 0 4px 10px; }
+  .pc-foot{ flex-direction: column; align-items: flex-start; padding: 0 4px; gap: 8px; }
+  .pc-foot .svc-price{ font-size: 17px; }
+  .pc-foot .svc-btn{ font-size: 13px; padding: 8px 12px; }
+}
+
+/* Остальные страницы: секции как бенто-панели на сером фоне */
+body.page-inner{ background: #eef1f5; }
+.page-inner .breadcrumbs{ background: transparent; border: 0; }
+.page-inner main > .section, .page-inner .section{ background: #eef1f5 !important; padding: 0 0 14px; }
+.page-inner .section > .container{ background: #fff; border-radius: 24px; padding: 48px 52px; }
+.page-inner .hero:not(.hero-main){ background: #eef1f5; padding: 0 0 14px; }
+.page-inner .hero:not(.hero-main) > .container{ background: #fff; border-radius: 24px; padding: 56px 52px; }
+.page-inner .section-head .tag{ background: transparent; padding: 0; font-size: 12.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: var(--color-accent); }
+@media (max-width: 760px){
+  .page-inner .section > .container, .page-inner .hero:not(.hero-main) > .container{ border-radius: 20px; padding: 28px 18px; margin-left: 8px; margin-right: 8px; width: auto; }
+}
+.footer-logo img{ width: 150px; height: 31px; display: block; }
+@media (min-width: 861px){
+  .page-inner .section > .container, .page-inner .hero:not(.hero-main) > .container, .page-inner .breadcrumbs > .container{ max-width: none; margin-left: 20px; margin-right: 20px; }
+  .page-inner .section > .container, .page-inner .hero:not(.hero-main) > .container{ padding: clamp(48px, 4vw, 80px) clamp(52px, 5vw, 110px); }
+}
+@media (min-width: 861px){ .page-inner .section > .container, .page-inner .hero:not(.hero-main) > .container, .page-inner .breadcrumbs > .container{ width: auto; } }
+.page-inner .price-table th{ background: #f3f5f8; color: var(--color-ink-soft); }
+.page-inner .price-table{ border-radius: 14px; overflow: hidden; }
