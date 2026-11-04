@@ -2051,7 +2051,6 @@ document.querySelectorAll('.ba').forEach(function(el){{
       <div class="bento-head">
         <span class="bento-label">Отзывы</span>
         <h2>Что говорят наши клиенты</h2>
-        <p class="bento-sub">Отзывы клиентов нашей сети «Чистка» из ВКонтакте — без правок.</p>
       </div>
       <div class="rv-grid">{rev_cards}</div>
     </div>

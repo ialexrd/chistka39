@@ -633,3 +633,13 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 @media (max-width: 1240px){ .rv-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 960px){ .rv-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px){ .rv-grid{ grid-template-columns: 1fr; gap: 10px; } .rv-card{ padding: 16px; } }
+/* Отзывы: шрифт компактнее */
+.rv-card{ padding: 16px 16px 14px; gap: 10px; grid-template-columns: 38px minmax(0,1fr); }
+.rv-ava{ width: 38px; height: 38px; }
+.rv-name{ font-size: 13.5px; }
+.rv-sub{ font-size: 12px; }
+.rv-stars{ margin: 4px 0 8px; }
+.rv-stars svg{ width: 15px; height: 15px; }
+.rv-text{ font-size: 13px; line-height: 1.5; }
+.rv-meta{ font-size: 12px; margin-top: 8px; }
+.rv-photo{ width: 72px; }
