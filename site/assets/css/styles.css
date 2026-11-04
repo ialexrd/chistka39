@@ -615,3 +615,21 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 @media (min-width: 1800px){ .rev-grid{ zoom: 1.2; } }
 @media (max-width: 1100px){ .rev-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px){ .rev-grid{ grid-template-columns: 1fr; gap: 10px; } }
+
+/* Отзывы — карточки в стиле ВК, 4 в ряд, выровнены по верху */
+.rv-grid{ display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.rv-card{ background: #fff; border: 1px solid #e6eaf0; border-radius: 18px; padding: 18px 18px 16px; box-shadow: 0 6px 18px rgba(20,35,60,.06); display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 12px; }
+.rv-ava{ width: 44px; height: 44px; border-radius: 50%; object-fit: cover; display: block; }
+.rv-name{ font-weight: 600; font-size: 15px; color: #222; line-height: 1.3; }
+.rv-sub{ display: block; font-size: 13px; color: #818c99; margin-top: 1px; }
+.rv-stars{ display: flex; gap: 1px; margin: 6px 0 10px; }
+.rv-stars svg{ width: 18px; height: 18px; }
+.rv-photo{ display: block; width: 84px; height: auto; border-radius: 8px; margin: 2px 0 12px; }
+.rv-text{ margin: 0; font-size: 14.5px; line-height: 1.5; color: #222; white-space: pre-line; overflow-wrap: anywhere; }
+.rv-meta{ margin-top: 10px; font-size: 13px; color: #818c99; display: flex; gap: 14px; }
+.rv-reply{ font-weight: 600; color: #6d7885; }
+@media (min-width: 1600px){ .rv-grid{ zoom: 1.1; } }
+@media (min-width: 1800px){ .rv-grid{ zoom: 1.2; } }
+@media (max-width: 1240px){ .rv-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 960px){ .rv-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px){ .rv-grid{ grid-template-columns: 1fr; gap: 10px; } .rv-card{ padding: 16px; } }
