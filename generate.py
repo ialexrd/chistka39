@@ -1802,6 +1802,8 @@ def render_service_page(s):
 # =========================================================================
 # 8. ГЛАВНАЯ СТРАНИЦА
 # =========================================================================
+REV_SIZES = [(1, 393), (2, 486), (3, 364), (4, 334), (5, 532), (6, 424)]
+
 def render_index():
     path = "index.html"
     hero = f"""
@@ -2017,17 +2019,19 @@ document.querySelectorAll('.ba').forEach(function(el){{
 </section>
 """
 
+    rev_cards = "".join(
+        f'''<figure class="rev-card"><picture><source srcset="{asset(f"assets/img/otzyv-{n}.webp")}" type="image/webp"><img src="{asset(f"assets/img/otzyv-{n}.jpg")}" alt="Отзыв клиента из ВКонтакте" width="591" height="{h}" loading="lazy"></picture></figure>'''
+        for n, h in REV_SIZES)
     reviews = f"""
-<section class="section">
+<section class="home-bento home-reviews" id="otzyvy">
   <div class="container">
-    <div class="section-head">
-      <span class="tag">Отзывы</span>
-      <h2>Отзывы клиентов</h2>
-      <p>Мы только запускаем сайт, поэтому отзывы здесь появятся после первых заказов — добавим реальные отзывы клиентов или виджет с Яндекс.Карт и 2ГИС.</p>
-    </div>
-    <div class="card text-center" style="max-width:560px;margin:0 auto;padding:36px;">
-      <div class="review-stars">{"★" * 5}</div>
-      <p style="margin-bottom:0">Здесь будет ваш первый отзыв. Соберите оценки на Яндекс.Картах и 2ГИС — мы поможем встроить виджет с реальными отзывами.</p>
+    <div class="bento-panel">
+      <div class="bento-head">
+        <span class="bento-label">Отзывы</span>
+        <h2>Что говорят наши клиенты</h2>
+        <p class="bento-sub">Скриншоты отзывов из нашей группы ВКонтакте — без правок.</p>
+      </div>
+      <div class="rev-grid">{rev_cards}</div>
     </div>
   </div>
 </section>
