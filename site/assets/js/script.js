@@ -2,6 +2,22 @@
 (function () {
   'use strict';
 
+  // Правило висячих слов (Мильчин): короткие предлоги, союзы и частицы
+  // не остаются в конце строки — после них неразрывный пробел.
+  var HANG = /(^|[^0-9A-Za-zА-Яа-яЁё\-])(а|и|в|во|к|ко|о|об|обо|от|с|со|у|я|за|из|изо|на|над|до|не|ни|но|да|же|для|без|или|при|про|под|что|как|это|то|так|уже|чем|по|через|перед|между|после|чтобы|ведь|лишь|даже|если|когда|где|тут|там|вот|мы|вы|он|она|оно|они|мой|наш|ваш|их|его|её) (?=\S)/gi;
+  function typoText(t) {
+    var prev;
+    do { prev = t; t = t.replace(HANG, '$1$2\u00a0'); } while (t !== prev);
+    return t.replace(/ (же|ли|ль|бы|б)(?![0-9A-Za-zА-Яа-яЁё])/gi, '\u00a0$1')
+            .replace(/ (—|–)/g, '\u00a0$1')
+            .replace(/(\d) (?=(₽|шт|м²|%))/g, '$1\u00a0');
+  }
+  function typograf(root) {
+    if (!root) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n;
+    while ((n = w.nextNode())) { var v = typoText(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v; }
+  }
+
   // Мобильное меню
   var burger = document.querySelector('[data-burger]');
   var mobileNav = document.querySelector('[data-mobile-nav]');
@@ -44,6 +60,7 @@
     if (successBox) {
       successBox.classList.add('show');
       successBox.textContent = 'Спасибо! Заявка сформирована, мы свяжемся с вами в ближайшее время. Также можно позвонить нам напрямую.';
+      typograf(successBox);
     }
   }
 
@@ -197,6 +214,7 @@
         html += '<div class="quiz-nav"><button type="button" class="btn btn-ghost" data-back>Назад</button></div>';
       }
       root.innerHTML = html;
+      typograf(root);
       bindTel(root);
     }
     function next() { step = Math.min(step + 1, steps().length - 1); render(); }

@@ -1129,6 +1129,52 @@ CORE_NAV_LINKS = NAV_LINKS  # alias for clarity below
 def esc(s):
     return htmlmod.escape(str(s), quote=True)
 
+
+# ---------------------------------------------------------------------------
+# Типографика: правило висячих слов (А. Мильчин).
+# Короткие предлоги, союзы, частицы и слова «тут, там, вот, где, когда, если»
+# не остаются в конце строки: после них ставим неразрывный пробел.
+# Частицы «же, ли, бы» и тире не переносятся на новую строку отдельно.
+# Применяется ко всем HTML-страницам при сборке, только к тексту (не к тегам,
+# атрибутам, <script> и <style>).
+# ---------------------------------------------------------------------------
+HANGING_WORDS = (
+    "а и в во к ко о об обо от ото с со у я "
+    "за из изо на над надо до не ни но да же "
+    "для без или при про под подо что как это то так уже чем "
+    "по через перед между после чтобы ведь лишь даже если когда где тут там вот "
+    "мы вы он она оно они мой наш ваш их его её"
+).split()
+_HANG_RE = re.compile(
+    r"(?<![0-9A-Za-zА-Яа-яЁё\-])(" + "|".join(sorted(set(HANGING_WORDS), key=len, reverse=True)) + r") (?=\S)",
+    re.IGNORECASE,
+)
+_AFTER_RE = re.compile(r" (же|ли|ль|бы|б)(?![0-9A-Za-zА-Яа-яЁё])", re.IGNORECASE)
+_DASH_RE = re.compile(r" (—|–)")
+_NUM_RE = re.compile(r"(\d) (?=(₽|руб|шт|м²|м|см|мм|кг|г|%|мин|ч|час|дн|лет|года|год)(?![A-Za-zА-Яа-яЁё]))")
+_SKIP_TAGS = re.compile(r"<(script|style|textarea|pre)\b.*?</\1>", re.S | re.I)
+
+def _typo_text(t):
+    t = _HANG_RE.sub(lambda m: m.group(1) + " ", t)
+    t = _AFTER_RE.sub(lambda m: " " + m.group(1), t)
+    t = _DASH_RE.sub(lambda m: " " + m.group(1), t)
+    t = _NUM_RE.sub(lambda m: m.group(1) + " ", t)
+    return t
+
+def typograf(page_html):
+    out = []
+    pos = 0
+    for m in _SKIP_TAGS.finditer(page_html):
+        out.append(_typo_chunk(page_html[pos:m.start()]))
+        out.append(m.group(0))
+        pos = m.end()
+    out.append(_typo_chunk(page_html[pos:]))
+    return "".join(out)
+
+def _typo_chunk(chunk):
+    parts = re.split(r"(<[^>]*>)", chunk)
+    return "".join(p if p.startswith("<") else _typo_text(p) for p in parts)
+
 def asset(path):
     """Путь к файлу в site/ с ?v=<хэш содержимого>: после правки файла браузер не возьмёт старый из кэша."""
     with open(os.path.join(OUT, path), "rb") as f:
@@ -2249,6 +2295,7 @@ def main():
     all_paths = []
 
     def write(path, content):
+        content = typograf(content)
         with open(os.path.join(OUT, path), "w", encoding="utf-8") as f:
             f.write(content)
         all_paths.append(path)
