@@ -1524,16 +1524,23 @@ QUIZ_ITEMS = [
     {"id": "kovrolin", "label": "Ковролин", "icon": "carpet", "kind": "area", "question": "Какая площадь ковролина?", "unit": 150, "min": 1500},
 ]
 
-def quiz_block(preselect=None):
+def quiz_block(preselect=None, bento=False):
     preselect_map = {"divana": "divan", "uglovogo-divana": "divan", "matrasa": "matras", "stulev": "stul",
                      "kresla": "kreslo", "kuhonnogo-ugolka": "ugolok", "kovrolina": "kovrolin"}
     config = {"items": [dict(it, icon_svg=gicon(it["icon"], 44)) for it in QUIZ_ITEMS], "extras": QUIZ_EXTRAS,
               "preselect": preselect_map.get(preselect)}
+    if bento:
+        sec_open = '<section class="home-bento home-quiz" id="kalkulyator">\n  <div class="container"><div class="bento-panel quiz-grid">'
+        sec_close = '</div></div>\n</section>'
+        label = '<span class="bento-label">Калькулятор стоимости</span>'
+    else:
+        sec_open = '<section class="section quiz-section" id="kalkulyator">\n  <div class="container quiz-grid">'
+        sec_close = '  </div>\n</section>'
+        label = '<span class="tag">Калькулятор стоимости</span>'
     return f"""
-<section class="section quiz-section" id="kalkulyator">
-  <div class="container quiz-grid">
+{sec_open}
     <div class="quiz-intro">
-      <span class="tag">Калькулятор стоимости</span>
+      {label}
       <h2>Узнайте цену за 1 минуту</h2>
       <p>Ответьте на несколько вопросов, и мы сразу покажем предварительную стоимость.</p>
       <ul class="check-list quiz-bullets">
@@ -1546,8 +1553,7 @@ def quiz_block(preselect=None):
     <div class="quiz card" data-quiz='{esc(json.dumps(config, ensure_ascii=False))}'>
       <noscript><p>Калькулятор работает с включённым JavaScript. <a href="#zayavka">Оставьте заявку</a>, и мы посчитаем стоимость сами.</p></noscript>
     </div>
-  </div>
-</section>
+{sec_close}
 """
 
 def hero_cta(order_href="#zayavka"):
@@ -2070,36 +2076,55 @@ document.querySelectorAll('.ba').forEach(function(el){{
         ("Какие районы Калининграда вы обслуживаете?", "Выезжаем во все районы города — Центральный, Московский, Ленинградский, Балтийский — а также в Гурьевск, Светлогорск, Зеленоградск и Пионерский."),
     ]
     faq = f"""
-<section class="section section-soft">
+<section class="home-bento home-faq">
   <div class="container">
-    <div class="section-head left">
-      <span class="tag">Вопросы и ответы</span>
-      <h2>Частые вопросы</h2>
+    <div class="bento-panel faq-bento">
+      <div class="bento-head">
+        <span class="bento-label">Вопросы и ответы</span>
+        <h2>Частые вопросы</h2>
+      </div>
+      {faq_block(faq_items)}
     </div>
-    {faq_block(faq_items)}
   </div>
 </section>
 """
 
     order = f"""
-<section class="section" id="zayavka">
-  <div class="container two-col">
-    <div>
-      <span class="tag">Заявка</span>
-      <h2>Рассчитаем стоимость и запишем мастера</h2>
-      <p>Оставьте заявку любым удобным способом — перезвоним и согласуем время визита.</p>
-      <div class="badge-list">
-        <span class="badge">{icon("clock",14)} Выезд в день обращения</span>
-        <span class="badge">{icon("shield",14)} Гарантия результата</span>
-        <span class="badge">{icon("leaf",14)} Безопасно для детей и животных</span>
+<section class="home-bento home-order" id="zayavka">
+  <div class="container">
+    <div class="bento-panel order-dark">
+      <div class="order-dark-text">
+        <span class="order-pill">Перезвоним за 5 минут</span>
+        <h2>Запишитесь на удобное время</h2>
+        <p class="order-lead">Оставьте заявку — подберём дату и время выезда, перезвоним и подтвердим стоимость.</p>
+        <ul class="order-checks">
+          <li>{icon("check", 18)}<span>Выезд по Калининграду бесплатно</span></li>
+          <li>{icon("check", 18)}<span>Оплата после результата</span></li>
+          <li>{icon("check", 18)}<span>Срочный выезд сегодня — при заказе до 15:00</span></li>
+          <li>{icon("check", 18)}<span>Работаем ежедневно с 9:00 до 21:00</span></li>
+        </ul>
+      </div>
+      <div class="order-card">
+        <form data-order-form>
+          <div class="field">
+            <label for="o-name">Имя</label>
+            <input id="o-name" name="name" type="text" placeholder="Как к вам обращаться" required>
+          </div>
+          <div class="field">
+            <label for="o-phone">Телефон</label>
+            <input id="o-phone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Оставить заявку</button>
+          <label class="consent" for="o-consent"><input type="checkbox" id="o-consent" name="consent" checked required> <span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>
+          <div class="form-success"></div>
+        </form>
       </div>
     </div>
-    {order_form_panel()}
   </div>
 </section>
 """
 
-    body = hero + services_grid + process + benefits + districts + reviews + quiz_block() + order + faq
+    body = hero + services_grid + process + benefits + districts + reviews + quiz_block(bento=True) + order + faq
     schemas = [local_business_schema()]
     return path, page_shell(
         path,

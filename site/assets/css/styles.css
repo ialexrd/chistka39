@@ -643,3 +643,32 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 .rv-text{ font-size: 13px; line-height: 1.5; }
 .rv-meta{ font-size: 12px; margin-top: 8px; }
 .rv-photo{ width: 72px; }
+
+/* Заявка на главной — тёмная бенто-панель */
+.order-dark{ background: #111418; color: #fff; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 48px; align-items: center; }
+.order-pill{ display: inline-block; padding: 10px 18px; border-radius: 999px; background: #22262c; border: 1px solid #33383f; font-weight: 700; font-size: 14px; }
+.order-dark h2{ color: #fff; margin: 22px 0 14px; font-size: clamp(28px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -.01em; }
+.order-lead{ color: #b9bec6; font-size: 17px; line-height: 1.55; margin: 0 0 24px; max-width: 560px; }
+.order-checks{ list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.order-checks li{ display: flex; gap: 12px; align-items: center; font-size: 16.5px; }
+.order-checks svg{ color: var(--color-accent); flex-shrink: 0; }
+.order-card{ background: #fff; color: var(--color-ink); border-radius: 20px; padding: 28px; }
+.order-card form{ display: grid; gap: 14px; }
+.order-card .field{ margin: 0; }
+.order-card .btn{ margin-top: 4px; }
+.order-card .consent{ margin: 0; font-size: 13px; }
+@media (min-width: 1600px){ .order-dark > *{ zoom: 1.1; } }
+@media (max-width: 960px){ .order-dark{ grid-template-columns: 1fr; gap: 28px; } }
+@media (max-width: 640px){ .order-card{ padding: 20px; } .order-checks li{ font-size: 15px; } }
+
+/* Калькулятор и FAQ на главной — в бенто-панелях */
+.home-quiz .bento-panel.quiz-grid{ display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 40px; align-items: center; }
+.home-quiz .quiz-intro h2{ font-size: clamp(24px, 2.6vw, 34px); margin: 14px 0 10px; }
+.home-quiz .quiz.card{ background: #f3f5f8; border: 0; box-shadow: none; }
+.home-quiz .quiz-opt, .home-quiz .quiz-choice{ background: #fff; }
+.home-quiz .quiz-gift{ background: #f3f5f8; border-color: transparent; }
+.faq-bento .faq-list{ display: grid; gap: 10px; }
+.faq-bento .faq-item{ background: #f3f5f8; border: 0; border-radius: 16px; }
+@media (max-width: 960px){ .home-quiz .bento-panel.quiz-grid{ grid-template-columns: 1fr; gap: 24px; } }
+.faq-bento .faq-item summary{ padding: 20px 22px; }
+.faq-bento .faq-a{ padding: 0 22px 20px; }
