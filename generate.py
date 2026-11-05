@@ -29,7 +29,9 @@ SITE = {
     "phone_tel": "+79000000000",
     "whatsapp": "https://wa.me/79000000000",
     "email": "info@himchistka-mebel-39.ru",
-    "domain": "https://himchistka-mebel-39.ru",
+    # Адрес сайта без «/» на конце. Сейчас — GitHub Pages; когда появится свой
+    # домен, впишите его сюда (и в site/CNAME) и перегенерируйте сайт.
+    "domain": "https://ialexrd.github.io/chistka39",
     "city": "Калининград",
     "address_text": "г. Калининград — выезд мастера на дом, в офис или на дачу",
     "work_hours": "Ежедневно, без выходных, с 9:00 до 21:00",
@@ -40,6 +42,21 @@ SITE = {
     ],
     "vk": "#", "telegram": "#", "max": "#", "instagram": "#",
     "year_placeholder": "[ГГГГ]",
+}
+
+# =========================================================================
+# 1.1 ВЕБМАСТЕРЫ И АНАЛИТИКА — вставьте коды из своих кабинетов.
+# Пустая строка = блок не выводится на сайт.
+# =========================================================================
+ANALYTICS = {
+    # Яндекс Вебмастер → «Права доступа» → Мета-тег: content="..."
+    "yandex_verification": "",
+    # Google Search Console → «Тег HTML»: content="..."
+    "google_verification": "",
+    # Яндекс Метрика: номер счётчика (только цифры)
+    "yandex_metrika_id": "",
+    # Google Analytics 4: идентификатор потока вида G-XXXXXXXXXX
+    "ga4_id": "",
 }
 
 # =========================================================================
@@ -1349,7 +1366,8 @@ def asset(path):
         return f"{path}?v={hashlib.md5(f.read()).hexdigest()[:8]}"
 
 def url(path):
-    return SITE["domain"] + "/" + path
+    # Главная — без index.html, чтобы у неё был один адрес (без дублей)
+    return SITE["domain"] + "/" + ("" if path == "index.html" else path)
 
 def service_filename(slug):
     s = SERVICE_BY_SLUG[slug]
@@ -1461,6 +1479,7 @@ def footer(current_path=""):
           <li><a href="geografiya.html">География выезда</a></li>
           <li><a href="kontakty.html">Контакты</a></li>
           <li><a href="politika-konfidencialnosti.html">Политика конфиденциальности</a></li>
+          <li><a href="politika-konfidencialnosti.html#cookies" data-cookie-reset>Настройки cookie</a></li>
         </ul>
       </div>
       <div>
@@ -1561,6 +1580,20 @@ def service_schema(s):
         },
     }
 
+def verification_meta():
+    out = ""
+    if ANALYTICS["yandex_verification"]:
+        out += f'<meta name="yandex-verification" content="{esc(ANALYTICS["yandex_verification"])}">\n'
+    if ANALYTICS["google_verification"]:
+        out += f'<meta name="google-site-verification" content="{esc(ANALYTICS["google_verification"])}">\n'
+    return out
+
+def analytics_config():
+    """Номера счётчиков для assets/js/script.js. Сами счётчики загружаются
+    скриптом только после согласия посетителя в баннере cookies."""
+    cfg = {"ym": ANALYTICS["yandex_metrika_id"], "ga": ANALYTICS["ga4_id"]}
+    return "<script>window.SITE_ANALYTICS=" + json.dumps(cfg) + ";</script>"
+
 def page_shell(path, title, description, body, schemas=None):
     canonical = url(path)
     schemas_html = "".join(ld(s) for s in (schemas or []))
@@ -1578,16 +1611,29 @@ def page_shell(path, title, description, body, schemas=None):
 <meta property="og:description" content="{esc(description)}">
 <meta property="og:url" content="{canonical}">
 <meta property="og:locale" content="ru_RU">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="{url("assets/img/og-image.jpg")}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{esc(SITE["name"])}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(title)}">
+<meta name="twitter:description" content="{esc(description)}">
+<meta name="twitter:image" content="{url("assets/img/og-image.jpg")}">
 <meta name="robots" content="index, follow">
+<link rel="alternate" hreflang="ru" href="{canonical}">
+<link rel="alternate" hreflang="x-default" href="{canonical}">
+{verification_meta()}<meta name="theme-color" content="#1868c1">
+<meta name="format-detection" content="telephone=no">
 <link rel="icon" href="{asset("favicon.ico")}" sizes="any">
 <link rel="icon" href="{asset("favicon.svg")}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{asset("apple-touch-icon.png")}">
+<link rel="manifest" href="site.webmanifest">
 <link rel="stylesheet" href="{asset("assets/css/styles.css")}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 {schemas_html}
+{analytics_config()}
 </head>
 <body class="page-home{'' if path == "index.html" else ' page-inner'}">
 {header(path)}
@@ -1831,6 +1877,26 @@ HERO_PHOTO = {
     "zapaha-sigaret": "nepriyatnogo-zapaha", "zapaha-syrosti-i-pleseni": "nepriyatnogo-zapaha",
 }
 
+HERO_WIDTHS = (960, 1600)
+
+def hero_picture(base, alt):
+    """Фон первого экрана: уменьшенные копии для телефонов и ноутбуков
+    (ускоряет загрузку — метрика LCP в Core Web Vitals)."""
+    src = Image.open(os.path.join(OUT, base + ".jpg"))
+    w, hgt = src.size
+    widths = [x for x in HERO_WIDTHS if x < w]
+    for x in widths:
+        for ext, fmt, kw in ((".webp", "WEBP", {"quality": 78}), (".jpg", "JPEG", {"quality": 80, "progressive": True})):
+            out = os.path.join(OUT, f"{base}-{x}{ext}")
+            if not os.path.exists(out):
+                src.convert("RGB").resize((x, round(hgt * x / w)), Image.LANCZOS).save(out, fmt, **kw)
+    def srcset(ext):
+        return ", ".join([f'{asset(f"{base}-{x}{ext}")} {x}w' for x in widths] + [f'{asset(base + ext)} {w}w'])
+    return f"""<picture class="hero-banner-bg">
+        <source srcset="{srcset(".webp")}" sizes="100vw" type="image/webp">
+        <img src="{asset(base + ".jpg")}" srcset="{srcset(".jpg")}" sizes="100vw" alt="{esc(alt)}" width="{w}" height="{hgt}" fetchpriority="high" decoding="async">
+      </picture>"""
+
 def service_hero(s):
     slug = s["slug"]
     if os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
@@ -1839,15 +1905,11 @@ def service_hero(s):
         base = f"assets/img/card-{HERO_PHOTO[slug]}"
     else:
         base = "assets/img/hero-main"
-    w, hgt = Image.open(os.path.join(OUT, base + ".jpg")).size
     return f"""
 <section class="hero hero-main hero-service">
   <div class="container">
     <div class="hero-banner">
-      <picture class="hero-banner-bg">
-        <source srcset="{asset(base + ".webp")}" type="image/webp">
-        <img src="{asset(base + ".jpg")}" alt="{esc(s["h1"])}" width="{w}" height="{hgt}" fetchpriority="high">
-      </picture>
+      {hero_picture(base, s["h1"])}
       <div class="hero-banner-body">
         <span class="eyebrow">{icon("mappin", 15)} {esc(s.get("eyebrow") or SITE["city"] + " и область")}</span>
         <h1>{esc(s["h1"])}</h1>
@@ -2110,10 +2172,7 @@ def home_parts():
 <section class="hero hero-main">
   <div class="container">
     <div class="hero-banner">
-      <picture class="hero-banner-bg">
-        <source srcset="{asset("assets/img/hero-main.webp")}" type="image/webp">
-        <img src="{asset("assets/img/hero-main.jpg")}" alt="Мастер выездной химчистки чистит кресло у клиента дома в Калининграде" width="3200" height="2134" fetchpriority="high">
-      </picture>
+      {hero_picture("assets/img/hero-main", "Мастер выездной химчистки чистит кресло у клиента дома в Калининграде")}
       <div class="hero-banner-body">
         <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
         <h1>Выездная химчистка мягкой мебели в Калининграде</h1>
@@ -2649,9 +2708,12 @@ def render_privacy():
     <p>Персональные данные используются исключительно для связи с клиентом, расчёта стоимости услуг, согласования выезда мастера и оказания услуг химчистки. Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством РФ.</p>
     <h2>4. Согласие на обработку</h2>
     <p>Отправляя форму на сайте, пользователь подтверждает согласие на обработку указанных персональных данных на условиях настоящей Политики.</p>
-    <h2>5. Права пользователя</h2>
+    <h2 id="cookies">5. Файлы cookie и веб-аналитика</h2>
+    <p>Сайт использует файлы cookie. Необходимые cookie (например, запоминание вашего выбора в баннере) работают всегда. Аналитические сервисы — Яндекс Метрика (ООО «Яндекс») и Google Analytics — подключаются только после того, как вы нажмёте «Принять» в баннере о cookie. Они собирают обезличенные сведения: страницы, которые вы открыли, источник перехода (в том числе UTM-метки), тип устройства и браузера, примерный регион, IP-адрес и идентификатор cookie. Эти данные нужны, чтобы понимать, какие страницы полезны посетителям, и улучшать сайт.</p>
+    <p>Отозвать согласие можно в любой момент: нажмите <a href="#" data-cookie-reset>«Изменить настройки cookie»</a> и выберите «Только необходимые», а также удалите cookie в настройках браузера.</p>
+    <h2>6. Права пользователя</h2>
     <p>Пользователь вправе запросить удаление или уточнение своих персональных данных, направив запрос на {esc(SITE["email"])}.</p>
-    <h2>6. Контакты Оператора</h2>
+    <h2>7. Контакты Оператора</h2>
     <p>[Наименование ИП/ООО], телефон {esc(SITE["phone_display"])}, e-mail {esc(SITE["email"])}.</p>
   </div>
 </section>
@@ -2865,13 +2927,56 @@ def main():
         f.write(sitemap)
     print_done("sitemap.xml")
 
-    # robots.txt
-    robots = f"User-agent: *\nAllow: /\nSitemap: {url('sitemap.xml')}\n"
+    # robots.txt (Clean-param — для Яндекса: адреса с метками UTM и т.п. не считать дублями)
+    robots = (
+        "User-agent: *\nAllow: /\nDisallow: /404.html\n\n"
+        "User-agent: Yandex\nAllow: /\nDisallow: /404.html\n"
+        "Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&gclid&fbclid&_openstat&from\n\n"
+        f"Sitemap: {url('sitemap.xml')}\n"
+    )
     with open(os.path.join(OUT, "robots.txt"), "w", encoding="utf-8") as f:
         f.write(robots)
     print_done("robots.txt")
 
+    write_web_assets()
+
     print(f"\nГотово! Сгенерировано страниц: {len(all_paths)}")
+
+
+def write_web_assets():
+    """Картинка для соцсетей (Open Graph), иконки и Web App Manifest."""
+    og = os.path.join(OUT, "assets/img/og-image.jpg")
+    if not os.path.exists(og):
+        im = Image.open(os.path.join(OUT, "assets/img/hero-main.jpg")).convert("RGB")
+        w, h = im.size
+        ch = round(w * 630 / 1200)
+        im = im.crop((0, (h - ch) // 2, w, (h - ch) // 2 + ch)).resize((1200, 630), Image.LANCZOS)
+        im.save(og, "JPEG", quality=82, progressive=True)
+        print_done("assets/img/og-image.jpg")
+    for size in (192, 512):
+        out = os.path.join(OUT, f"icon-{size}.png")
+        if not os.path.exists(out):
+            Image.open(os.path.join(OUT, "apple-touch-icon.png")).convert("RGB").resize((size, size), Image.LANCZOS).save(out, "PNG")
+            print_done(f"icon-{size}.png")
+    manifest = {
+        "name": SITE["name"],
+        "short_name": SITE["short_name"],
+        "description": SITE["tagline"],
+        "lang": "ru",
+        "start_url": "./",
+        "scope": "./",
+        "display": "standalone",
+        "background_color": "#ffffff",
+        "theme_color": "#1868c1",
+        "icons": [
+            {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+            {"src": "favicon.svg", "sizes": "any", "type": "image/svg+xml"},
+        ],
+    }
+    with open(os.path.join(OUT, "site.webmanifest"), "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    print_done("site.webmanifest")
 
 if __name__ == "__main__":
     main()

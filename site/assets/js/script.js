@@ -55,6 +55,9 @@
   var WHATSAPP_NUMBER = '79000000000'; // TODO: заменить на реальный номер в формате 7XXXXXXXXXX
 
   function sendLead(lines, successBox) {
+    var src = trafficSource();
+    if (src) lines.push('Источник: ' + src);
+    goal('lead_form', { form: lines[0] });
     var message = encodeURIComponent(lines.join('\n'));
     window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message, '_blank', 'noopener');
     if (successBox) {
@@ -282,11 +285,14 @@
   }
   bindTel(document);
 
-  // Клики по кнопкам звонка/WhatsApp — место для вставки аналитики (метрика/GA)
-  document.querySelectorAll('[data-track-call]').forEach(function (el) {
-    el.addEventListener('click', function () {
-      if (window.ym) { /* window.ym(COUNTER_ID, 'reachGoal', 'CALL_CLICK'); */ }
-    });
+  // Клики по телефону и мессенджерам — цели в Метрике и события в GA4
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (/^tel:/.test(href)) goal('call_click');
+    else if (/wa\.me|whatsapp/i.test(href)) goal('whatsapp_click');
+    else if (/t\.me|telegram|max\.ru/i.test(href)) goal('messenger_click');
   });
 
   // Закрывать открытые FAQ-аккордеоны при открытии нового в той же группе (по желанию можно убрать)
@@ -321,6 +327,100 @@
     window.addEventListener('resize', update);
     update();
   });
+  // ===================================================================
+  // UTM-метки, баннер cookie и счётчики (Яндекс Метрика, Google Analytics 4)
+  // Номера счётчиков задаются в generate.py (ANALYTICS) → window.SITE_ANALYTICS.
+  // Счётчики загружаются только после «Принять» в баннере.
+  // ===================================================================
+  function store(k, v) {
+    try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (err) { return null; }
+  }
+
+  // Первое касание: запоминаем метки из адреса, чтобы приложить к заявке
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search), keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'], parts = [];
+      keys.forEach(function (k) { if (q.get(k)) parts.push(k.replace('utm_', '') + '=' + q.get(k)); });
+      if (q.get('yclid')) parts.push('Яндекс Директ');
+      if (q.get('gclid')) parts.push('Google Ads');
+      if (!parts.length && document.referrer && document.referrer.indexOf(location.host) === -1) {
+        parts.push('переход с ' + new URL(document.referrer).host);
+      }
+      if (parts.length && !sessionStorage.getItem('lead_src')) sessionStorage.setItem('lead_src', parts.join(', '));
+    } catch (err) {}
+  })();
+  function trafficSource() {
+    try { return sessionStorage.getItem('lead_src'); } catch (err) { return null; }
+  }
+
+  var CFG = window.SITE_ANALYTICS || {};
+  var analyticsOn = false;
+
+  function goal(name, params) {
+    if (!analyticsOn) return;
+    if (CFG.ym && window.ym) window.ym(+CFG.ym, 'reachGoal', name, params || {});
+    if (CFG.ga && window.gtag) window.gtag('event', name, params || {});
+  }
+
+  function loadScript(src) {
+    var s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s);
+  }
+
+  function startAnalytics() {
+    if (analyticsOn) return;
+    analyticsOn = true;
+    if (CFG.ym) {
+      window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); };
+      window.ym.l = +new Date();
+      loadScript('https://mc.yandex.ru/metrika/tag.js');
+      window.ym(+CFG.ym, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true });
+    }
+    if (CFG.ga) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted' });
+      window.gtag('js', new Date());
+      window.gtag('config', CFG.ga);
+      loadScript('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(CFG.ga));
+    }
+  }
+
+  function cookieBanner() {
+    if (document.querySelector('.cookie-banner')) return;
+    var box = document.createElement('div');
+    box.className = 'cookie-banner';
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-label', 'Файлы cookie');
+    box.innerHTML =
+      '<p>Мы используем файлы cookie и сервисы аналитики (Яндекс Метрика, Google Analytics), чтобы сайт работал лучше. ' +
+      'Подробнее — в <a href="politika-konfidencialnosti.html#cookies">политике конфиденциальности</a>.</p>' +
+      '<div class="cookie-actions"><button type="button" class="btn btn-primary btn-sm" data-cookie="all">Принять</button>' +
+      '<button type="button" class="btn btn-ghost btn-sm" data-cookie="necessary">Только необходимые</button></div>';
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-cookie]');
+      if (!b) return;
+      var v = b.getAttribute('data-cookie');
+      store('cookie_consent', v);
+      box.remove();
+      if (v === 'all') startAnalytics();
+    });
+    typograf(box);
+    document.body.appendChild(box);
+  }
+
+  document.querySelectorAll('[data-cookie-reset]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      try { localStorage.removeItem('cookie_consent'); } catch (err) {}
+      cookieBanner();
+    });
+  });
+
+  var consent = store('cookie_consent');
+  if (CFG.ym || CFG.ga) {
+    if (consent === 'all') startAnalytics();
+    else if (consent !== 'necessary') cookieBanner();
+  }
 })();
 
 /* Нижнее меню: показываем, когда на экране появляется блок услуг */
@@ -338,4 +438,5 @@
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener('resize', update);
   update();
+
 })();

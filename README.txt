@@ -42,9 +42,17 @@ Netlify, Vercel, Github Pages, reg.ru и т.п.) или в корень доме
    Пришлите свой реальный прайс-лист — я подставлю точные цифры по всем
    14 страницам услуг и странице ceny.html за один проход.
 
-3. Домен — сейчас используется заглушка https://himchistka-mebel-39.ru
-   в canonical-ссылках, Open Graph и sitemap.xml. Замените на реальный домен
-   в SITE["domain"] в generate.py и перегенерируйте.
+3. Домен — сейчас сайт работает на https://ialexrd.github.io/chistka39
+   (canonical, Open Graph, sitemap.xml, robots.txt). Когда появится свой
+   домен, впишите его в SITE["domain"] в generate.py, создайте файл
+   site/CNAME с доменом и перегенерируйте сайт.
+
+   Вебмастеры и аналитика — коды вставляются в ANALYTICS в generate.py:
+   yandex_verification, google_verification (мета-теги подтверждения),
+   yandex_metrika_id, ga4_id (счётчики). Счётчики грузятся только после
+   «Принять» в баннере cookie. Цели/события: lead_form (отправка формы
+   или квиза), call_click, whatsapp_click, messenger_click — создайте
+   цели с такими же идентификаторами в Метрике («JavaScript-событие»).
 
 4. E-mail и реквизиты в politika-konfidencialnosti.html — сейчас там
    плейсхолдеры [Наименование ИП/ООО], [ОГРНИП/ОГРН], [ИНН]. Это шаблон
