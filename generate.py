@@ -2507,7 +2507,7 @@ def render_uslugi():
     <span class="eyebrow">{icon("drop",15)} Полный список услуг</span>
     <h1>Химчистка мебели в Калининграде — все услуги</h1>
     <p class="hero-lead">Чистим мягкую мебель дома, в офисе, в кафе и на объектах бизнеса. Выберите услугу ниже, чтобы посмотреть процесс чистки, типичные загрязнения и цены.</p>
-      {hero_cta("kontakty.html#zayavka")}
+      {hero_cta()}
   </div>
 </section>
 """
@@ -2537,7 +2537,7 @@ def render_uslugi():
   </div>
 </section>
 """
-    body = breadcrumbs_html(breadcrumbs) + hero + grid + extra + f'<section class="section"><div class="container">{cta_banner()}</div></section>'
+    body = breadcrumbs_html(breadcrumbs) + hero + grid + extra + home_parts()["order"]
     schemas = [breadcrumb_schema(breadcrumbs)]
     return path, page_shell(
         path,
@@ -2559,7 +2559,7 @@ def render_onas():
     <span class="eyebrow">{icon("shield",15)} О компании</span>
     <h1>{esc(SITE["short_name"])} — выездная химчистка мебели в Калининграде</h1>
     <p class="hero-lead">Мы приезжаем с профессиональным оборудованием прямо к вам домой или в офис и чистим мебель без вывоза — быстро, безопасно и с гарантией результата.</p>
-      {hero_cta("kontakty.html#zayavka")}
+      {hero_cta()}
   </div>
 </section>
 """
@@ -2589,7 +2589,7 @@ def render_onas():
   </div>
 </section>
 """
-    body = breadcrumbs_html(breadcrumbs) + hero + content + f'<section class="section section-soft"><div class="container">{cta_banner()}</div></section>'
+    body = breadcrumbs_html(breadcrumbs) + hero + content + home_parts()["order"]
     schemas = [breadcrumb_schema(breadcrumbs), local_business_schema()]
     return path, page_shell(
         path,
@@ -2611,7 +2611,7 @@ def render_ceny():
     <span class="eyebrow">{icon("drop",15)} Прайс-лист</span>
     <h1>Цены на химчистку мебели в Калининграде</h1>
     <p class="hero-lead">Ниже — ориентировочные цены по каждой услуге. Итоговая стоимость зависит от размера предмета, материала обивки и степени загрязнения и всегда согласуется с вами до начала работ.</p>
-      {hero_cta("kontakty.html#zayavka")}
+      {hero_cta()}
   </div>
 </section>
 """
@@ -2633,7 +2633,7 @@ def render_ceny():
         breadcrumbs_html(breadcrumbs)
         + hero
         + f'<section class="section"><div class="container">{callout}{tables}</div></section>'
-        + f'<section class="section section-soft"><div class="container">{cta_banner()}</div></section>'
+        + home_parts()["order"]
     )
     schemas = [breadcrumb_schema(breadcrumbs)]
     return path, page_shell(
