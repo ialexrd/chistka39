@@ -1847,9 +1847,12 @@ HERO_PHOTO = {
 # Страницы, которые берут крупное фото первого экрана у другой страницы
 HERO_SHARED = {"krovati": "matrasa"}
 
+# Как кадрировать фото первого экрана (CSS object-position), если по центру неудачно
+HERO_POSITION = {"kuhonnogo-ugolka": "70% 100%"}
+
 HERO_WIDTHS = (960, 1600)
 
-def hero_picture(base, alt):
+def hero_picture(base, alt, position=None):
     """Фон первого экрана: уменьшенные копии для телефонов и ноутбуков
     (ускоряет загрузку — метрика LCP в Core Web Vitals)."""
     src = Image.open(os.path.join(OUT, base + ".jpg"))
@@ -1864,15 +1867,16 @@ def hero_picture(base, alt):
         return ", ".join([f'{asset(f"{base}-{x}{ext}")} {x}w' for x in widths] + [f'{asset(base + ext)} {w}w'])
     return f"""<picture class="hero-banner-bg">
         <source srcset="{srcset(".webp")}" sizes="100vw" type="image/webp">
-        <img src="{asset(base + ".jpg")}" srcset="{srcset(".jpg")}" sizes="100vw" alt="{esc(alt)}" width="{w}" height="{hgt}" fetchpriority="high" decoding="async">
+        <img src="{asset(base + ".jpg")}" srcset="{srcset(".jpg")}" sizes="100vw" alt="{esc(alt)}" width="{w}" height="{hgt}" fetchpriority="high" decoding="async"{f' style="object-position:{position}"' if position else ''}>
       </picture>"""
 
 def service_hero(s):
     slug = s["slug"]
     # Отдельное фото для первого экрана (крупное, hero-<slug>.jpg) важнее карточки
     hero_slug = HERO_SHARED.get(slug, slug)
-    if os.path.exists(os.path.join(OUT, f"assets/img/hero-{hero_slug}.jpg")):
-        base = f"assets/img/hero-{hero_slug}"
+    # Имя файла с ключевыми словами: himchistka-<slug>-kaliningrad.jpg
+    if os.path.exists(os.path.join(OUT, f"assets/img/himchistka-{hero_slug}-kaliningrad.jpg")):
+        base = f"assets/img/himchistka-{hero_slug}-kaliningrad"
     elif os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
         base = f"assets/img/card-{slug}"
     elif slug in HERO_PHOTO:
@@ -1883,7 +1887,7 @@ def service_hero(s):
 <section class="hero hero-main hero-service">
   <div class="container">
     <div class="hero-banner">
-      {hero_picture(base, s["h1"])}
+      {hero_picture(base, s["h1"], HERO_POSITION.get(slug))}
       <div class="hero-banner-body">
         <span class="eyebrow">{icon("mappin", 15)} {esc(s.get("eyebrow") or SITE["city"] + " и область")}</span>
         <h1>{esc(s["h1"])}</h1>
