@@ -742,3 +742,15 @@ body.page-inner{ background: #eef1f5; }
 }
 .mobile-nav a.mobile-call{ color: #fff; font-size: 16px; font-weight: 700; padding: 14px 18px; display: flex; justify-content: center; align-items: center; gap: 8px; }
 .mobile-nav a.mobile-call b{ font-weight: 800; letter-spacing: .01em; }
+
+/* ---------- Нижнее меню: без подложки, выезжает снизу у блока услуг ---------- */
+.sticky-cta.sticky-cta-home{
+  background: transparent; border-top: 0; box-shadow: none;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  transform: translateY(130%); opacity: 0; pointer-events: none;
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .3s ease;
+}
+.sticky-cta.sticky-cta-home.is-visible{ transform: translateY(0); opacity: 1; pointer-events: auto; }
+.sticky-cta-home .btn{ box-shadow: 0 8px 22px rgba(20,35,60,.22); }
+.sticky-cta-home .btn-ghost{ background: #fff; }
+@media (prefers-reduced-motion: reduce){ .sticky-cta.sticky-cta-home{ transition: opacity .2s ease; } }

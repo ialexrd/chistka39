@@ -322,3 +322,20 @@
     update();
   });
 })();
+
+/* Нижнее меню: показываем, когда на экране появляется блок услуг */
+(function () {
+  var bar = document.querySelector('.sticky-cta-home');
+  if (!bar) return;
+  var target = document.getElementById('uslugi');
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var h = window.innerHeight;
+    var show = target ? target.getBoundingClientRect().top < h * 0.85 : window.scrollY > h * 0.6;
+    bar.classList.toggle('is-visible', show);
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
