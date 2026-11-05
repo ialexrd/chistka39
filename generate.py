@@ -1866,7 +1866,10 @@ def hero_picture(base, alt):
 
 def service_hero(s):
     slug = s["slug"]
-    if os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
+    # Отдельное фото для первого экрана (крупное, hero-<slug>.jpg) важнее карточки
+    if os.path.exists(os.path.join(OUT, f"assets/img/hero-{slug}.jpg")):
+        base = f"assets/img/hero-{slug}"
+    elif os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
         base = f"assets/img/card-{slug}"
     elif slug in HERO_PHOTO:
         base = f"assets/img/card-{HERO_PHOTO[slug]}"
