@@ -1392,7 +1392,6 @@ def header(current_path):
       <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary btn-sm" data-track-call>{icon("phone", 16)} Вызвать мастера</a>
       <button class="burger" data-burger aria-label="Открыть меню" aria-expanded="false"><span></span></button>
     </div>
-    <nav class="sub-nav" aria-label="Основные услуги">{sub_items}</nav>
   </div>
   <nav class="mobile-nav" data-mobile-nav aria-label="Мобильная навигация">
     <div class="container">
