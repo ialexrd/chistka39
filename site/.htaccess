@@ -6,10 +6,13 @@ ErrorDocument 404 /404.html
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
-# Всё на https и без www — один адрес у каждой страницы (301)
-RewriteCond %{HTTPS} off [OR]
-RewriteCond %{HTTP_HOST} ^www\. [NC]
-RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+# Всё на https и без www — один адрес у каждой страницы (301).
+# SSL на SpaceWeb снимает фронтенд-сервер, Apache видит обычный http,
+# поэтому смотрим заголовок X-Forwarded-Proto (иначе будет бесконечный редирект).
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
 RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
 # /index.html → /
 RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
