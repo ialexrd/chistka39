@@ -1844,6 +1844,9 @@ HERO_PHOTO = {
     "zapaha-sigaret": "nepriyatnogo-zapaha", "zapaha-syrosti-i-pleseni": "nepriyatnogo-zapaha",
 }
 
+# Страницы, которые берут крупное фото первого экрана у другой страницы
+HERO_SHARED = {"krovati": "matrasa"}
+
 HERO_WIDTHS = (960, 1600)
 
 def hero_picture(base, alt):
@@ -1867,8 +1870,9 @@ def hero_picture(base, alt):
 def service_hero(s):
     slug = s["slug"]
     # Отдельное фото для первого экрана (крупное, hero-<slug>.jpg) важнее карточки
-    if os.path.exists(os.path.join(OUT, f"assets/img/hero-{slug}.jpg")):
-        base = f"assets/img/hero-{slug}"
+    hero_slug = HERO_SHARED.get(slug, slug)
+    if os.path.exists(os.path.join(OUT, f"assets/img/hero-{hero_slug}.jpg")):
+        base = f"assets/img/hero-{hero_slug}"
     elif os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
         base = f"assets/img/card-{slug}"
     elif slug in HERO_PHOTO:
