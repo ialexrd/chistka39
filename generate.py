@@ -1876,8 +1876,9 @@ def render_service_page(s):
     body = (
         service_hero(s)
         + service_prices(s)
+        + quiz_block(s["slug"], bento=True)
         + h["wyvodim"] + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"]
-        + quiz_block(s["slug"], bento=True) + h["order"] + faq_new
+        + h["order"] + faq_new
     )
 
     schemas = [
@@ -2144,7 +2145,8 @@ document.querySelectorAll('.ba').forEach(function(el){{
         <span class="bento-label">Отзывы</span>
         <h2>Что говорят наши клиенты</h2>
       </div>
-      <div class="rv-grid">{rev_cards}</div>
+      <div class="rv-grid" data-rv>{rev_cards}</div>
+      <div class="rv-nav"><button type="button" class="rv-arrow" data-rv-prev aria-label="Предыдущий отзыв">{icon("chevron", 18)}</button><span class="rv-count" data-rv-count></span><button type="button" class="rv-arrow" data-rv-next aria-label="Следующий отзыв">{icon("chevron", 18)}</button></div>
     </div>
   </div>
 </section>
@@ -2215,7 +2217,7 @@ document.querySelectorAll('.ba').forEach(function(el){{
 def render_index():
     path = "index.html"
     h = home_parts()
-    body = h["hero"] + h["wyvodim"] + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"] + quiz_block(bento=True) + h["order"] + h["faq"]
+    body = h["hero"] + h["wyvodim"] + quiz_block(bento=True) + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"] + h["order"] + h["faq"]
     schemas = [local_business_schema()]
     return path, page_shell(
         path,

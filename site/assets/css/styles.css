@@ -721,3 +721,16 @@ body.page-inner{ background: #eef1f5; }
 @media (min-width: 861px){ .page-inner .section > .container, .page-inner .hero:not(.hero-main) > .container, .page-inner .breadcrumbs > .container{ width: auto; } }
 .page-inner .price-table th{ background: #f3f5f8; color: var(--color-ink-soft); }
 .page-inner .price-table{ border-radius: 14px; overflow: hidden; }
+
+/* Отзывы на телефоне — карусель со свайпом */
+.rv-nav{ display: none; }
+@media (max-width: 640px){
+  .rv-grid{ display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin: 0 -18px; padding: 2px 18px 6px; scroll-padding: 0 18px; scrollbar-width: none; align-items: flex-start; }
+  .rv-grid::-webkit-scrollbar{ display: none; }
+  .rv-card{ flex: 0 0 86%; scroll-snap-align: start; }
+  .rv-nav{ display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; }
+  .rv-arrow{ width: 44px; height: 44px; border-radius: 50%; border: 1px solid #e1e6ee; background: #fff; color: var(--color-ink); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .rv-arrow[data-rv-prev] svg{ transform: rotate(180deg); }
+  .rv-arrow:disabled{ opacity: .35; }
+  .rv-count{ font-size: 14px; font-weight: 600; color: var(--color-ink-soft); min-width: 44px; text-align: center; }
+}

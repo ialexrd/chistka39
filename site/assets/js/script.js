@@ -302,4 +302,23 @@
       });
     });
   });
+
+  // Отзывы: карусель на телефоне (свайп и кнопки)
+  document.querySelectorAll('[data-rv]').forEach(function (track) {
+    var wrap = track.parentElement;
+    var prev = wrap.querySelector('[data-rv-prev]'), next = wrap.querySelector('[data-rv-next]'), count = wrap.querySelector('[data-rv-count]');
+    var cards = track.children;
+    function step() { return cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth; }
+    function update() {
+      var i = Math.round(track.scrollLeft / step());
+      if (count) count.textContent = Math.min(i + 1, cards.length) + ' / ' + cards.length;
+      if (prev) prev.disabled = track.scrollLeft < 5;
+      if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 5;
+    }
+    if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    track.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
 })();
