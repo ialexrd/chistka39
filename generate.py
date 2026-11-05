@@ -1327,8 +1327,22 @@ def asset(path):
         return f"{path}?v={hashlib.md5(f.read()).hexdigest()[:8]}"
 
 def url(path):
-    # Главная — без index.html, чтобы у неё был один адрес (без дублей)
-    return SITE["domain"] + "/" + ("" if path == "index.html" else path)
+    # Адреса без .html (chistka-39.ru/himchistka-divana); главная — просто «/»
+    if path == "index.html":
+        path = ""
+    elif path.endswith(".html"):
+        path = path[:-5]
+    return SITE["domain"] + "/" + path
+
+_LINK_RE = re.compile(r'href="(?!https?:|//|#|mailto:|tel:)([A-Za-z0-9_-]+)\.html((?:#[^"]*)?)"')
+
+def clean_links(page_html):
+    """Внутренние ссылки без .html: сервер (.htaccess) и GitHub Pages
+    отдают страницу по адресу без расширения."""
+    def repl(m):
+        name, anchor = m.group(1), m.group(2)
+        return f'href="{"./" if name == "index" else name}{anchor}"'
+    return _LINK_RE.sub(repl, page_html)
 
 def service_filename(slug):
     s = SERVICE_BY_SLUG[slug]
@@ -2880,9 +2894,9 @@ def render_karta():
     total = sum(len(items) for _, items in groups) + 1
     cards = []
     for title, items in groups:
-        links = "".join(f'<li><a href="{href}">{esc(label)}</a><span class="sm-url">{esc(href)}</span></li>' for href, label in items)
+        links = "".join(f'<li><a href="{href}">{esc(label)}</a><span class="sm-url">/{esc("" if href == "index.html" else href.removesuffix(".html"))}</span></li>' for href, label in items)
         cards.append(f'<div class="bento-card sm-card"><h3>{esc(title)} <span class="sm-count">{len(items)}</span></h3><ul class="sm-list">{links}</ul></div>')
-    cards.append('<div class="bento-card sm-card"><h3>Служебные <span class="sm-count">1</span></h3><ul class="sm-list"><li><a href="404.html">Страница 404</a><span class="sm-url">404.html (закрыта от индексации)</span></li></ul></div>')
+    cards.append('<div class="bento-card sm-card"><h3>Служебные <span class="sm-count">1</span></h3><ul class="sm-list"><li><a href="404.html">Страница 404</a><span class="sm-url">/404 (закрыта от индексации)</span></li></ul></div>')
     grid = f'<div class="sm-grid">{"".join(cards)}</div>'
     return simple_page(path,
         f"Карта сайта | {SITE['short_name']}",
@@ -2906,7 +2920,7 @@ def main():
     all_paths = []
 
     def write(path, content):
-        content = typograf(content)
+        content = clean_links(typograf(content))
         with open(os.path.join(OUT, path), "w", encoding="utf-8") as f:
             f.write(content)
         all_paths.append(path)
@@ -2944,8 +2958,8 @@ def main():
 
     # robots.txt (Clean-param — для Яндекса: адреса с метками UTM и т.п. не считать дублями)
     robots = (
-        "User-agent: *\nAllow: /\nDisallow: /404.html\n\n"
-        "User-agent: Yandex\nAllow: /\nDisallow: /404.html\n"
+        "User-agent: *\nAllow: /\nDisallow: /404\n\n"
+        "User-agent: Yandex\nAllow: /\nDisallow: /404\n"
         "Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&gclid&fbclid&_openstat&from\n\n"
         f"Sitemap: {url('sitemap.xml')}\n"
     )

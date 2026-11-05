@@ -207,7 +207,7 @@
           '<form class="quiz-form" data-quiz-form><div class="form-row">' +
           '<div class="field"><label>Имя</label><input name="name" type="text" placeholder="Как к вам обращаться" required></div>' +
           '<div class="field"><label>Телефон</label><input name="phone" type="tel" placeholder="+7 (___) ___-__-__" required></div></div>' +
-          '<label class="consent"><input type="checkbox" name="consent" checked required> <span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>' +
+          '<label class="consent"><input type="checkbox" name="consent" checked required> <span>Я согласен на <a href="politika-konfidencialnosti" target="_blank">обработку персональных данных</a></span></label>' +
           '<div class="form-gift">Получите скидку 10% на первый заказ</div>' +
           '<button type="submit" class="btn btn-primary btn-block">Отправить заявку</button>' +
           '<div class="form-success"></div></form>' +
@@ -393,7 +393,7 @@
     box.setAttribute('aria-label', 'Файлы cookie');
     box.innerHTML =
       '<p>Мы используем файлы cookie и сервисы аналитики (Яндекс Метрика, Google Analytics), чтобы сайт работал лучше. ' +
-      'Подробнее — в <a href="politika-konfidencialnosti.html#cookies">политике конфиденциальности</a>.</p>' +
+      'Подробнее — в <a href="politika-konfidencialnosti#cookies">политике конфиденциальности</a>.</p>' +
       '<div class="cookie-actions"><button type="button" class="btn btn-primary btn-sm" data-cookie="all">Принять</button>' +
       '<button type="button" class="btn btn-ghost btn-sm" data-cookie="necessary">Только необходимые</button></div>';
     box.addEventListener('click', function (e) {

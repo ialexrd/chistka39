@@ -11,6 +11,13 @@ RewriteEngine On
 # /index.html → /
 RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
 RewriteRule ^index\.html$ / [L,R=301]
+# Адреса без .html: /page.html → /page (301), а /page отдаёт файл page.html
+RewriteCond %{THE_REQUEST} \s/([^\s?]+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
 </IfModule>
 
 <IfModule mod_headers.c>
