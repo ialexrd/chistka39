@@ -2137,11 +2137,21 @@ def render_service_page(s):
   </div>
 </section>
 """
+    prices_html, services_html = service_prices(s), h["services"]
+    if s.get("category") == "geo":
+        # На страницах городов вместо списка цен — карточки услуг с фото и ценами
+        prices_html = (h["services"]
+            .replace('<span class="bento-label">Услуги</span>', '<span class="bento-label">Цены</span>')
+            .replace("<h2>Что мы чистим</h2>", f"<h2>Цены на {esc(s['acc'])}</h2>")
+            .replace("Выберите свою услугу, чтобы увидеть подробности процесса, типичные загрязнения и точные цены.", esc(s["price_note"]))
+            .replace("— химчистка в Калининграде", f"— химчистка {s['nav'].split(' ', 2)[2]}")
+            .replace('id="uslugi"', 'id="ceny"'))
+        services_html = ""
     body = (
         service_hero(s)
-        + service_prices(s)
+        + prices_html
         + quiz_block(s["slug"], bento=True)
-        + h["wyvodim"] + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"]
+        + h["wyvodim"] + services_html + h["process"] + h["benefits"] + h["districts"] + h["reviews"]
         + h["order"] + intro_panel + faq_new
     )
 
