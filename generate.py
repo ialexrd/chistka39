@@ -1295,6 +1295,10 @@ SHORT_NAMES = {
     "kovrolina": "Ковролин", "nepriyatnogo-zapaha": "Выведение неприятных запахов",
 }
 
+# Ещё короче — для второго ряда шапки
+SUB_NAMES = {"kafe-restoranov": "Кафе и рестораны", "mebeli-dlya-biznesa": "Для бизнеса",
+             "nepriyatnogo-zapaha": "Запахи", "kuhonnogo-ugolka": "Кухонные уголки"}
+
 def short(s):
     return SHORT_NAMES.get(s["slug"], s["nav"])
 
@@ -1302,6 +1306,7 @@ NAV_LINKS = [
     ("index.html", "Главная"),
     ("uslugi.html", "Услуги"),
     ("ceny.html", "Цены"),
+    ("otzyvy.html", "Отзывы"),
     ("o-nas.html", "О компании"),
     ("kontakty.html", "Контакты"),
 ]
@@ -1387,7 +1392,7 @@ def header(current_path):
         if href == "uslugi.html":
             nav_items += (
                 f'<div class="has-dropdown">'
-                f'<a href="{href}"{current}>{label}</a>'
+                f'<a href="{href}"{current} class="nav-drop">{label} <span class="nav-caret">{icon("chevron", 14)}</span></a>'
                 f'<div class="dropdown">{dropdown_items}</div>'
                 f'</div>'
             )
@@ -1395,6 +1400,10 @@ def header(current_path):
             nav_items += f'<a href="{href}"{current}>{label}</a>'
 
     mobile_services = dropdown_items
+    sub_items = "".join(
+        f'<a href="{service_filename(s["slug"])}"{" aria-current=\"page\"" if service_filename(s["slug"]) == current_path else ""}>{gicon(s["icon"], 20)}<span>{esc(SUB_NAMES.get(s["slug"], short(s)))}</span></a>'
+        for s in MAIN_SERVICES
+    )
     mobile_core = "".join(
         f'<a href="{href}">{label}</a>' for href, label in NAV_LINKS if href not in ("uslugi.html", "index.html")
     )
@@ -1427,6 +1436,7 @@ def header(current_path):
       <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary btn-sm" data-track-call>{icon("phone", 16)} Вызвать мастера</a>
       <button class="burger" data-burger aria-label="Открыть меню" aria-expanded="false"><span></span></button>
     </div>
+    <nav class="sub-nav" aria-label="Основные услуги">{sub_items}</nav>
   </div>
   <nav class="mobile-nav" data-mobile-nav aria-label="Мобильная навигация">
     <div class="container">
@@ -1478,6 +1488,7 @@ def footer(current_path=""):
           <li><a href="voprosy-i-otvety.html">Вопросы и ответы</a></li>
           <li><a href="geografiya.html">География выезда</a></li>
           <li><a href="kontakty.html">Контакты</a></li>
+          <li><a href="karta-sajta.html">Карта сайта</a></li>
           <li><a href="politika-konfidencialnosti.html">Политика конфиденциальности</a></li>
           <li><a href="politika-konfidencialnosti.html#cookies" data-cookie-reset>Настройки cookie</a></li>
         </ul>
@@ -2874,6 +2885,35 @@ def render_404():
     html = page_shell(path, f"Страница не найдена | {SITE['short_name']}", "Страница не найдена.", body)
     return path, html.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, follow">')
 
+
+def render_karta():
+    path = "karta-sajta.html"
+    bc = [("Главная", "index.html"), ("Карта сайта", None)]
+    main_slugs = {x["slug"] for x in MAIN_SERVICES}
+    groups = [
+        ("Основные страницы", [("index.html", "Главная"), ("uslugi.html", "Все услуги"), ("ceny.html", "Цены"),
+                               ("otzyvy.html", "Отзывы"), ("akcii.html", "Акции и скидки"), ("garantii.html", "Гарантии"),
+                               ("voprosy-i-otvety.html", "Вопросы и ответы"), ("geografiya.html", "География выезда"),
+                               ("o-nas.html", "О компании"), ("kontakty.html", "Контакты"),
+                               ("politika-konfidencialnosti.html", "Политика конфиденциальности")]),
+        ("Основные услуги (в меню)", [(service_filename(x["slug"]), x["nav"]) for x in MAIN_SERVICES]),
+        ("Другие услуги", [(service_filename(x["slug"]), x["nav"]) for x in SERVICES if x["category"] == "chistka" and x["slug"] not in main_slugs]),
+        ("Устранение запахов", [(service_filename(x["slug"]), x["nav"]) for x in SERVICES if x["category"] == "zapahi" and x["slug"] not in main_slugs]),
+        ("Города области", [(g["filename"], g["nav"]) for g in GEO_PAGES]),
+    ]
+    total = sum(len(items) for _, items in groups) + 1
+    cards = []
+    for title, items in groups:
+        links = "".join(f'<li><a href="{href}">{esc(label)}</a><span class="sm-url">{esc(href)}</span></li>' for href, label in items)
+        cards.append(f'<div class="bento-card sm-card"><h3>{esc(title)} <span class="sm-count">{len(items)}</span></h3><ul class="sm-list">{links}</ul></div>')
+    cards.append('<div class="bento-card sm-card"><h3>Служебные <span class="sm-count">1</span></h3><ul class="sm-list"><li><a href="404.html">Страница 404</a><span class="sm-url">404.html (закрыта от индексации)</span></li></ul></div>')
+    grid = f'<div class="sm-grid">{"".join(cards)}</div>'
+    return simple_page(path,
+        f"Карта сайта | {SITE['short_name']}",
+        "Все страницы сайта химчистки мебели в Калининграде: услуги, запахи, города области, цены, отзывы и контакты.",
+        dict(slug="karta", h1="Карта сайта", lead=f"Все страницы сайта в одном месте — {total} страниц."),
+        [bento_panel("Карта сайта", "Все страницы сайта", grid, sub="Список обновляется автоматически при каждой сборке сайта.")], bc, with_order=False)
+
 # =========================================================================
 # 14. СБОРКА САЙТА
 # =========================================================================
@@ -2912,7 +2952,7 @@ def main():
         write(p, c)
 
     print("Генерация стандартных страниц...")
-    for renderer in (render_otzyvy, render_akcii, render_garantii, render_voprosy, render_geografiya, render_404):
+    for renderer in (render_otzyvy, render_akcii, render_garantii, render_voprosy, render_geografiya, render_karta, render_404):
         p, c = renderer()
         write(p, c)
 
