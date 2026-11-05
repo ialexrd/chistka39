@@ -200,11 +200,11 @@
         var p = price();
         html += '<h3>Предварительная стоимость</h3><div class="quiz-summary">' + summary() + '</div>' +
           '<div class="quiz-price"><span class="quiz-price-old">' + range(p[0], p[1]) + '</span><span class="quiz-price-new">' + range(r10(p[0] * 0.9), r10(p[1] * 0.9)) + '</span></div>' +
-          '<p class="quiz-hint">Цена со скидкой 10% на первый заказ. Финальную стоимость мастер подтвердит на месте.</p>' +
+          '<p class="quiz-hint">Цена со скидкой 10% на первый заказ. Финальную стоимость менеджер рассчитает по реальным фотографиям вашей мебели.</p>' +
           '<form class="quiz-form" data-quiz-form><div class="form-row">' +
           '<div class="field"><label>Имя</label><input name="name" type="text" placeholder="Как к вам обращаться" required></div>' +
           '<div class="field"><label>Телефон</label><input name="phone" type="tel" placeholder="+7 (___) ___-__-__" required></div></div>' +
-          '<label class="consent"><input type="checkbox" name="consent" required> <span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>' +
+          '<label class="consent"><input type="checkbox" name="consent" checked required> <span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>' +
           '<div class="form-gift">Получите скидку 10% на первый заказ</div>' +
           '<button type="submit" class="btn btn-primary btn-block">Отправить заявку</button>' +
           '<div class="form-success"></div></form>' +

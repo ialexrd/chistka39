@@ -1428,7 +1428,7 @@ def page_shell(path, title, description, body, schemas=None):
 # 6. ПОВТОРЯЮЩИЕСЯ БЛОКИ КОНТЕНТА
 # =========================================================================
 def consent_html(input_id):
-    return (f'<label class="consent" for="{input_id}"><input type="checkbox" id="{input_id}" name="consent" required> '
+    return (f'<label class="consent" for="{input_id}"><input type="checkbox" id="{input_id}" name="consent" checked required> '
             f'<span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>')
 
 def order_form_panel(preselect_slug=None):
@@ -1545,7 +1545,7 @@ def quiz_block(preselect=None, bento=False):
       <ul class="check-list quiz-bullets">
         <li>{icon("check", 18)}<span>Цена появляется сразу, без звонков и ожидания</span></li>
         <li>{icon("check", 18)}<span>Учитываем вид мебели, обивку, пятна и запахи</span></li>
-        <li>{icon("check", 18)}<span>Финальную стоимость мастер подтвердит на месте</span></li>
+        <li>{icon("check", 18)}<span>Финальную стоимость менеджер рассчитает по реальным фотографиям вашей мебели</span></li>
       </ul>
       <div class="quiz-gift">{icon("spark", 20)} <span><b>−10% на первый заказ</b> за прохождение калькулятора</span></div>
     </div>
