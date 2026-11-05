@@ -1210,7 +1210,7 @@ def header(current_path):
 
     mobile_services = dropdown_items
     mobile_core = "".join(
-        f'<a href="{href}">{label}</a>' for href, label in NAV_LINKS if href != "uslugi.html"
+        f'<a href="{href}">{label}</a>' for href, label in NAV_LINKS if href not in ("uslugi.html", "index.html")
     )
 
     return f"""
@@ -1251,8 +1251,7 @@ def header(current_path):
       </details>
       {mobile_core}
       <div class="mobile-cta">
-        <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary btn-block">{icon("phone", 16)} {SITE["phone_display"]}</a>
-        <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" class="btn btn-accent btn-block">{icon("whatsapp", 16)} Написать в WhatsApp</a>
+        <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary btn-block mobile-call">{icon("phone", 18)} <span>Позвонить</span> <b>{SITE["phone_display"]}</b></a>
       </div>
     </div>
   </nav>

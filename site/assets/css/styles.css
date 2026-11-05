@@ -734,3 +734,11 @@ body.page-inner{ background: #eef1f5; }
   .rv-arrow:disabled{ opacity: .35; }
   .rv-count{ font-size: 14px; font-weight: 600; color: var(--color-ink-soft); min-width: 44px; text-align: center; }
 }
+
+/* Мобильное меню: кликабельно под прозрачной шапкой, плавающая карточка */
+.page-home .mobile-nav{ pointer-events: auto; }
+@media (max-width: 860px){
+  .page-home .mobile-nav.open{ width: calc(100% - 16px); margin: 8px auto 0; border: 0; border-radius: 18px; box-shadow: 0 10px 30px rgba(20,35,60,.14); max-height: calc(100vh - 110px); overflow-y: auto; }
+}
+.mobile-nav a.mobile-call{ color: #fff; font-size: 16px; font-weight: 700; padding: 14px 18px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+.mobile-nav a.mobile-call b{ font-weight: 800; letter-spacing: .01em; }
