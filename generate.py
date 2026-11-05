@@ -2066,11 +2066,10 @@ def render_service_page(s):
 """
     body = (
         service_hero(s)
-        + intro_panel
         + service_prices(s)
         + quiz_block(s["slug"], bento=True)
         + h["wyvodim"] + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"]
-        + h["order"] + faq_new
+        + h["order"] + intro_panel + faq_new
     )
 
     schemas = [
