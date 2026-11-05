@@ -29,8 +29,8 @@ SITE = {
     "phone_tel": "+79000000000",
     "whatsapp": "https://wa.me/79000000000",
     "email": "info@himchistka-mebel-39.ru",
-    # Адрес сайта без «/» на конце. Сейчас — GitHub Pages; когда появится свой
-    # домен, впишите его сюда (и в site/CNAME) и перегенерируйте сайт.
+    # Адрес сайта без «/» на конце. Сейчас — GitHub Pages. Когда chistka-39.ru
+    # заработает на хостинге, впишите сюда "https://chistka-39.ru" и перегенерируйте сайт.
     "domain": "https://ialexrd.github.io/chistka39",
     "city": "Калининград",
     "address_text": "г. Калининград — выезд мастера на дом, в офис или на дачу",
