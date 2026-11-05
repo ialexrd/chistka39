@@ -1848,7 +1848,7 @@ HERO_PHOTO = {
 HERO_SHARED = {"krovati": "matrasa"}
 
 # Как кадрировать фото первого экрана (CSS object-position), если по центру неудачно
-HERO_POSITION = {"kuhonnogo-ugolka": "50% 45%"}
+HERO_POSITION = {"kuhonnogo-ugolka": "50% 45%", "ofisnoy-mebeli": "60% 70%"}
 
 HERO_WIDTHS = (960, 1600)
 
