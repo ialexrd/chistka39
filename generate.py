@@ -2725,7 +2725,7 @@ def _legal_page(path, h1, lead, crumb, sections_html, title, description):
 """
     content = f"""
 <section class="section legal">
-  <div class="container" style="max-width:820px;">
+  <div class="container">
 {sections_html}
   </div>
 </section>
