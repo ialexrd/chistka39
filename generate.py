@@ -2016,6 +2016,43 @@ def service_prices(s):
 </section>
 """
 
+B2B_SLUGS = ("ofisnoy-mebeli", "mebeli-dlya-biznesa", "kafe-restoranov")
+
+def b2b_docs_block():
+    """Второй блок на страницах для бизнеса: документы и скидка за объём."""
+    sv = 'width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
+    docs = [
+        ("Договор", "Заключаем договор на разовую или регулярную чистку",
+         f'<svg {sv}><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>'),
+        ("Счёт на оплату", "Безналичный расчёт для ИП и юрлиц",
+         f'<svg {sv}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>'),
+        ("Закрывающие акты", "Акт выполненных работ после каждой чистки",
+         f'<svg {sv}><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 14l2 2 4-4"/></svg>'),
+        ("Чеки", "Выдаём чек при любой форме оплаты",
+         f'<svg {sv}><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h3"/></svg>'),
+    ]
+    cards = "".join(f'<div class="b2b-doc"><span class="b2b-doc-ic">{ic}</span><div><strong>{esc(a)}</strong><p>{esc(b)}</p></div></div>' for a, b, ic in docs)
+    return f"""
+<section class="home-bento b2b-block">
+  <div class="container b2b-grid">
+    <div class="bento-panel b2b-docs">
+      <div class="bento-head">
+        <span class="bento-label">Для организаций</span>
+        <h2>Работаем со всеми документами</h2>
+        <p class="bento-sub">Полный пакет для бухгалтерии — без лишних вопросов от вашего бухгалтера.</p>
+      </div>
+      <div class="b2b-doc-grid">{cards}</div>
+    </div>
+    <div class="bento-panel b2b-discount">
+      <span class="b2b-discount-label">Скидки за объём</span>
+      <div class="b2b-discount-num"><small>до</small>50%</div>
+      <p>Чем больше мебели — тем ниже цена за единицу. Посчитаем скидку под ваш объём.</p>
+      <a href="#zayavka" class="btn btn-green" data-popup-order>Рассчитать скидку</a>
+    </div>
+  </div>
+</section>
+"""
+
 def render_service_page(s):
     path = service_filename(s["slug"])
     breadcrumbs = [("Главная", "index.html"), ("Услуги", "uslugi.html"), (s["nav"], None)]
@@ -2193,6 +2230,7 @@ def render_service_page(s):
         services_html = ""
     body = (
         service_hero(s)
+        + (b2b_docs_block() if s["slug"] in B2B_SLUGS else "")
         + prices_html
         + quiz_block(s["slug"], bento=True)
         + h["wyvodim"] + services_html + h["process"] + h["benefits"] + h["districts"] + h["reviews"]

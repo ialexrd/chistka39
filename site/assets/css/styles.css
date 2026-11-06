@@ -871,3 +871,18 @@ html.modal-open{ overflow: hidden; }
 .btn-green, .site-footer a.btn-green, footer a.btn-green{ background: #22a85a; color: #fff; }
 .btn-green:hover{ background: #1e9851; transform: translateY(-1px); }
 .footer-order-btn{ margin-top: 8px; }
+
+/* Страницы для бизнеса: документы и скидка за объём */
+.b2b-grid{ display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 14px; }
+.b2b-doc-grid{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+.b2b-doc{ display: flex; gap: 14px; align-items: flex-start; background: #f4f6f9; border-radius: 18px; padding: 18px; }
+.b2b-doc-ic{ width: 48px; height: 48px; border-radius: 14px; background: #fff; color: var(--color-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.b2b-doc strong{ display: block; font-size: 17px; margin-bottom: 4px; }
+.b2b-doc p{ margin: 0; font-size: 14px; color: var(--color-ink-soft); line-height: 1.45; }
+.b2b-discount{ background: linear-gradient(150deg, #1868c1, #0f4a8c); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.b2b-discount-label{ font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: .06em; opacity: .85; }
+.b2b-discount-num{ font-size: clamp(88px, 10vw, 150px); font-weight: 800; line-height: .95; letter-spacing: -.03em; margin: 10px 0 14px; }
+.b2b-discount-num small{ font-size: .32em; font-weight: 700; margin-right: 8px; letter-spacing: 0; vertical-align: .9em; }
+.b2b-discount p{ margin: 0 0 22px; color: #dbe7f6; font-size: 16px; line-height: 1.5; }
+@media (max-width: 960px){ .b2b-grid{ grid-template-columns: 1fr; } }
+@media (max-width: 640px){ .b2b-doc-grid{ grid-template-columns: 1fr; } }
