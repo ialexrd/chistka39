@@ -843,3 +843,9 @@ body.page-inner{ background: #eef1f5; }
 .legal-table th{ width: 32%; background: #f6f8fb; font-weight: 600; }
 @media (max-width: 640px){ .legal-table th, .legal-table td{ display: block; width: auto; } .legal-table th{ border-bottom: 0; } }
 .consent a{ color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Подвал: районы и города одной строкой над нижней линией */
+.footer-grid{ border-bottom: 0; padding-bottom: 0; }
+.footer-districts{ justify-content: space-between; margin-top: 32px; padding-bottom: 28px; border-bottom: 1px solid #24304a; }
+.footer-districts .chip{ font-size: 13px; padding: 7px 14px; }
+@media (max-width: 1100px){ .footer-districts{ justify-content: flex-start; gap: 8px; } }

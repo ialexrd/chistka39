@@ -1489,9 +1489,9 @@ def footer(current_path=""):
         <p>{icon("whatsapp", 15)} <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener">Написать в WhatsApp</a></p>
         <p>{icon("clock", 15)} {esc(SITE["work_hours"])}</p>
         <p>{icon("mappin", 15)} {esc(SITE["address_text"])}</p>
-        <div class="chip-row">{district_chips}</div>
       </div>
     </div>
+    <div class="chip-row footer-districts">{district_chips}</div>
     <div class="footer-bottom">
       <span>© <span data-year>{date.today().year}</span> {esc(SITE["short_name"])}. Все права защищены.</span>
       <a href="politika-konfidencialnosti.html">Политика конфиденциальности</a>
