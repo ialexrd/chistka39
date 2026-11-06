@@ -207,7 +207,7 @@
           '<form class="quiz-form" data-quiz-form><div class="form-row">' +
           '<div class="field"><label>Имя</label><input name="name" type="text" placeholder="Как к вам обращаться" required></div>' +
           '<div class="field"><label>Телефон</label><input name="phone" type="tel" placeholder="+7 (___) ___-__-__" required></div></div>' +
-          '<label class="consent"><input type="checkbox" name="consent" checked required> <span>Я согласен на <a href="politika-konfidencialnosti" target="_blank">обработку персональных данных</a></span></label>' +
+          '<label class="consent"><input type="checkbox" name="consent" checked required> <span>Я согласен на <a href="soglasie-na-obrabotku-personalnyh-dannyh" target="_blank">обработку персональных данных</a></span></label>' +
           '<div class="form-gift">Получите скидку 10% на первый заказ</div>' +
           '<button type="submit" class="btn btn-primary btn-block">Отправить заявку</button>' +
           '<div class="form-success"></div></form>' +
@@ -416,11 +416,11 @@
     });
   });
 
+  // Окно показывается всем, пока посетитель не сделал выбор,
+  // даже если коды счётчиков ещё не вставлены.
   var consent = store('cookie_consent');
-  if (CFG.ym || CFG.ga) {
-    if (consent === 'all') startAnalytics();
-    else if (consent !== 'necessary') cookieBanner();
-  }
+  if (consent === 'all') startAnalytics();
+  else if (consent !== 'necessary') cookieBanner();
 })();
 
 /* Нижнее меню: показываем, когда на экране появляется блок услуг */
