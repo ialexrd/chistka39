@@ -1481,7 +1481,6 @@ def footer(current_path=""):
           <li><a href="voprosy-i-otvety.html">Вопросы и ответы</a></li>
           <li><a href="geografiya.html">География выезда</a></li>
           <li><a href="kontakty.html">Контакты</a></li>
-          <li><a href="politika-konfidencialnosti.html">Политика конфиденциальности</a></li>
         </ul>
       </div>
       <div>
@@ -1495,7 +1494,7 @@ def footer(current_path=""):
     </div>
     <div class="footer-bottom">
       <span>© <span data-year>{date.today().year}</span> {esc(SITE["short_name"])}. Все права защищены.</span>
-      <span>Материалы сайта не являются публичной офертой. Точная стоимость услуг определяется мастером на месте.</span>
+      <a href="politika-konfidencialnosti.html">Политика конфиденциальности</a>
     </div>
   </div>
 </footer>
