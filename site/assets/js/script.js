@@ -49,6 +49,33 @@
     });
   });
 
+  // Всплывающее окно с формой заявки: «Вызвать мастера» и «Оставить заявку»
+  var orderModal = document.getElementById('order-modal');
+  if (orderModal) {
+    var lastFocus = null;
+    var openModal = function () {
+      lastFocus = document.activeElement;
+      orderModal.hidden = false;
+      document.documentElement.classList.add('modal-open');
+      var first = orderModal.querySelector('input[name="name"]');
+      if (first) setTimeout(function () { first.focus(); }, 50);
+    };
+    var closeModal = function () {
+      orderModal.hidden = true;
+      document.documentElement.classList.remove('modal-open');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+    document.querySelectorAll('[data-popup-order]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+    });
+    orderModal.addEventListener('click', function (e) {
+      if (e.target.closest('[data-modal-close]')) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !orderModal.hidden) closeModal();
+    });
+  }
+
   // Обработка форм заявки — локально формируем сообщение для WhatsApp
   // (на сайте нет бэкенда; после подключения хостинга форму можно
   // переключить на отправку в CRM/почту/Telegram-бота).

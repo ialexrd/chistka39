@@ -1427,7 +1427,7 @@ def header(current_path):
         {SITE["phone_display"]}
         <small>{esc(SITE["work_hours_short"])}</small>
       </div>
-      <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary btn-sm" data-track-call>{icon("phone", 16)} Вызвать мастера</a>
+      <a href="#zayavka" class="btn btn-primary btn-sm" data-popup-order>{icon("phone", 16)} Вызвать мастера</a>
       <button class="burger" data-burger aria-label="Открыть меню" aria-expanded="false"><span></span></button>
     </div>
   </div>
@@ -1504,7 +1504,7 @@ def footer(current_path=""):
 def sticky_cta(current_path):
     if True:
         return f"""<div class="sticky-cta sticky-cta-home">
-  <a href="#zayavka" class="btn btn-primary">Оставить заявку</a>
+  <a href="#zayavka" class="btn btn-primary" data-popup-order>Оставить заявку</a>
   <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="22" height="22"> Max</a>
   <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="22" height="22"> Telegram</a>
 </div>"""
@@ -1640,6 +1640,7 @@ def page_shell(path, title, description, body, schemas=None):
 {header(path)}
 {body}
 {footer(path)}
+{order_modal()}
 <script src="{asset("assets/js/script.js")}" defer></script>
 </body>
 </html>"""
@@ -1692,6 +1693,47 @@ def order_form_panel(preselect_slug=None):
   </form>
 </div>
 """
+
+def order_dark_inner(prefix, title_tag="h2", title_id=""):
+    """Тёмный блок заявки: преимущества слева, форма справа. Используется
+    в конце главной и во всплывающем окне (кнопки «Вызвать мастера» и
+    «Оставить заявку»)."""
+    tid = f' id="{title_id}"' if title_id else ""
+    return f"""      <div class="order-dark-text">
+        <span class="order-pill">Перезвоним за 5 минут</span>
+        <{title_tag}{tid}>Запишитесь на удобное время</{title_tag}>
+        <p class="order-lead">Оставьте заявку — подберём дату и время выезда, перезвоним и подтвердим стоимость.</p>
+        <ul class="order-checks">
+          <li>{icon("check", 18)}<span>Выезд по Калининграду бесплатно</span></li>
+          <li>{icon("check", 18)}<span>Оплата после результата</span></li>
+          <li>{icon("check", 18)}<span>Срочный выезд сегодня — при заказе до 15:00</span></li>
+          <li>{icon("check", 18)}<span>Работаем ежедневно с 9:00 до 21:00</span></li>
+        </ul>
+      </div>
+      <div class="order-card">
+        <form data-order-form>
+          <div class="field">
+            <label for="{prefix}-name">Имя</label>
+            <input id="{prefix}-name" name="name" type="text" placeholder="Как к вам обращаться" required>
+          </div>
+          <div class="field">
+            <label for="{prefix}-phone">Телефон</label>
+            <input id="{prefix}-phone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Оставить заявку</button>
+          {consent_html(prefix + "-consent")}
+          <div class="form-success"></div>
+        </form>
+      </div>"""
+
+def order_modal():
+    return f"""<div class="order-modal" id="order-modal" hidden>
+  <div class="order-modal-backdrop" data-modal-close></div>
+  <div class="order-modal-dialog bento-panel order-dark" role="dialog" aria-modal="true" aria-labelledby="m-title">
+    <button type="button" class="order-modal-close" data-modal-close aria-label="Закрыть">&times;</button>
+{order_dark_inner("m", "h2", "m-title")}
+  </div>
+</div>"""
 
 def steps_block(steps):
     items = "".join(f'<div class="step"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in steps)
@@ -1780,7 +1822,7 @@ def hero_cta(order_href="#zayavka"):
     """Кнопки первого экрана: заявка + мессенджеры Max и Telegram."""
     return f"""
       <div class="hero-cta-row">
-        <a href="{order_href}" class="btn btn-primary">Оставить заявку</a>
+        <a href="{order_href}" class="btn btn-primary" data-popup-order>Оставить заявку</a>
         <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="24" height="24"> Max</a>
         <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="24" height="24"> Telegram</a>
       </div>"""
@@ -2397,7 +2439,7 @@ document.querySelectorAll('.ba').forEach(function(el){{
           <p>Уточните по телефону — скорее всего, мы всё равно приедем.</p>
           <div class="geo-actions">
             <a class="geo-phone" href="tel:{SITE["phone_tel"]}">{icon("phone",18)} {esc(SITE["phone_display"])}</a>
-            <a class="btn geo-btn" href="#zayavka">Оставить заявку</a>
+            <a class="btn geo-btn" href="#zayavka" data-popup-order>Оставить заявку</a>
           </div>
         </div>
       </div>
@@ -2457,32 +2499,7 @@ document.querySelectorAll('.ba').forEach(function(el){{
 <section class="home-bento home-order" id="zayavka">
   <div class="container">
     <div class="bento-panel order-dark">
-      <div class="order-dark-text">
-        <span class="order-pill">Перезвоним за 5 минут</span>
-        <h2>Запишитесь на удобное время</h2>
-        <p class="order-lead">Оставьте заявку — подберём дату и время выезда, перезвоним и подтвердим стоимость.</p>
-        <ul class="order-checks">
-          <li>{icon("check", 18)}<span>Выезд по Калининграду бесплатно</span></li>
-          <li>{icon("check", 18)}<span>Оплата после результата</span></li>
-          <li>{icon("check", 18)}<span>Срочный выезд сегодня — при заказе до 15:00</span></li>
-          <li>{icon("check", 18)}<span>Работаем ежедневно с 9:00 до 21:00</span></li>
-        </ul>
-      </div>
-      <div class="order-card">
-        <form data-order-form>
-          <div class="field">
-            <label for="o-name">Имя</label>
-            <input id="o-name" name="name" type="text" placeholder="Как к вам обращаться" required>
-          </div>
-          <div class="field">
-            <label for="o-phone">Телефон</label>
-            <input id="o-phone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" required>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Оставить заявку</button>
-          <label class="consent" for="o-consent"><input type="checkbox" id="o-consent" name="consent" checked required> <span>Я согласен (-а) с <a href="politika-konfidencialnosti.html" target="_blank">политикой конфиденциальности в отношении пользовательских данных</a> и даю свое <a href="soglasie-na-obrabotku-personalnyh-dannyh.html" target="_blank">согласие на обработку персональных данных</a></span></label>
-          <div class="form-success"></div>
-        </form>
-      </div>
+{order_dark_inner("o")}
     </div>
   </div>
 </section>
