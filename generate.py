@@ -1923,7 +1923,7 @@ HERO_PHOTO = {
 }
 
 # Страницы, которые берут крупное фото первого экрана у другой страницы
-HERO_SHARED = {"krovati": "matrasa"}
+HERO_SHARED = {"krovati": "matrasa", **{k: "nepriyatnogo-zapaha" for k in ("zapaha-mochi", "zapaha-koshki", "zapaha-sobaki", "zapaha-sigaret", "zapaha-syrosti-i-pleseni")}}
 
 # Как кадрировать фото первого экрана (CSS object-position), если по центру неудачно
 HERO_POSITION = {"kuhonnogo-ugolka": "50% 45%", "ofisnoy-mebeli": "60% 70%"}
