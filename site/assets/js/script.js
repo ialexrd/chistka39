@@ -49,6 +49,14 @@
     });
   });
 
+  // Запрет масштабирования щипком (Safari на iPhone игнорирует user-scalable=no)
+  ['gesturestart', 'gesturechange'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+  });
+  document.addEventListener('touchmove', function (e) {
+    if (e.touches && e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+
   // Всплывающее окно с формой заявки: «Вызвать мастера» и «Оставить заявку»
   var orderModal = document.getElementById('order-modal');
   if (orderModal) {

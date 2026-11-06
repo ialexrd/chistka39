@@ -861,7 +861,7 @@ body.page-inner{ background: #eef1f5; }
 html.modal-open{ overflow: hidden; }
 @keyframes modal-in{ from{ opacity: 0; transform: translateY(12px); } to{ opacity: 1; transform: none; } }
 @media (max-width: 960px){
-  .order-modal{ padding: 12px; align-items: flex-end; }
+  .order-modal{ padding: 12px; align-items: center; }
   .order-modal-dialog{ padding: 28px 18px 18px; border-radius: 22px; max-height: calc(100vh - 24px); }
   .order-modal-dialog .order-lead, .order-modal-dialog .order-checks{ display: none; }
   .order-modal-dialog h2{ margin: 14px 0 0; }
@@ -886,3 +886,6 @@ html.modal-open{ overflow: hidden; }
 .b2b-discount p{ margin: 0 0 22px; color: #dbe7f6; font-size: 16px; line-height: 1.5; }
 @media (max-width: 960px){ .b2b-grid{ grid-template-columns: 1fr; } }
 @media (max-width: 640px){ .b2b-doc-grid{ grid-template-columns: 1fr; } }
+
+/* Телефоны: без масштабирования двойным касанием */
+html{ touch-action: manipulation; }
