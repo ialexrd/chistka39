@@ -839,3 +839,4 @@ body.page-inner{ background: #eef1f5; }
 .legal-table th, .legal-table td{ border: 1px solid var(--color-border); padding: 10px 14px; text-align: left; vertical-align: top; }
 .legal-table th{ width: 32%; background: #f6f8fb; font-weight: 600; }
 @media (max-width: 640px){ .legal-table th, .legal-table td{ display: block; width: auto; } .legal-table th{ border-bottom: 0; } }
+.consent a{ color: inherit; text-decoration: underline; text-underline-offset: 2px; }
