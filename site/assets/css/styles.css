@@ -830,3 +830,12 @@ body.page-inner{ background: #eef1f5; }
 /* Выпадающее меню «Услуги»: названия в одну строку, без пустот в сетке */
 .main-nav .dropdown{ min-width: 0; width: max-content; grid-template-columns: repeat(2, max-content); column-gap: 8px; }
 .main-nav .dropdown a{ white-space: nowrap; }
+
+/* Юридические страницы: политика, согласие */
+.legal ul{ margin: 0 0 16px; padding-left: 20px; }
+.legal li{ margin-bottom: 6px; }
+.legal .table-wrap{ overflow-x: auto; margin: 0 0 20px; }
+.legal-table{ width: 100%; border-collapse: collapse; font-size: 15px; }
+.legal-table th, .legal-table td{ border: 1px solid var(--color-border); padding: 10px 14px; text-align: left; vertical-align: top; }
+.legal-table th{ width: 32%; background: #f6f8fb; font-weight: 600; }
+@media (max-width: 640px){ .legal-table th, .legal-table td{ display: block; width: auto; } .legal-table th{ border-bottom: 0; } }
