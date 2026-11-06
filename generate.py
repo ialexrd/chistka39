@@ -1460,9 +1460,9 @@ def footer(current_path=""):
         <div class="footer-logo"><img src="{asset("assets/img/logo-white.svg")}" alt="{esc(SITE["short_name"])}" width="1372" height="324"></div>
         <p>{esc(SITE["tagline"])}. Работаем по {esc(SITE["city"])} и области, выезд мастера в день обращения.</p>
         <div class="footer-social">
-          <a href="{SITE["vk"]}" aria-label="VK">VK</a>
-          <a href="{SITE["telegram"]}" aria-label="Telegram">TG</a>
-          <a href="{SITE["instagram"]}" aria-label="Instagram">IG</a>
+          <a href="{SITE["max"]}" target="_blank" rel="noopener" aria-label="Написать в MAX"><img src="{asset("assets/img/icon-max.png")}" alt="MAX" width="40" height="40" loading="lazy"></a>
+          <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" aria-label="Написать в WhatsApp"><img src="{asset("assets/img/icon-whatsapp.png")}" alt="WhatsApp" width="40" height="40" loading="lazy"></a>
+          <a href="{SITE["telegram"]}" target="_blank" rel="noopener" aria-label="Написать в Telegram"><img src="{asset("assets/img/icon-telegram.png")}" alt="Telegram" width="40" height="40" loading="lazy"></a>
         </div>
       </div>
       <div>

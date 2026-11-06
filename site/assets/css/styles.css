@@ -273,7 +273,10 @@ button{ font-family: inherit; cursor: pointer; }
 .footer-links li{ margin-bottom: 9px; }
 .footer-bottom{ display: flex; justify-content: space-between; gap: 12px; padding-top: 22px; font-size: 12.5px; flex-wrap: wrap; color: #7d8aa3; }
 .footer-social{ display: flex; gap: 10px; }
-.footer-social a{ width: 36px; height: 36px; border-radius: 50%; background: #1a2438; display: flex; align-items: center; justify-content: center; }
+.footer-social{ gap: 12px; }
+.footer-social a{ width: 40px; height: 40px; display: block; border-radius: 10px; overflow: hidden; transition: transform .15s; }
+.footer-social a:hover{ transform: translateY(-2px); }
+.footer-social img{ width: 40px; height: 40px; display: block; }
 
 /* ---------- Sticky mobile call bar ---------- */
 .sticky-cta{
