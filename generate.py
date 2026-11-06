@@ -25,9 +25,9 @@ SITE = {
     "name": "Химчистка Мебели Калининград",
     "short_name": "Чистка 39",
     "tagline": "Выездная химчистка мягкой мебели и текстиля на дому и в офисе",
-    "phone_display": "+7 (900) 000-00-00",
-    "phone_tel": "+79000000000",
-    "whatsapp": "https://wa.me/79000000000",
+    "phone_display": "+7 (932) 303-97-22",
+    "phone_tel": "+79323039722",
+    "whatsapp": "https://wa.me/79323039722",
     "email": "info@himchistka-mebel-39.ru",
     # Адрес сайта без «/» на конце. Сейчас — GitHub Pages. Когда chistka-39.ru
     # заработает на хостинге, впишите сюда "https://chistka-39.ru" и перегенерируйте сайт.
@@ -40,7 +40,7 @@ SITE = {
         "Центральный район", "Московский район", "Ленинградский район",
         "Балтийский район", "Гурьевск", "Светлогорск", "Зеленоградск", "Пионерский",
     ],
-    "vk": "#", "telegram": "#", "max": "#", "instagram": "#",
+    "vk": "#", "telegram": "https://t.me/+79323039722", "max": "https://max.ru/u/f9LHodD0cOJ1WI7v2AV8Dr6rBF7oEaKvQdY5tPAMSR5phBrhhIfH0vl_Fx8", "instagram": "#",
     "year_placeholder": "[ГГГГ]",
 }
 

@@ -52,7 +52,7 @@
   // Обработка форм заявки — локально формируем сообщение для WhatsApp
   // (на сайте нет бэкенда; после подключения хостинга форму можно
   // переключить на отправку в CRM/почту/Telegram-бота).
-  var WHATSAPP_NUMBER = '79000000000'; // TODO: заменить на реальный номер в формате 7XXXXXXXXXX
+  var WHATSAPP_NUMBER = '79323039722';
 
   function sendLead(lines, successBox) {
     var src = trafficSource();
