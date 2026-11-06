@@ -407,7 +407,7 @@
     if (CFG.ym) {
       window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); };
       window.ym.l = +new Date();
-      loadScript('https://mc.yandex.ru/metrika/tag.js');
+      loadScript('https://mc.yandex.ru/metrika/tag.js?id=' + encodeURIComponent(CFG.ym));
       window.ym(+CFG.ym, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true });
     }
     if (CFG.ga) {

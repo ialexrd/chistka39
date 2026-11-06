@@ -54,7 +54,7 @@ ANALYTICS = {
     # Google Search Console → «Тег HTML»: content="..."
     "google_verification": "",
     # Яндекс Метрика: номер счётчика (только цифры)
-    "yandex_metrika_id": "",
+    "yandex_metrika_id": "114111320",
     # Google Analytics 4: идентификатор потока вида G-XXXXXXXXXX
     "ga4_id": "",
 }
