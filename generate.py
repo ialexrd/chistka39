@@ -1481,9 +1481,7 @@ def footer(current_path=""):
           <li><a href="voprosy-i-otvety.html">Вопросы и ответы</a></li>
           <li><a href="geografiya.html">География выезда</a></li>
           <li><a href="kontakty.html">Контакты</a></li>
-          <li><a href="karta-sajta.html">Карта сайта</a></li>
           <li><a href="politika-konfidencialnosti.html">Политика конфиденциальности</a></li>
-          <li><a href="politika-konfidencialnosti.html#cookies" data-cookie-reset>Настройки cookie</a></li>
         </ul>
       </div>
       <div>
@@ -2763,6 +2761,7 @@ def _policy_inline(text):
     t = esc(text)
     t = re.sub(r'([\w.+-]+@[\w-]+\.[\w.]+\w)', r'<a href="mailto:\1">\1</a>', t)
     t = re.sub(r'(https://chistka-39\.ru[\w/-]*)', r'<a href="\1">\1</a>', t)
+    t = t.replace('по ссылке «Настройки cookie»', 'по ссылке <a href="#cookies" data-cookie-reset>«Настройки cookie»</a>')
     return t
 
 def policy_html():
