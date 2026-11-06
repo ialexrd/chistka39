@@ -1489,6 +1489,7 @@ def footer(current_path=""):
         <p>{icon("whatsapp", 15)} <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener">Написать в WhatsApp</a></p>
         <p>{icon("clock", 15)} {esc(SITE["work_hours"])}</p>
         <p>{icon("mappin", 15)} {esc(SITE["address_text"])}</p>
+        <a href="#zayavka" class="btn btn-green footer-order-btn" data-popup-order>Оставить заявку и получить скидку</a>
       </div>
     </div>
     <div class="chip-row footer-districts">{district_chips}</div>

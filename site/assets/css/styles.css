@@ -866,3 +866,8 @@ html.modal-open{ overflow: hidden; }
   .order-modal-dialog .order-lead, .order-modal-dialog .order-checks{ display: none; }
   .order-modal-dialog h2{ margin: 14px 0 0; }
 }
+
+/* Зелёная кнопка заявки в подвале */
+.btn-green, .site-footer a.btn-green, footer a.btn-green{ background: #22a85a; color: #fff; }
+.btn-green:hover{ background: #1e9851; transform: translateY(-1px); }
+.footer-order-btn{ margin-top: 8px; }
