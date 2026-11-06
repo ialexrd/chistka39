@@ -1766,6 +1766,7 @@ def related_block(slugs):
 
 QUIZ_PAGES = {"index.html"} | {service_filename(x["slug"]) for x in SERVICES}
 QUIZ_PAGES |= {g["filename"] for g in GEO_PAGES}
+QUIZ_PAGES -= {service_filename(x) for x in ("ofisnoy-mebeli", "mebeli-dlya-biznesa", "kafe-restoranov")}  # на страницах для бизнеса калькулятора нет
 
 def quiz_href(current_path):
     """Ссылка на калькулятор: на своей странице — якорь, иначе — на главную."""
@@ -2232,7 +2233,7 @@ def render_service_page(s):
         service_hero(s)
         + (b2b_docs_block() if s["slug"] in B2B_SLUGS else "")
         + prices_html
-        + quiz_block(s["slug"], bento=True)
+        + ("" if s["slug"] in B2B_SLUGS else quiz_block(s["slug"], bento=True))
         + h["wyvodim"] + services_html + h["process"] + h["benefits"] + h["districts"] + h["reviews"]
         + h["order"] + intro_panel + faq_new
     )
