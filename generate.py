@@ -28,7 +28,7 @@ SITE = {
     "phone_display": "+7 (932) 303-97-22",
     "phone_tel": "+79323039722",
     "whatsapp": "https://wa.me/79323039722",
-    "email": "info@himchistka-mebel-39.ru",
+    "email": "info@chistka-39.ru",
     # Адрес сайта без «/» на конце
     "domain": "https://chistka-39.ru",
     "city": "Калининград",
