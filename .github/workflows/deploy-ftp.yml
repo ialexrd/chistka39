@@ -32,3 +32,6 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./site/
           server-dir: ${{ secrets.FTP_DIR }}
+      - name: Сообщить Яндексу и Bing об изменённых страницах (IndexNow)
+        if: env.FTP_SERVER != ''
+        run: python3 tools/indexnow.py

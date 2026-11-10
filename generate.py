@@ -47,6 +47,13 @@ SITE = {
 # 1.1 ВЕБМАСТЕРЫ И АНАЛИТИКА — вставьте коды из своих кабинетов.
 # Пустая строка = блок не выводится на сайт.
 # =========================================================================
+# Ключ IndexNow: файл site/<ключ>.txt лежит на сайте, после выкладки
+# GitHub Actions сообщает Яндексу и Bing об изменённых страницах.
+INDEXNOW_KEY = "83276854e754305c58e1820923fb9efd"
+
+# Даты последнего реального изменения страниц (для lastmod в sitemap.xml)
+LASTMOD_FILE = os.path.join(ROOT, "lastmod.json")
+
 ANALYTICS = {
     # Яндекс Вебмастер → «Права доступа» → Мета-тег: content="..."
     "yandex_verification": "1b1916da8b7cb7f1",
@@ -1565,6 +1572,29 @@ def local_business_schema():
         "priceRange": "от 150 ₽",
     }
 
+def organization_schema():
+    same = [v for v in (SITE["telegram"], SITE["max"], SITE["vk"], SITE["instagram"]) if v.startswith("http")]
+    return {
+        "@context": "https://schema.org", "@type": "Organization",
+        "@id": SITE["domain"] + "/#organization",
+        "name": SITE["name"], "alternateName": SITE["short_name"],
+        "url": SITE["domain"] + "/",
+        "logo": {"@type": "ImageObject", "url": url("assets/img/logo.svg")},
+        "email": SITE["email"], "telephone": SITE["phone_tel"],
+        "contactPoint": {"@type": "ContactPoint", "telephone": SITE["phone_tel"], "contactType": "customer service",
+                         "areaServed": "RU", "availableLanguage": "ru"},
+        "sameAs": same,
+    }
+
+def website_schema():
+    return {
+        "@context": "https://schema.org", "@type": "WebSite",
+        "@id": SITE["domain"] + "/#website",
+        "name": SITE["name"], "alternateName": SITE["short_name"],
+        "url": SITE["domain"] + "/", "inLanguage": "ru",
+        "publisher": {"@id": SITE["domain"] + "/#organization"},
+    }
+
 def service_schema(s):
     return {
         "@context": "https://schema.org",
@@ -1948,7 +1978,13 @@ def hero_picture(base, alt, position=None):
         <img src="{asset(base + ".jpg")}" srcset="{srcset(".jpg")}" sizes="100vw" alt="{esc(alt)}" width="{w}" height="{hgt}" fetchpriority="high" decoding="async"{f' style="object-position:{position}"' if position else ''}>
       </picture>"""
 
-def service_hero(s):
+def hero_crumbs(items):
+    if not items:
+        return ""
+    lis = "".join(f'<li><a href="{h}">{esc(l)}</a></li>' if h else f'<li aria-current="page">{esc(l)}</li>' for l, h in items)
+    return f'<nav class="hero-crumbs" aria-label="Хлебные крошки"><ol>{lis}</ol></nav>'
+
+def service_hero(s, crumbs=None):
     slug = s["slug"]
     # Отдельное фото для первого экрана (крупное, hero-<slug>.jpg) важнее карточки
     hero_slug = HERO_SHARED.get(slug, slug)
@@ -1967,6 +2003,7 @@ def service_hero(s):
     <div class="hero-banner">
       {hero_picture(base, s["h1"], HERO_POSITION.get(slug))}
       <div class="hero-banner-body">
+        {hero_crumbs(crumbs)}
         <span class="eyebrow">{icon("mappin", 15)} {esc(s.get("eyebrow") or SITE["city"] + " и область")}</span>
         <h1>{esc(s["h1"])}</h1>
         <p class="hero-lead">{esc(s["lead"])}</p>
@@ -2230,7 +2267,7 @@ def render_service_page(s):
             .replace('id="uslugi"', 'id="ceny"'))
         services_html = ""
     body = (
-        service_hero(s)
+        service_hero(s, breadcrumbs)
         + (b2b_docs_block() if s["slug"] in B2B_SLUGS else "")
         + prices_html
         + ("" if s["slug"] in B2B_SLUGS else quiz_block(s["slug"], bento=True))
@@ -2554,7 +2591,7 @@ def render_index():
     path = "index.html"
     h = home_parts()
     body = h["hero"] + h["wyvodim"] + quiz_block(bento=True) + h["services"] + h["process"] + h["benefits"] + h["districts"] + h["reviews"] + h["order"] + h["faq"]
-    schemas = [local_business_schema()]
+    schemas = [organization_schema(), website_schema(), local_business_schema()]
     return path, page_shell(
         path,
         "Химчистка мебели на дому в Калининграде — выездная химчистка диванов, матрасов, стульев | " + SITE["short_name"],
@@ -2920,7 +2957,7 @@ def info_cards(items):
 
 def simple_page(path, title, description, hero_dict, sections, breadcrumbs, schemas=None, with_order=True):
     h = home_parts()
-    body = service_hero(hero_dict) + "".join(sections)
+    body = service_hero(hero_dict, breadcrumbs) + "".join(sections)
     if with_order:
         body += h["order"]
     return path, page_shell(path, title, description, body, [breadcrumb_schema(breadcrumbs)] + (schemas or []))
@@ -3067,7 +3104,10 @@ def render_karta():
 ARTICLES = [
 dict(
     slug="kak-pochistit-divan", filename="kak-pochistit-divan-v-domashnih-usloviyah.html", photo="divana",
-    related="divana", minutes=6,
+    related="divana", minutes=6, published="2026-11-10", updated="2026-11-10",
+    links=[("Не чистите паром пятна от крови, мочи и молока", "kak-ubrat-zapah-mochi-s-divana.html"),
+           ("Кожу не мочат", "@kozhanogo-divana"),
+           ("Мастера стоит вызвать, если", "@divana")],
     nav="Как почистить диван в домашних условиях",
     h1="Как почистить диван в домашних условиях",
     title="Как почистить диван в домашних условиях: чем отмыть обивку без разводов | " + SITE["short_name"],
@@ -3126,7 +3166,11 @@ dict(
 ),
 dict(
     slug="kak-ubrat-zapah-koshki", filename="kak-ubrat-zapah-koshachej-mochi.html", photo="nepriyatnogo-zapaha",
-    related="zapaha-koshki", minutes=6,
+    related="zapaha-koshki", minutes=6, published="2026-11-10", updated="2026-11-10",
+    links=[("Матрас: моча уходит в наполнитель", "@matrasa"),
+           ("Ковролин: моча уходит в подложку", "@kovrolina"),
+           ("Мастер пропитывает мебель энзимным составом", "@zapaha-koshki"),
+           ("Пароочистителем и горячей водой", "kak-ubrat-zapah-mochi-s-divana.html")],
     nav="Как убрать запах кошачьей мочи",
     h1="Как убрать запах кошачьей мочи",
     title="Как убрать запах кошачьей мочи с дивана, матраса и пола | " + SITE["short_name"],
@@ -3172,7 +3216,11 @@ dict(
 ),
 dict(
     slug="kak-ubrat-zapah-mochi", filename="kak-ubrat-zapah-mochi-s-divana.html", photo="nepriyatnogo-zapaha",
-    related="zapaha-mochi", minutes=5,
+    related="zapaha-mochi", minutes=5, published="2026-11-10", updated="2026-11-10",
+    links=[("Как не оставить сырость в матрасе", None),
+           ("Собачья моча пахнет сильнее детской и слабее кошачьей", "kak-ubrat-zapah-koshachej-mochi.html"),
+           ("Пятно на матрасе выводится", "@matrasa"),
+           ("Мастер обрабатывает место энзимным составом", "@zapaha-mochi")],
     nav="Как убрать мочу и её запах с дивана и матраса",
     h1="Как убрать мочу и её запах с дивана и матраса",
     title="Как убрать мочу и запах мочи с дивана и матраса в домашних условиях | " + SITE["short_name"],
@@ -3229,20 +3277,39 @@ def articles_panel(slug):
         return ""
     return bento_panel("Статьи", "Полезно почитать", article_cards(items))
 
-def render_article_body(blocks):
+def _link_phrases(html_text, links, used):
+    for phrase, href in links:
+        if not href or phrase in used:
+            continue
+        ep = esc(phrase)
+        if ep in html_text:
+            target = service_filename(href[1:]) if href.startswith("@") else href
+            html_text = html_text.replace(ep, f'<a href="{target}">{ep}</a>', 1)
+            used.add(phrase)
+    return html_text
+
+def render_article_body(blocks, links=()):
     out, toc, n = [], [], 0
+    used = set()
+    L = lambda t: _link_phrases(esc(t), links, used)
     for kind, val in blocks:
         if kind == "h2":
             n += 1
             toc.append(f'<li><a href="#r{n}">{esc(val)}</a></li>')
             out.append(f'<h2 id="r{n}">{esc(val)}</h2>')
         elif kind == "p":
-            out.append(f"<p>{esc(val)}</p>")
+            out.append(f"<p>{L(val)}</p>")
         elif kind in ("ul", "ol"):
-            out.append(f"<{kind}>" + "".join(f"<li>{esc(x)}</li>" for x in val) + f"</{kind}>")
+            out.append(f"<{kind}>" + "".join(f"<li>{L(x)}</li>" for x in val) + f"</{kind}>")
         elif kind == "note":
-            out.append(f'<div class="article-note">{gicon("spark", 28)}<p>{esc(val)}</p></div>')
+            out.append(f'<div class="article-note">{gicon("spark", 28)}<p>{L(val)}</p></div>')
     return "".join(out), "".join(toc)
+
+RU_MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+
+def ru_date(iso):
+    y, m, d = iso.split("-")
+    return f"{int(d)} {RU_MONTHS[int(m) - 1]} {y}"
 
 def article_schema(a):
     return {
@@ -3250,7 +3317,7 @@ def article_schema(a):
         "headline": a["h1"], "description": a["description"],
         "mainEntityOfPage": url(a["filename"]), "inLanguage": "ru",
         "image": url("assets/img/og-image.jpg"),
-        "datePublished": "2026-11-10", "dateModified": date.today().isoformat(),
+        "datePublished": a["published"], "dateModified": a["updated"],
         "author": {"@type": "Organization", "name": SITE["name"]},
         "publisher": {"@type": "Organization", "name": SITE["name"], "logo": {"@type": "ImageObject", "url": url("assets/img/logo.svg")}},
     }
@@ -3259,7 +3326,7 @@ def render_article(a):
     path = a["filename"]
     bc = [("Главная", "index.html"), ("Статьи", "stati.html"), (a["nav"], None)]
     s = SERVICE_BY_SLUG[a["related"]]
-    body_html, toc = render_article_body(a["body"])
+    body_html, toc = render_article_body(a["body"], a.get("links", ()))
     service_card_html = f"""<div class="bento-card article-cta">
         <div class="why-icon">{gicon(ARTICLE_ICONS.get(a["related"], "spark"), 28)}</div>
         <h3>{esc(s["nav"])} от {esc(s["price_from"])} ₽</h3>
@@ -3272,7 +3339,7 @@ def render_article(a):
         <div class="bento-card article-toc"><h3>Содержание</h3><ol>{toc}</ol></div>
         {service_card_html}
       </aside>
-      <article class="article-body">{body_html}</article>
+      <article class="article-body"><p class="article-meta">Обновлено <time datetime="{a["updated"]}">{ru_date(a["updated"])}</time> · {a["minutes"]} мин чтения</p>{body_html}</article>
     </div>"""
     others = [x for x in ARTICLES if x is not a]
     sections = [
@@ -3308,8 +3375,11 @@ def main():
 
     all_paths = []
 
+    page_hashes = {}
+
     def write(path, content):
         content = clean_links(typograf(content))
+        page_hashes[path] = hashlib.sha1(re.sub(r"\?v=[0-9a-f]+", "", content).encode("utf-8")).hexdigest()
         with open(os.path.join(OUT, path), "w", encoding="utf-8") as f:
             f.write(content)
         all_paths.append(path)
@@ -3341,10 +3411,28 @@ def main():
         write(p, c)
 
     # sitemap.xml
+    # lastmod — дата, когда содержимое страницы последний раз реально менялось,
+    # а не дата сборки (иначе поисковики перестают доверять этому полю).
     today = date.today().isoformat()
+    try:
+        with open(LASTMOD_FILE, encoding="utf-8") as f:
+            known = json.load(f)
+    except (OSError, ValueError):
+        known = {}
+    lastmod = {}
+    for p in all_paths:
+        old_entry = known.get(p)
+        if old_entry and old_entry.get("hash") == page_hashes[p]:
+            lastmod[p] = old_entry
+        else:
+            lastmod[p] = {"hash": page_hashes[p], "date": today}
+    with open(LASTMOD_FILE, "w", encoding="utf-8") as f:
+        json.dump(lastmod, f, ensure_ascii=False, indent=1, sort_keys=True)
     urls = "".join(
-        f"<url><loc>{url(p)}</loc><lastmod>{today}</lastmod></url>" for p in all_paths if p != "404.html"
+        f"<url><loc>{url(p)}</loc><lastmod>{lastmod[p]['date']}</lastmod></url>" for p in all_paths if p != "404.html"
     )
+    with open(os.path.join(OUT, INDEXNOW_KEY + ".txt"), "w", encoding="utf-8") as f:
+        f.write(INDEXNOW_KEY)
     sitemap = f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>'
     with open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8") as f:
         f.write(sitemap)
