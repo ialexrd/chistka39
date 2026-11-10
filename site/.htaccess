@@ -6,8 +6,15 @@ ErrorDocument 404 /404.html
 
 <IfModule mod_rewrite.c>
 RewriteEngine On
-# Переход на https включается в панели SpaceWeb (SSL → «Перенаправлять на HTTPS»):
-# правило в .htaccess на этом хостинге даёт бесконечный редирект.
+# Переход на https. SSL на SpaceWeb снимает фронтенд-сервер, Apache видит обычный http.
+# Правило с «!=https» зацикливалось (заголовка нет и на https-запросах), поэтому
+# переадресуем только когда фронтенд прямо говорит «http». Нет заголовка — правило
+# молчит, зацикливания быть не может. Запасной вариант — галочка в панели SpaceWeb.
+RewriteCond %{HTTP:X-Forwarded-Proto} =http [NC]
+RewriteRule ^ https://chistka-39.ru%{REQUEST_URI} [L,R=301]
+# www → без www
+RewriteCond %{HTTP_HOST} ^www\.chistka-39\.ru$ [NC]
+RewriteRule ^ https://chistka-39.ru%{REQUEST_URI} [L,R=301]
 # /index.html → /
 RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
 RewriteRule ^index\.html$ / [L,R=301]
@@ -21,6 +28,7 @@ RewriteRule ^(.+?)/?$ $1.html [L]
 </IfModule>
 
 <IfModule mod_headers.c>
+Header always set Strict-Transport-Security "max-age=31536000"
 Header always set X-Frame-Options "SAMEORIGIN"
 Header always set X-Content-Type-Options "nosniff"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"

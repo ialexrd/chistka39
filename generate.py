@@ -1513,8 +1513,8 @@ def sticky_cta(current_path):
     if True:
         return f"""<div class="sticky-cta sticky-cta-home">
   <a href="#zayavka" class="btn btn-primary" data-popup-order>Оставить заявку</a>
-  <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="22" height="22"> Max</a>
-  <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="22" height="22"> Telegram</a>
+  <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="Значок MAX" width="22" height="22"> Max</a>
+  <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="Значок Telegram" width="22" height="22"> Telegram</a>
 </div>"""
     return f"""<div class="sticky-cta">
   <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary" data-track-call>{icon("phone", 16)} Позвонить</a>
@@ -1621,10 +1621,29 @@ def verification_meta():
     return out
 
 def analytics_config():
-    """Номера счётчиков для assets/js/script.js. Сами счётчики загружаются
-    скриптом только после согласия посетителя в баннере cookies."""
-    cfg = {"ym": ANALYTICS["yandex_metrika_id"], "ga": ANALYTICS["ga4_id"]}
-    return "<script>window.SITE_ANALYTICS=" + json.dumps(cfg) + ";</script>"
+    """Код счётчиков прямо в <head>, чтобы его видели проверялки сайтов.
+    Сами счётчики по-прежнему запускаются только после согласия в окне cookie:
+    сразу при загрузке, если посетитель уже нажал «Принять», иначе — из
+    assets/js/script.js по нажатию кнопки (window.siteStartAnalytics)."""
+    ym_id = ANALYTICS["yandex_metrika_id"]
+    ga_id = ANALYTICS["ga4_id"]
+    cfg = {"ym": ym_id, "ga": ga_id}
+    parts = ["window.SITE_ANALYTICS=" + json.dumps(cfg) + ";",
+             "window.siteStartAnalytics=function(){if(window.siteAnalyticsOn)return;window.siteAnalyticsOn=true;"]
+    if ym_id:
+        parts.append(
+            "(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};"
+            "m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0];k.async=1;k.src=r;a.parentNode.insertBefore(k,a)})"
+            f"(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id={ym_id}','ym');"
+            f"ym({ym_id},'init',{{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true}});")
+    if ga_id:
+        parts.append(
+            "window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};"
+            "gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted'});"
+            f"gtag('js',new Date());gtag('config','{ga_id}');"
+            f"var g=document.createElement('script');g.async=1;g.src='https://www.googletagmanager.com/gtag/js?id={ga_id}';document.head.appendChild(g);")
+    parts.append("};try{if(localStorage.getItem('cookie_consent')==='all')window.siteStartAnalytics()}catch(e){}")
+    return "<!-- Яндекс Метрика и Google Analytics: запуск только после согласия на cookie -->\n<script>" + "".join(parts) + "</script>"
 
 def page_shell(path, title, description, body, schemas=None):
     canonical = url(path)
@@ -1855,8 +1874,8 @@ def hero_cta(order_href="#zayavka"):
     return f"""
       <div class="hero-cta-row">
         <a href="{order_href}" class="btn btn-primary" data-popup-order>Оставить заявку</a>
-        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="24" height="24"> Max</a>
-        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="24" height="24"> Telegram</a>
+        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="Значок MAX" width="24" height="24"> Max</a>
+        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="Значок Telegram" width="24" height="24"> Telegram</a>
       </div>"""
 
 def cta_banner(title_text="Готовы избавить мебель от пятен и запахов?", sub="Позвоните или напишите — рассчитаем стоимость и запишем мастера на удобное время."):
@@ -2531,8 +2550,8 @@ document.querySelectorAll('.ba').forEach(function(el){{
         sub_html = f'<span class="rv-sub">{esc(sub)}</span>' if sub else ""
         photo_html = f'<img class="rv-photo" src="{asset("assets/img/rev/photo-6.jpg")}" alt="Фото дивана после чистки" width="174" height="206" loading="lazy">' if photo else ""
         date_html = f'<div class="rv-meta"><span>{esc(date_)}</span><span class="rv-reply">Ответить</span></div>' if date_ else ""
-        return (f'<article class="rv-card"><img class="rv-ava" src="{asset(f"assets/img/rev/av-{n}.jpg")}" alt="" width="60" height="60" loading="lazy">'
-                f'<div class="rv-body"><div class="rv-name">{esc(name)}</div>{sub_html}<div class="rv-stars" aria-label="Оценка 5 из 5">{rev_star * 5}</div>'
+        return (f'<article class="rv-card"><img class="rv-ava" src="{asset(f"assets/img/rev/av-{n}.jpg")}" alt="{esc(name)}, автор отзыва" width="60" height="60" loading="lazy">'
+                f'<div class="rv-body"><div class="rv-name">{esc(name)}</div>{sub_html}<div class="rv-stars" role="img" aria-label="Оценка 5 из 5">{rev_star * 5}</div>'
                 f'{photo_html}<p class="rv-text">{esc(text)}</p>{date_html}</div></article>')
     rev_cards = "".join(rev_card(r) for r in REVIEWS)
     reviews = f"""
@@ -2594,8 +2613,8 @@ def render_index():
     schemas = [organization_schema(), website_schema(), local_business_schema()]
     return path, page_shell(
         path,
-        "Химчистка мебели на дому в Калининграде — выездная химчистка диванов, матрасов, стульев | " + SITE["short_name"],
-        "Выездная химчистка мебели в Калининграде: диваны, матрасы, стулья, кухонные уголки, офисная мебель и мебель для кафе. Выезд мастера в день обращения, сертифицированная химия, гарантия результата.",
+        "Химчистка мебели и диванов на дому в Калининграде | " + SITE["short_name"],
+        "Выездная химчистка мебели в Калининграде: диваны, матрасы, стулья, кухонные уголки. Мастер приедет в день заявки, гарантия результата.",
         body,
         schemas,
     )

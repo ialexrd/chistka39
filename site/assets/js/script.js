@@ -397,27 +397,10 @@
     if (CFG.ga && window.gtag) window.gtag('event', name, params || {});
   }
 
-  function loadScript(src) {
-    var s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s);
-  }
-
+  // Сам код счётчиков стоит в <head> каждой страницы (generate.py → analytics_config)
   function startAnalytics() {
-    if (analyticsOn) return;
-    analyticsOn = true;
-    if (CFG.ym) {
-      window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); };
-      window.ym.l = +new Date();
-      loadScript('https://mc.yandex.ru/metrika/tag.js?id=' + encodeURIComponent(CFG.ym));
-      window.ym(+CFG.ym, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true });
-    }
-    if (CFG.ga) {
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function () { window.dataLayer.push(arguments); };
-      window.gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'granted' });
-      window.gtag('js', new Date());
-      window.gtag('config', CFG.ga);
-      loadScript('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(CFG.ga));
-    }
+    if (window.siteStartAnalytics) window.siteStartAnalytics();
+    analyticsOn = !!window.siteAnalyticsOn;
   }
 
   function cookieBanner() {
