@@ -476,11 +476,11 @@
 
 })();
 
-/* Плавное появление блоков при прокрутке (пока только на главной).
+/* Плавное появление блоков при прокрутке (на всех страницах, кроме юридических).
    Прячем только то, что ниже первого экрана: главный экран и всё видимое
    сразу не трогаем, без JS и при «уменьшить движение» анимации нет. */
 (function () {
-  if (!document.body.classList.contains('page-home')) return;
+  if (document.querySelector('.legal')) return;
   if (!('IntersectionObserver' in window)) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -489,7 +489,9 @@
     '.bento-grid > *', '.svc-grid > *', '.tech-steps > *', '.tech-media-grid > *',
     '.ba-grid > *', '.geo-grid > *',
     '.quiz-intro', '.home-quiz .quiz',
-    '.home-reviews .rv-grid', '.home-order .bento-panel', '.faq-list'
+    '.home-reviews .rv-grid', '.home-order .bento-panel', '.faq-list',
+    '.pc-grid > *', '.b2b-doc-grid > *', '.b2b-discount', '.bento-prose',
+    '.related-list', '.sm-grid > *', '.section > .container > *'
   ];
   var els = document.querySelectorAll(selectors.join(','));
   var fold = window.innerHeight;
@@ -511,6 +513,7 @@
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
 
   Array.prototype.forEach.call(els, function (el) {
+    if (el.closest('.hero, .reveal')) return; // главный экран и вложенные блоки не трогаем
     if (el.getBoundingClientRect().top < fold) return; // уже на экране — не прячем
     el.classList.add('reveal');
     io.observe(el);
