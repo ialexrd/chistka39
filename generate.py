@@ -1554,7 +1554,7 @@ def local_business_schema():
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": SITE["name"],
-        "image": url("assets/img/og-cover.jpg"),
+        "image": url("assets/img/og-image.jpg"),
         "telephone": SITE["phone_tel"],
         "email": SITE["email"],
         "url": SITE["domain"] + "/",
@@ -1855,7 +1855,7 @@ def service_card(s):
 
 def service_photo_card(s):
     """Карточка услуги на главной: фото, название, цена и кнопка."""
-    img = "assets/img/card-" + s["slug"]
+    img = "assets/img/foto-himchistka-" + s["slug"]
     href = service_filename(s["slug"])
     return f"""
 <a href="{href}" class="svc-card">
@@ -1954,12 +1954,12 @@ def service_hero(s):
     # Имя файла с ключевыми словами: himchistka-<slug>-kaliningrad.jpg
     if os.path.exists(os.path.join(OUT, f"assets/img/himchistka-{hero_slug}-kaliningrad.jpg")):
         base = f"assets/img/himchistka-{hero_slug}-kaliningrad"
-    elif os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
-        base = f"assets/img/card-{slug}"
+    elif os.path.exists(os.path.join(OUT, f"assets/img/foto-himchistka-{slug}.jpg")):
+        base = f"assets/img/foto-himchistka-{slug}"
     elif slug in HERO_PHOTO:
-        base = f"assets/img/card-{HERO_PHOTO[slug]}"
+        base = f"assets/img/foto-himchistka-{HERO_PHOTO[slug]}"
     else:
-        base = "assets/img/hero-main"
+        base = "assets/img/vyezdnaya-himchistka-mebeli-kaliningrad"
     return f"""
 <section class="hero hero-main hero-service">
   <div class="container">
@@ -2274,7 +2274,7 @@ def home_parts():
 <section class="hero hero-main">
   <div class="container">
     <div class="hero-banner">
-      {hero_picture("assets/img/hero-main", "Мастер выездной химчистки чистит кресло у клиента дома в Калининграде")}
+      {hero_picture("assets/img/vyezdnaya-himchistka-mebeli-kaliningrad", "Мастер выездной химчистки чистит кресло у клиента дома в Калининграде")}
       <div class="hero-banner-body">
         <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
         <h1>Выездная химчистка мягкой мебели в Калининграде</h1>
@@ -2402,8 +2402,8 @@ def home_parts():
     ba_cards = "".join(f"""
         <figure class="ba-card">
           <div class="ba" style="--pos:50%">
-            <picture><source srcset="{asset(f"assets/img/ba-{i}-posle.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/ba-{i}-posle.jpg")}" alt="{esc(n)} после химчистки" width="900" height="600" loading="lazy"></picture>
-            <picture class="ba-before"><source srcset="{asset(f"assets/img/ba-{i}-do.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/ba-{i}-do.jpg")}" alt="{esc(n)} до химчистки" width="900" height="600" loading="lazy"></picture>
+            <picture><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.jpg")}" alt="{esc(n)} после химчистки" width="900" height="600" loading="lazy"></picture>
+            <picture class="ba-before"><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.jpg")}" alt="{esc(n)} до химчистки" width="900" height="600" loading="lazy"></picture>
             <span class="ba-tag ba-tag-do">До</span><span class="ba-tag ba-tag-posle">После</span>
             <span class="ba-line" aria-hidden="true"><span class="ba-knob">{icon("chevron", 14)}{icon("chevron", 14)}</span></span>
             <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Сравнить до и после: {esc(n)}">
@@ -3130,7 +3130,7 @@ def write_web_assets():
     """Картинка для соцсетей (Open Graph), иконки и Web App Manifest."""
     og = os.path.join(OUT, "assets/img/og-image.jpg")
     if not os.path.exists(og):
-        im = Image.open(os.path.join(OUT, "assets/img/hero-main.jpg")).convert("RGB")
+        im = Image.open(os.path.join(OUT, "assets/img/vyezdnaya-himchistka-mebeli-kaliningrad.jpg")).convert("RGB")
         w, h = im.size
         ch = round(w * 630 / 1200)
         im = im.crop((0, (h - ch) // 2, w, (h - ch) // 2 + ch)).resize((1200, 630), Image.LANCZOS)
