@@ -29,9 +29,8 @@ SITE = {
     "phone_tel": "+79323039722",
     "whatsapp": "https://wa.me/79323039722",
     "email": "info@himchistka-mebel-39.ru",
-    # Адрес сайта без «/» на конце. Сейчас — GitHub Pages. Когда chistka-39.ru
-    # заработает на хостинге, впишите сюда "https://chistka-39.ru" и перегенерируйте сайт.
-    "domain": "https://ialexrd.github.io/chistka39",
+    # Адрес сайта без «/» на конце
+    "domain": "https://chistka-39.ru",
     "city": "Калининград",
     "address_text": "г. Калининград — выезд мастера на дом, в офис или на дачу",
     "work_hours": "Ежедневно, без выходных, с 9:00 до 21:00",

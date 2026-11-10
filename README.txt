@@ -42,10 +42,10 @@ Netlify, Vercel, Github Pages, reg.ru и т.п.) или в корень доме
    Пришлите свой реальный прайс-лист — я подставлю точные цифры по всем
    14 страницам услуг и странице ceny.html за один проход.
 
-3. Домен — сейчас сайт работает на https://ialexrd.github.io/chistka39
-   (canonical, Open Graph, sitemap.xml, robots.txt). Когда появится свой
-   домен, впишите его в SITE["domain"] в generate.py, создайте файл
-   site/CNAME с доменом и перегенерируйте сайт.
+3. Домен — https://chistka-39.ru (хостинг SpaceWeb). Сайт загружается туда
+   по FTP из GitHub при каждом изменении в main (.github/workflows/deploy-ftp.yml).
+   Старый адрес https://ialexrd.github.io/chistka39 только переадресует на домен
+   (tools/pages_redirect.py).
 
    Вебмастеры и аналитика — коды вставляются в ANALYTICS в generate.py:
    yandex_verification, google_verification (мета-теги подтверждения),

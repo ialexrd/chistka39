@@ -24,8 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # Сайт живёт на chistka-39.ru: на GitHub Pages только переадресация
+      - run: python3 tools/pages_redirect.py site _pages
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: _pages
       - id: deployment
         uses: actions/deploy-pages@v4

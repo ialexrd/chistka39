@@ -7,4 +7,4 @@ Allow: /
 Disallow: /404
 Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&gclid&fbclid&_openstat&from
 
-Sitemap: https://ialexrd.github.io/chistka39/sitemap.xml
+Sitemap: https://chistka-39.ru/sitemap.xml
