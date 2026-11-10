@@ -475,3 +475,44 @@
   update();
 
 })();
+
+/* Плавное появление блоков при прокрутке (пока только на главной).
+   Прячем только то, что ниже первого экрана: главный экран и всё видимое
+   сразу не трогаем, без JS и при «уменьшить движение» анимации нет. */
+(function () {
+  if (!document.body.classList.contains('page-home')) return;
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var selectors = [
+    '.home-bento .bento-head',
+    '.bento-grid > *', '.svc-grid > *', '.tech-steps > *', '.tech-media-grid > *',
+    '.ba-grid > *', '.geo-grid > *',
+    '.quiz-intro', '.home-quiz .quiz',
+    '.home-reviews .rv-grid', '.home-order .bento-panel', '.faq-list'
+  ];
+  var els = document.querySelectorAll(selectors.join(','));
+  var fold = window.innerHeight;
+
+  var io = new IntersectionObserver(function (entries) {
+    var batch = 0;
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      io.unobserve(el);
+      el.style.transitionDelay = Math.min(batch++, 5) * 80 + 'ms';
+      el.classList.add('is-in');
+      // После появления убираем классы, чтобы не мешать hover-эффектам карточек
+      setTimeout(function () {
+        el.classList.remove('reveal', 'is-in');
+        el.style.transitionDelay = '';
+      }, 1200);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+  Array.prototype.forEach.call(els, function (el) {
+    if (el.getBoundingClientRect().top < fold) return; // уже на экране — не прячем
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+})();

@@ -891,3 +891,10 @@ html.modal-open{ overflow: hidden; }
 
 /* Телефоны: без масштабирования двойным касанием */
 html{ touch-action: manipulation; }
+
+/* Плавное появление блоков при прокрутке (главная). Класс .reveal ставит
+   script.js только тем блокам, что ниже первого экрана, поэтому без JS
+   и при «уменьшить движение» всё видно сразу. */
+.reveal{ opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.reveal.is-in{ opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity: 1; transform: none; transition: none; } }
