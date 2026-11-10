@@ -49,10 +49,45 @@
     });
   });
 
+  // Запрет масштабирования щипком (Safari на iPhone игнорирует user-scalable=no)
+  ['gesturestart', 'gesturechange'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+  });
+  document.addEventListener('touchmove', function (e) {
+    if (e.touches && e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+
+  // Всплывающее окно с формой заявки: «Вызвать мастера» и «Оставить заявку»
+  var orderModal = document.getElementById('order-modal');
+  if (orderModal) {
+    var lastFocus = null;
+    var openModal = function () {
+      lastFocus = document.activeElement;
+      orderModal.hidden = false;
+      document.documentElement.classList.add('modal-open');
+      var first = orderModal.querySelector('input[name="name"]');
+      if (first) setTimeout(function () { first.focus(); }, 50);
+    };
+    var closeModal = function () {
+      orderModal.hidden = true;
+      document.documentElement.classList.remove('modal-open');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+    document.querySelectorAll('[data-popup-order]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+    });
+    orderModal.addEventListener('click', function (e) {
+      if (e.target.closest('[data-modal-close]')) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !orderModal.hidden) closeModal();
+    });
+  }
+
   // Обработка форм заявки — локально формируем сообщение для WhatsApp
   // (на сайте нет бэкенда; после подключения хостинга форму можно
   // переключить на отправку в CRM/почту/Telegram-бота).
-  var WHATSAPP_NUMBER = '79000000000'; // TODO: заменить на реальный номер в формате 7XXXXXXXXXX
+  var WHATSAPP_NUMBER = '79323039722';
 
   function sendLead(lines, successBox) {
     var src = trafficSource();
@@ -207,7 +242,7 @@
           '<form class="quiz-form" data-quiz-form><div class="form-row">' +
           '<div class="field"><label>Имя</label><input name="name" type="text" placeholder="Как к вам обращаться" required></div>' +
           '<div class="field"><label>Телефон</label><input name="phone" type="tel" placeholder="+7 (___) ___-__-__" required></div></div>' +
-          '<label class="consent"><input type="checkbox" name="consent" checked required> <span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>' +
+          '<label class="consent"><input type="checkbox" name="consent" checked required> <span>Я согласен (-а) с <a href="politika-konfidencialnosti" target="_blank">политикой конфиденциальности в отношении пользовательских данных</a> и даю свое <a href="soglasie-na-obrabotku-personalnyh-dannyh" target="_blank">согласие на обработку персональных данных</a></span></label>' +
           '<div class="form-gift">Получите скидку 10% на первый заказ</div>' +
           '<button type="submit" class="btn btn-primary btn-block">Отправить заявку</button>' +
           '<div class="form-success"></div></form>' +
@@ -372,7 +407,7 @@
     if (CFG.ym) {
       window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); };
       window.ym.l = +new Date();
-      loadScript('https://mc.yandex.ru/metrika/tag.js');
+      loadScript('https://mc.yandex.ru/metrika/tag.js?id=' + encodeURIComponent(CFG.ym));
       window.ym(+CFG.ym, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true });
     }
     if (CFG.ga) {
@@ -393,7 +428,7 @@
     box.setAttribute('aria-label', 'Файлы cookie');
     box.innerHTML =
       '<p>Мы используем файлы cookie и сервисы аналитики (Яндекс Метрика, Google Analytics), чтобы сайт работал лучше. ' +
-      'Подробнее — в <a href="politika-konfidencialnosti.html#cookies">политике конфиденциальности</a>.</p>' +
+      'Подробнее — в <a href="politika-konfidencialnosti#cookies">политике конфиденциальности</a>.</p>' +
       '<div class="cookie-actions"><button type="button" class="btn btn-primary btn-sm" data-cookie="all">Принять</button>' +
       '<button type="button" class="btn btn-ghost btn-sm" data-cookie="necessary">Только необходимые</button></div>';
     box.addEventListener('click', function (e) {
@@ -416,11 +451,11 @@
     });
   });
 
+  // Окно показывается всем, пока посетитель не сделал выбор,
+  // даже если коды счётчиков ещё не вставлены.
   var consent = store('cookie_consent');
-  if (CFG.ym || CFG.ga) {
-    if (consent === 'all') startAnalytics();
-    else if (consent !== 'necessary') cookieBanner();
-  }
+  if (consent === 'all') startAnalytics();
+  else if (consent !== 'necessary') cookieBanner();
 })();
 
 /* Нижнее меню: показываем, когда на экране появляется блок услуг */
@@ -439,4 +474,48 @@
   window.addEventListener('resize', update);
   update();
 
+})();
+
+/* Плавное появление блоков при прокрутке (на всех страницах, кроме юридических).
+   Прячем только то, что ниже первого экрана: главный экран и всё видимое
+   сразу не трогаем, без JS и при «уменьшить движение» анимации нет. */
+(function () {
+  if (document.querySelector('.legal')) return;
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var selectors = [
+    '.home-bento .bento-head',
+    '.bento-grid > *', '.svc-grid > *', '.tech-steps > *', '.tech-media-grid > *',
+    '.ba-grid > *', '.geo-grid > *',
+    '.quiz-intro', '.home-quiz .quiz',
+    '.home-reviews .rv-grid', '.home-order .bento-panel', '.faq-list',
+    '.pc-grid > *', '.b2b-doc-grid > *', '.b2b-discount', '.bento-prose',
+    '.related-list', '.sm-grid > *', '.section > .container > *'
+  ];
+  var els = document.querySelectorAll(selectors.join(','));
+  var fold = window.innerHeight;
+
+  var io = new IntersectionObserver(function (entries) {
+    var batch = 0;
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      io.unobserve(el);
+      el.style.transitionDelay = Math.min(batch++, 5) * 80 + 'ms';
+      el.classList.add('is-in');
+      // После появления убираем классы, чтобы не мешать hover-эффектам карточек
+      setTimeout(function () {
+        el.classList.remove('reveal', 'is-in');
+        el.style.transitionDelay = '';
+      }, 1200);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+  Array.prototype.forEach.call(els, function (el) {
+    if (el.closest('.hero, .reveal')) return; // главный экран и вложенные блоки не трогаем
+    if (el.getBoundingClientRect().top < fold) return; // уже на экране — не прячем
+    el.classList.add('reveal');
+    io.observe(el);
+  });
 })();

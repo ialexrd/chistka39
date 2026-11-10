@@ -33,7 +33,7 @@ Netlify, Vercel, Github Pages, reg.ru и т.п.) или в корень доме
 
 ЧТО ОБЯЗАТЕЛЬНО ЗАМЕНИТЬ ПЕРЕД ЗАПУСКОМ
 -----------------------------------------
-1. Телефон и WhatsApp — сейчас плейсхолдер +7 (900) 000-00-00.
+1. Телефон и WhatsApp — сейчас +7 (932) 303-97-22.
    Замените в файле generate.py (переменная SITE) и перегенерируйте сайт,
    либо сделайте поиск-замену по всем .html файлам, а также в assets/js/script.js
    (переменная WHATSAPP_NUMBER).
@@ -42,10 +42,10 @@ Netlify, Vercel, Github Pages, reg.ru и т.п.) или в корень доме
    Пришлите свой реальный прайс-лист — я подставлю точные цифры по всем
    14 страницам услуг и странице ceny.html за один проход.
 
-3. Домен — сейчас сайт работает на https://ialexrd.github.io/chistka39
-   (canonical, Open Graph, sitemap.xml, robots.txt). Когда появится свой
-   домен, впишите его в SITE["domain"] в generate.py, создайте файл
-   site/CNAME с доменом и перегенерируйте сайт.
+3. Домен — https://chistka-39.ru (хостинг SpaceWeb). Сайт загружается туда
+   по FTP из GitHub при каждом изменении в main (.github/workflows/deploy-ftp.yml).
+   Старый адрес https://ialexrd.github.io/chistka39 только переадресует на домен
+   (tools/pages_redirect.py).
 
    Вебмастеры и аналитика — коды вставляются в ANALYTICS в generate.py:
    yandex_verification, google_verification (мета-теги подтверждения),

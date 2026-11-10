@@ -1,0 +1,34 @@
+# Загрузка папки site/ на хостинг (SpaceWeb) по FTP при каждом изменении в main.
+# Нужны секреты репозитория: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD,
+# FTP_DIR (папка сайта на хостинге, например chistka-39.ru/public_html/).
+# Пока секретов нет, загрузка пропускается.
+name: Загрузка на хостинг
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ftp
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+    steps:
+      - name: Секреты FTP не заданы — пропускаю
+        if: env.FTP_SERVER == ''
+        run: echo "Добавьте FTP_SERVER, FTP_USERNAME, FTP_PASSWORD, FTP_DIR в Settings → Secrets → Actions"
+      - uses: actions/checkout@v4
+        if: env.FTP_SERVER != ''
+      - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        if: env.FTP_SERVER != ''
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./site/
+          server-dir: ${{ secrets.FTP_DIR }}

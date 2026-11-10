@@ -273,7 +273,10 @@ button{ font-family: inherit; cursor: pointer; }
 .footer-links li{ margin-bottom: 9px; }
 .footer-bottom{ display: flex; justify-content: space-between; gap: 12px; padding-top: 22px; font-size: 12.5px; flex-wrap: wrap; color: #7d8aa3; }
 .footer-social{ display: flex; gap: 10px; }
-.footer-social a{ width: 36px; height: 36px; border-radius: 50%; background: #1a2438; display: flex; align-items: center; justify-content: center; }
+.footer-social{ gap: 12px; }
+.footer-social a{ width: 40px; height: 40px; display: block; border-radius: 10px; overflow: hidden; transition: transform .15s; }
+.footer-social a:hover{ transform: translateY(-2px); }
+.footer-social img{ width: 40px; height: 40px; display: block; }
 
 /* ---------- Sticky mobile call bar ---------- */
 .sticky-cta{
@@ -785,16 +788,17 @@ body.page-inner{ background: #eef1f5; }
 
 /* Баннер cookie */
 .cookie-banner{
-  position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 120;
-  max-width: 560px; margin: 0 auto; padding: 18px 20px;
+  position: fixed; left: auto; right: 24px; bottom: 24px; z-index: 120;
+  width: 380px; max-width: calc(100% - 32px); padding: 16px 18px;
   background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg); font-size: 14px; line-height: 1.5;
 }
 .cookie-banner p{ margin: 0 0 12px; color: var(--color-ink-soft); }
 .cookie-banner a{ color: var(--color-primary); text-decoration: underline; }
 .cookie-actions{ display: flex; flex-wrap: wrap; gap: 8px; }
+.cookie-actions .btn{ flex: 1 1 auto; }
 @media (max-width: 760px){
-  .cookie-banner{ bottom: 84px; left: 12px; right: 12px; padding: 14px 16px; }
+  .cookie-banner{ bottom: 84px; left: 12px; right: 12px; width: auto; max-width: none; padding: 14px 16px; }
 }
 
 /* --- Шапка: стрелка у «Услуги» и второй ряд с основными услугами --- */
@@ -859,3 +863,67 @@ body.page-inner{ background: #eef1f5; }
 .article-body ul{ list-style: disc; } .article-body ol, .article-toc ol{ list-style: decimal; }
 .article-body li, .article-toc li{ display: list-item; padding-left: 4px; }
 .article-body li::before, .article-toc li::before{ content: none; }
+/* Юридические страницы: политика, согласие */
+.legal ul{ margin: 0 0 16px; padding-left: 20px; }
+.legal li{ margin-bottom: 6px; }
+.legal .table-wrap{ overflow-x: auto; margin: 0 0 20px; }
+.legal-table{ width: 100%; border-collapse: collapse; font-size: 15px; }
+.legal-table th, .legal-table td{ border: 1px solid var(--color-border); padding: 10px 14px; text-align: left; vertical-align: top; }
+.legal-table th{ width: 32%; background: #f6f8fb; font-weight: 600; }
+@media (max-width: 640px){ .legal-table th, .legal-table td{ display: block; width: auto; } .legal-table th{ border-bottom: 0; } }
+.consent a{ color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Подвал: районы и города одной строкой над нижней линией */
+.footer-grid{ border-bottom: 0; padding-bottom: 0; }
+.footer-districts{ justify-content: space-between; margin-top: 32px; padding-bottom: 28px; border-bottom: 1px solid #24304a; }
+.footer-districts .chip{ font-size: 13px; padding: 7px 14px; }
+@media (max-width: 1100px){ .footer-districts{ justify-content: flex-start; gap: 8px; } }
+
+/* Всплывающее окно заявки */
+.order-modal{ position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.order-modal[hidden]{ display: none; }
+.order-modal-backdrop{ position: absolute; inset: 0; background: rgba(10, 14, 22, .6); backdrop-filter: blur(3px); }
+.order-modal-dialog{ position: relative; width: 100%; max-width: 980px; max-height: calc(100vh - 40px); overflow-y: auto; padding: 44px; border-radius: 28px; animation: modal-in .2s ease-out; }
+.order-modal-dialog h2{ margin-top: 18px; font-size: clamp(26px, 3vw, 38px); }
+.order-modal-close{ position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: #22262c; color: #fff; font-size: 26px; line-height: 1; cursor: pointer; }
+.order-modal-close:hover{ background: #33383f; }
+html.modal-open{ overflow: hidden; }
+@keyframes modal-in{ from{ opacity: 0; transform: translateY(12px); } to{ opacity: 1; transform: none; } }
+@media (max-width: 960px){
+  .order-modal{ padding: 12px; align-items: center; }
+  .order-modal-dialog{ padding: 28px 18px 18px; border-radius: 22px; max-height: calc(100vh - 24px); }
+  .order-modal-dialog .order-lead, .order-modal-dialog .order-checks{ display: none; }
+  .order-modal-dialog h2{ margin: 14px 0 0; }
+}
+
+/* Зелёная кнопка заявки в подвале */
+.btn-green, .site-footer a.btn-green, footer a.btn-green{ background: #22a85a; color: #fff; }
+.btn-green:hover{ background: #1e9851; transform: translateY(-1px); }
+.footer-order-btn{ margin-top: 8px; max-width: 100%; white-space: normal; text-align: center; line-height: 1.3; }
+.footer-grid > *{ min-width: 0; }
+@media (max-width: 640px){ .footer-grid > div:last-child{ grid-column: 1 / -1; } .footer-order-btn{ display: flex; width: 100%; padding: 13px 16px; font-size: 14.5px; } }
+
+/* Страницы для бизнеса: документы и скидка за объём */
+.b2b-grid{ display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 14px; }
+.b2b-doc-grid{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+.b2b-doc{ display: flex; gap: 14px; align-items: flex-start; background: #f4f6f9; border-radius: 18px; padding: 18px; }
+.b2b-doc-ic{ width: 48px; height: 48px; border-radius: 14px; background: #fff; color: var(--color-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.b2b-doc strong{ display: block; font-size: 17px; margin-bottom: 4px; }
+.b2b-doc p{ margin: 0; font-size: 14px; color: var(--color-ink-soft); line-height: 1.45; }
+.b2b-discount{ background: linear-gradient(150deg, #1868c1, #0f4a8c); color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.b2b-discount-label{ font-weight: 700; font-size: 15px; text-transform: uppercase; letter-spacing: .06em; opacity: .85; }
+.b2b-discount-num{ font-size: clamp(88px, 10vw, 150px); font-weight: 800; line-height: .95; letter-spacing: -.03em; margin: 10px 0 14px; }
+.b2b-discount-num small{ font-size: .32em; font-weight: 700; margin-right: 8px; letter-spacing: 0; vertical-align: .9em; }
+.b2b-discount p{ margin: 0 0 22px; color: #dbe7f6; font-size: 16px; line-height: 1.5; }
+@media (max-width: 960px){ .b2b-grid{ grid-template-columns: 1fr; } }
+@media (max-width: 640px){ .b2b-doc-grid{ grid-template-columns: 1fr; } }
+
+/* Телефоны: без масштабирования двойным касанием */
+html{ touch-action: manipulation; }
+
+/* Плавное появление блоков при прокрутке. Класс .reveal ставит
+   script.js только тем блокам, что ниже первого экрана, поэтому без JS
+   и при «уменьшить движение» всё видно сразу. */
+.reveal{ opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.reveal.is-in{ opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){ .reveal{ opacity: 1; transform: none; transition: none; } }

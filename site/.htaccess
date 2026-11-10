@@ -1,0 +1,41 @@
+# Настройки сервера для хостинга на Apache (SpaceWeb). На GitHub Pages не используются.
+Options -Indexes
+AddDefaultCharset utf-8
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+# Переход на https включается в панели SpaceWeb (SSL → «Перенаправлять на HTTPS»):
+# правило в .htaccess на этом хостинге даёт бесконечный редирект.
+# /index.html → /
+RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
+RewriteRule ^index\.html$ / [L,R=301]
+# Адреса без .html: /page.html → /page (301), а /page отдаёт файл page.html
+RewriteCond %{THE_REQUEST} \s/([^\s?]+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yastatic.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://mc.yandex.ru https://mc.yandex.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://mc.yandex.ru https://mc.yandex.com wss://mc.yandex.ru wss://mc.yandex.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://mc.yandex.ru https://mc.yandex.com https://*.yandex.ru https://*.yandex.com; frame-ancestors 'self' https://webvisor.com https://*.webvisor.com https://metrika.yandex.ru"
+<FilesMatch "\.(css|js|jpg|jpeg|png|webp|svg|ico|woff2)$">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+<FilesMatch "\.(html|xml|txt|webmanifest)$">
+Header set Cache-Control "public, max-age=600"
+</FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json application/manifest+json image/svg+xml text/xml application/xml text/plain
+</IfModule>
+
+AddType application/manifest+json .webmanifest

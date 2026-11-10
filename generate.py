@@ -25,13 +25,12 @@ SITE = {
     "name": "Химчистка Мебели Калининград",
     "short_name": "Чистка 39",
     "tagline": "Выездная химчистка мягкой мебели и текстиля на дому и в офисе",
-    "phone_display": "+7 (900) 000-00-00",
-    "phone_tel": "+79000000000",
-    "whatsapp": "https://wa.me/79000000000",
-    "email": "info@himchistka-mebel-39.ru",
-    # Адрес сайта без «/» на конце. Сейчас — GitHub Pages; когда появится свой
-    # домен, впишите его сюда (и в site/CNAME) и перегенерируйте сайт.
-    "domain": "https://ialexrd.github.io/chistka39",
+    "phone_display": "+7 (932) 303-97-22",
+    "phone_tel": "+79323039722",
+    "whatsapp": "https://wa.me/79323039722",
+    "email": "info@chistka-39.ru",
+    # Адрес сайта без «/» на конце
+    "domain": "https://chistka-39.ru",
     "city": "Калининград",
     "address_text": "г. Калининград — выезд мастера на дом, в офис или на дачу",
     "work_hours": "Ежедневно, без выходных, с 9:00 до 21:00",
@@ -40,7 +39,7 @@ SITE = {
         "Центральный район", "Московский район", "Ленинградский район",
         "Балтийский район", "Гурьевск", "Светлогорск", "Зеленоградск", "Пионерский",
     ],
-    "vk": "#", "telegram": "#", "max": "#", "instagram": "#",
+    "vk": "#", "telegram": "https://t.me/+79323039722", "max": "https://max.ru/u/f9LHodD0cOJ1WI7v2AV8Dr6rBF7oEaKvQdY5tPAMSR5phBrhhIfH0vl_Fx8", "instagram": "#",
     "year_placeholder": "[ГГГГ]",
 }
 
@@ -50,13 +49,37 @@ SITE = {
 # =========================================================================
 ANALYTICS = {
     # Яндекс Вебмастер → «Права доступа» → Мета-тег: content="..."
-    "yandex_verification": "",
+    "yandex_verification": "1b1916da8b7cb7f1",
     # Google Search Console → «Тег HTML»: content="..."
     "google_verification": "",
     # Яндекс Метрика: номер счётчика (только цифры)
-    "yandex_metrika_id": "",
+    "yandex_metrika_id": "114111320",
     # Google Analytics 4: идентификатор потока вида G-XXXXXXXXXX
-    "ga4_id": "",
+    "ga4_id": "G-JDXMD2TCLW",
+}
+
+# =========================================================================
+# 1.2 ОПЕРАТОР ПЕРСОНАЛЬНЫХ ДАННЫХ — для политики конфиденциальности и
+# согласия на обработку (152-ФЗ). Значения в [квадратных скобках] —
+# заглушки: замените на реальные данные и перегенерируйте сайт.
+# =========================================================================
+OPERATOR = {
+    # Например: «Индивидуальный предприниматель Иванов Иван Иванович» или «ООО „Чистка 39“»
+    "name": "Сухоплеска Алексей Сергеевич",
+    # Краткое имя для текста: «ИП Иванов И. И.» / «ООО „Чистка 39“»
+    "short": "Сухоплеска А. С.",
+    "inn": "[ИНН]",
+    "ogrn_label": "ОГРНИП",          # для ООО — «ОГРН»
+    "ogrn": "[ОГРНИП / ОГРН]",
+    "address": "[адрес регистрации / юридический адрес]",
+    "email": "alex.zzzz.99@mail.ru",  # почта для запросов по персональным данным
+    "phone": SITE["phone_display"],
+    # Ответственный за организацию обработки ПДн (для ИП обычно он сам)
+    "responsible": "[ФИО ответственного]",
+    # Срок хранения данных из заявок после выполнения заказа / последнего обращения
+    "retention": "3 года",  # используется в согласии
+    # Дата, с которой действует редакция политики
+    "policy_date": "[ДД.ММ.ГГГГ]",
 }
 
 # =========================================================================
@@ -1327,8 +1350,22 @@ def asset(path):
         return f"{path}?v={hashlib.md5(f.read()).hexdigest()[:8]}"
 
 def url(path):
-    # Главная — без index.html, чтобы у неё был один адрес (без дублей)
-    return SITE["domain"] + "/" + ("" if path == "index.html" else path)
+    # Адреса без .html (chistka-39.ru/himchistka-divana); главная — просто «/»
+    if path == "index.html":
+        path = ""
+    elif path.endswith(".html"):
+        path = path[:-5]
+    return SITE["domain"] + "/" + path
+
+_LINK_RE = re.compile(r'href="(?!https?:|//|#|mailto:|tel:)([A-Za-z0-9_-]+)\.html((?:#[^"]*)?)"')
+
+def clean_links(page_html):
+    """Внутренние ссылки без .html: сервер (.htaccess) и GitHub Pages
+    отдают страницу по адресу без расширения."""
+    def repl(m):
+        name, anchor = m.group(1), m.group(2)
+        return f'href="{"./" if name == "index" else name}{anchor}"'
+    return _LINK_RE.sub(repl, page_html)
 
 def service_filename(slug):
     s = SERVICE_BY_SLUG[slug]
@@ -1389,10 +1426,9 @@ def header(current_path):
         {SITE["phone_display"]}
         <small>{esc(SITE["work_hours_short"])}</small>
       </div>
-      <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary btn-sm" data-track-call>{icon("phone", 16)} Вызвать мастера</a>
+      <a href="#zayavka" class="btn btn-primary btn-sm" data-popup-order>{icon("phone", 16)} Вызвать мастера</a>
       <button class="burger" data-burger aria-label="Открыть меню" aria-expanded="false"><span></span></button>
     </div>
-    <nav class="sub-nav" aria-label="Основные услуги">{sub_items}</nav>
   </div>
   <nav class="mobile-nav" data-mobile-nav aria-label="Мобильная навигация">
     <div class="container">
@@ -1423,9 +1459,9 @@ def footer(current_path=""):
         <div class="footer-logo"><img src="{asset("assets/img/logo-white.svg")}" alt="{esc(SITE["short_name"])}" width="1372" height="324"></div>
         <p>{esc(SITE["tagline"])}. Работаем по {esc(SITE["city"])} и области, выезд мастера в день обращения.</p>
         <div class="footer-social">
-          <a href="{SITE["vk"]}" aria-label="VK">VK</a>
-          <a href="{SITE["telegram"]}" aria-label="Telegram">TG</a>
-          <a href="{SITE["instagram"]}" aria-label="Instagram">IG</a>
+          <a href="{SITE["max"]}" target="_blank" rel="noopener" aria-label="Написать в MAX"><img src="{asset("assets/img/icon-max.png")}" alt="MAX" width="40" height="40" loading="lazy"></a>
+          <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" aria-label="Написать в WhatsApp"><img src="{asset("assets/img/icon-whatsapp.png")}" alt="WhatsApp" width="40" height="40" loading="lazy"></a>
+          <a href="{SITE["telegram"]}" target="_blank" rel="noopener" aria-label="Написать в Telegram"><img src="{asset("assets/img/icon-telegram.png")}" alt="Telegram" width="40" height="40" loading="lazy"></a>
         </div>
       </div>
       <div>
@@ -1445,9 +1481,6 @@ def footer(current_path=""):
           <li><a href="stati.html">Полезные статьи</a></li>
           <li><a href="geografiya.html">География выезда</a></li>
           <li><a href="kontakty.html">Контакты</a></li>
-          <li><a href="karta-sajta.html">Карта сайта</a></li>
-          <li><a href="politika-konfidencialnosti.html">Политика конфиденциальности</a></li>
-          <li><a href="politika-konfidencialnosti.html#cookies" data-cookie-reset>Настройки cookie</a></li>
         </ul>
       </div>
       <div>
@@ -1456,12 +1489,13 @@ def footer(current_path=""):
         <p>{icon("whatsapp", 15)} <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener">Написать в WhatsApp</a></p>
         <p>{icon("clock", 15)} {esc(SITE["work_hours"])}</p>
         <p>{icon("mappin", 15)} {esc(SITE["address_text"])}</p>
-        <div class="chip-row">{district_chips}</div>
+        <a href="#zayavka" class="btn btn-green footer-order-btn" data-popup-order>Оставить заявку и получить скидку</a>
       </div>
     </div>
+    <div class="chip-row footer-districts">{district_chips}</div>
     <div class="footer-bottom">
       <span>© <span data-year>{date.today().year}</span> {esc(SITE["short_name"])}. Все права защищены.</span>
-      <span>Материалы сайта не являются публичной офертой. Точная стоимость услуг определяется мастером на месте.</span>
+      <a href="politika-konfidencialnosti.html">Политика конфиденциальности</a>
     </div>
   </div>
 </footer>
@@ -1471,7 +1505,7 @@ def footer(current_path=""):
 def sticky_cta(current_path):
     if True:
         return f"""<div class="sticky-cta sticky-cta-home">
-  <a href="#zayavka" class="btn btn-primary">Оставить заявку</a>
+  <a href="#zayavka" class="btn btn-primary" data-popup-order>Оставить заявку</a>
   <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="22" height="22"> Max</a>
   <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="22" height="22"> Telegram</a>
 </div>"""
@@ -1521,7 +1555,7 @@ def local_business_schema():
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "name": SITE["name"],
-        "image": url("assets/img/og-cover.jpg"),
+        "image": url("assets/img/og-image.jpg"),
         "telephone": SITE["phone_tel"],
         "email": SITE["email"],
         "url": SITE["domain"] + "/",
@@ -1569,7 +1603,7 @@ def page_shell(path, title, description, body, schemas=None):
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
 <link rel="canonical" href="{canonical}">
@@ -1607,6 +1641,7 @@ def page_shell(path, title, description, body, schemas=None):
 {header(path)}
 {body}
 {footer(path)}
+{order_modal()}
 <script src="{asset("assets/js/script.js")}" defer></script>
 </body>
 </html>"""
@@ -1616,7 +1651,7 @@ def page_shell(path, title, description, body, schemas=None):
 # =========================================================================
 def consent_html(input_id):
     return (f'<label class="consent" for="{input_id}"><input type="checkbox" id="{input_id}" name="consent" checked required> '
-            f'<span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>')
+            f'<span>Я согласен (-а) с <a href="politika-konfidencialnosti.html" target="_blank">политикой конфиденциальности в отношении пользовательских данных</a> и даю свое <a href="soglasie-na-obrabotku-personalnyh-dannyh.html" target="_blank">согласие на обработку персональных данных</a></span></label>')
 
 def order_form_panel(preselect_slug=None):
     services = list(MAIN_SERVICES)
@@ -1660,6 +1695,47 @@ def order_form_panel(preselect_slug=None):
 </div>
 """
 
+def order_dark_inner(prefix, title_tag="h2", title_id=""):
+    """Тёмный блок заявки: преимущества слева, форма справа. Используется
+    в конце главной и во всплывающем окне (кнопки «Вызвать мастера» и
+    «Оставить заявку»)."""
+    tid = f' id="{title_id}"' if title_id else ""
+    return f"""      <div class="order-dark-text">
+        <span class="order-pill">Перезвоним за 5 минут</span>
+        <{title_tag}{tid}>Запишитесь на удобное время</{title_tag}>
+        <p class="order-lead">Оставьте заявку — подберём дату и время выезда, перезвоним и подтвердим стоимость.</p>
+        <ul class="order-checks">
+          <li>{icon("check", 18)}<span>Выезд по Калининграду бесплатно</span></li>
+          <li>{icon("check", 18)}<span>Оплата после результата</span></li>
+          <li>{icon("check", 18)}<span>Срочный выезд сегодня — при заказе до 15:00</span></li>
+          <li>{icon("check", 18)}<span>Работаем ежедневно с 9:00 до 21:00</span></li>
+        </ul>
+      </div>
+      <div class="order-card">
+        <form data-order-form>
+          <div class="field">
+            <label for="{prefix}-name">Имя</label>
+            <input id="{prefix}-name" name="name" type="text" placeholder="Как к вам обращаться" required>
+          </div>
+          <div class="field">
+            <label for="{prefix}-phone">Телефон</label>
+            <input id="{prefix}-phone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Оставить заявку</button>
+          {consent_html(prefix + "-consent")}
+          <div class="form-success"></div>
+        </form>
+      </div>"""
+
+def order_modal():
+    return f"""<div class="order-modal" id="order-modal" hidden>
+  <div class="order-modal-backdrop" data-modal-close></div>
+  <div class="order-modal-dialog bento-panel order-dark" role="dialog" aria-modal="true" aria-labelledby="m-title">
+    <button type="button" class="order-modal-close" data-modal-close aria-label="Закрыть">&times;</button>
+{order_dark_inner("m", "h2", "m-title")}
+  </div>
+</div>"""
+
 def steps_block(steps):
     items = "".join(f'<div class="step"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in steps)
     return f'<div class="steps">{items}</div>'
@@ -1690,6 +1766,7 @@ def related_block(slugs):
 
 QUIZ_PAGES = {"index.html"} | {service_filename(x["slug"]) for x in SERVICES}
 QUIZ_PAGES |= {g["filename"] for g in GEO_PAGES}
+QUIZ_PAGES -= {service_filename(x) for x in ("ofisnoy-mebeli", "mebeli-dlya-biznesa", "kafe-restoranov")}  # на страницах для бизнеса калькулятора нет
 
 def quiz_href(current_path):
     """Ссылка на калькулятор: на своей странице — якорь, иначе — на главную."""
@@ -1747,7 +1824,7 @@ def hero_cta(order_href="#zayavka"):
     """Кнопки первого экрана: заявка + мессенджеры Max и Telegram."""
     return f"""
       <div class="hero-cta-row">
-        <a href="{order_href}" class="btn btn-primary">Оставить заявку</a>
+        <a href="{order_href}" class="btn btn-primary" data-popup-order>Оставить заявку</a>
         <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="" width="24" height="24"> Max</a>
         <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="24" height="24"> Telegram</a>
       </div>"""
@@ -1779,7 +1856,7 @@ def service_card(s):
 
 def service_photo_card(s):
     """Карточка услуги на главной: фото, название, цена и кнопка."""
-    img = "assets/img/card-" + s["slug"]
+    img = "assets/img/foto-himchistka-" + s["slug"]
     href = service_filename(s["slug"])
     return f"""
 <a href="{href}" class="svc-card">
@@ -1845,9 +1922,15 @@ HERO_PHOTO = {
     "zapaha-sigaret": "nepriyatnogo-zapaha", "zapaha-syrosti-i-pleseni": "nepriyatnogo-zapaha",
 }
 
+# Страницы, которые берут крупное фото первого экрана у другой страницы
+HERO_SHARED = {"krovati": "matrasa", **{k: "nepriyatnogo-zapaha" for k in ("zapaha-mochi", "zapaha-koshki", "zapaha-sobaki", "zapaha-sigaret", "zapaha-syrosti-i-pleseni")}}
+
+# Как кадрировать фото первого экрана (CSS object-position), если по центру неудачно
+HERO_POSITION = {"kuhonnogo-ugolka": "50% 45%", "ofisnoy-mebeli": "60% 70%"}
+
 HERO_WIDTHS = (960, 1600)
 
-def hero_picture(base, alt):
+def hero_picture(base, alt, position=None):
     """Фон первого экрана: уменьшенные копии для телефонов и ноутбуков
     (ускоряет загрузку — метрика LCP в Core Web Vitals)."""
     src = Image.open(os.path.join(OUT, base + ".jpg"))
@@ -1862,22 +1945,27 @@ def hero_picture(base, alt):
         return ", ".join([f'{asset(f"{base}-{x}{ext}")} {x}w' for x in widths] + [f'{asset(base + ext)} {w}w'])
     return f"""<picture class="hero-banner-bg">
         <source srcset="{srcset(".webp")}" sizes="100vw" type="image/webp">
-        <img src="{asset(base + ".jpg")}" srcset="{srcset(".jpg")}" sizes="100vw" alt="{esc(alt)}" width="{w}" height="{hgt}" fetchpriority="high" decoding="async">
+        <img src="{asset(base + ".jpg")}" srcset="{srcset(".jpg")}" sizes="100vw" alt="{esc(alt)}" width="{w}" height="{hgt}" fetchpriority="high" decoding="async"{f' style="object-position:{position}"' if position else ''}>
       </picture>"""
 
 def service_hero(s):
     slug = s["slug"]
-    if os.path.exists(os.path.join(OUT, f"assets/img/card-{slug}.jpg")):
-        base = f"assets/img/card-{slug}"
+    # Отдельное фото для первого экрана (крупное, hero-<slug>.jpg) важнее карточки
+    hero_slug = HERO_SHARED.get(slug, slug)
+    # Имя файла с ключевыми словами: himchistka-<slug>-kaliningrad.jpg
+    if os.path.exists(os.path.join(OUT, f"assets/img/himchistka-{hero_slug}-kaliningrad.jpg")):
+        base = f"assets/img/himchistka-{hero_slug}-kaliningrad"
+    elif os.path.exists(os.path.join(OUT, f"assets/img/foto-himchistka-{slug}.jpg")):
+        base = f"assets/img/foto-himchistka-{slug}"
     elif slug in HERO_PHOTO:
-        base = f"assets/img/card-{HERO_PHOTO[slug]}"
+        base = f"assets/img/foto-himchistka-{HERO_PHOTO[slug]}"
     else:
-        base = "assets/img/hero-main"
+        base = "assets/img/vyezdnaya-himchistka-mebeli-kaliningrad"
     return f"""
 <section class="hero hero-main hero-service">
   <div class="container">
     <div class="hero-banner">
-      {hero_picture(base, s["h1"])}
+      {hero_picture(base, s["h1"], HERO_POSITION.get(slug))}
       <div class="hero-banner-body">
         <span class="eyebrow">{icon("mappin", 15)} {esc(s.get("eyebrow") or SITE["city"] + " и область")}</span>
         <h1>{esc(s["h1"])}</h1>
@@ -1924,6 +2012,43 @@ def service_prices(s):
       </div>
       {type_cards}
       <div class="pc-list">{rows}</div>
+    </div>
+  </div>
+</section>
+"""
+
+B2B_SLUGS = ("ofisnoy-mebeli", "mebeli-dlya-biznesa", "kafe-restoranov")
+
+def b2b_docs_block():
+    """Второй блок на страницах для бизнеса: документы и скидка за объём."""
+    sv = 'width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"'
+    docs = [
+        ("Договор", "Заключаем договор на разовую или регулярную чистку",
+         f'<svg {sv}><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>'),
+        ("Счёт на оплату", "Безналичный расчёт для ИП и юрлиц",
+         f'<svg {sv}><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>'),
+        ("Закрывающие акты", "Акт выполненных работ после каждой чистки",
+         f'<svg {sv}><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 14l2 2 4-4"/></svg>'),
+        ("Чеки", "Выдаём чек при любой форме оплаты",
+         f'<svg {sv}><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h3"/></svg>'),
+    ]
+    cards = "".join(f'<div class="b2b-doc"><span class="b2b-doc-ic">{ic}</span><div><strong>{esc(a)}</strong><p>{esc(b)}</p></div></div>' for a, b, ic in docs)
+    return f"""
+<section class="home-bento b2b-block">
+  <div class="container b2b-grid">
+    <div class="bento-panel b2b-docs">
+      <div class="bento-head">
+        <span class="bento-label">Для организаций</span>
+        <h2>Работаем со всеми документами</h2>
+        <p class="bento-sub">Полный пакет для бухгалтерии — без лишних вопросов от вашего бухгалтера.</p>
+      </div>
+      <div class="b2b-doc-grid">{cards}</div>
+    </div>
+    <div class="bento-panel b2b-discount">
+      <span class="b2b-discount-label">Скидки за объём</span>
+      <div class="b2b-discount-num"><small>до</small>50%</div>
+      <p>Чем больше мебели — тем ниже цена за единицу. Посчитаем скидку под ваш объём.</p>
+      <a href="#zayavka" class="btn btn-green" data-popup-order>Рассчитать скидку</a>
     </div>
   </div>
 </section>
@@ -2106,8 +2231,9 @@ def render_service_page(s):
         services_html = ""
     body = (
         service_hero(s)
+        + (b2b_docs_block() if s["slug"] in B2B_SLUGS else "")
         + prices_html
-        + quiz_block(s["slug"], bento=True)
+        + ("" if s["slug"] in B2B_SLUGS else quiz_block(s["slug"], bento=True))
         + h["wyvodim"] + services_html + h["process"] + h["benefits"] + h["districts"] + h["reviews"]
         + h["order"] + intro_panel + faq_new + articles_panel(s["slug"])
     )
@@ -2149,7 +2275,7 @@ def home_parts():
 <section class="hero hero-main">
   <div class="container">
     <div class="hero-banner">
-      {hero_picture("assets/img/hero-main", "Мастер выездной химчистки чистит кресло у клиента дома в Калининграде")}
+      {hero_picture("assets/img/vyezdnaya-himchistka-mebeli-kaliningrad", "Мастер выездной химчистки чистит кресло у клиента дома в Калининграде")}
       <div class="hero-banner-body">
         <span class="eyebrow">{icon("mappin", 15)} {esc(SITE["city"])} и область</span>
         <h1>Выездная химчистка мягкой мебели в Калининграде</h1>
@@ -2277,8 +2403,8 @@ def home_parts():
     ba_cards = "".join(f"""
         <figure class="ba-card">
           <div class="ba" style="--pos:50%">
-            <picture><source srcset="{asset(f"assets/img/ba-{i}-posle.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/ba-{i}-posle.jpg")}" alt="{esc(n)} после химчистки" width="900" height="600" loading="lazy"></picture>
-            <picture class="ba-before"><source srcset="{asset(f"assets/img/ba-{i}-do.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/ba-{i}-do.jpg")}" alt="{esc(n)} до химчистки" width="900" height="600" loading="lazy"></picture>
+            <picture><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.jpg")}" alt="{esc(n)} после химчистки" width="900" height="600" loading="lazy"></picture>
+            <picture class="ba-before"><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.jpg")}" alt="{esc(n)} до химчистки" width="900" height="600" loading="lazy"></picture>
             <span class="ba-tag ba-tag-do">До</span><span class="ba-tag ba-tag-posle">После</span>
             <span class="ba-line" aria-hidden="true"><span class="ba-knob">{icon("chevron", 14)}{icon("chevron", 14)}</span></span>
             <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Сравнить до и после: {esc(n)}">
@@ -2353,7 +2479,7 @@ document.querySelectorAll('.ba').forEach(function(el){{
           <p>Уточните по телефону — скорее всего, мы всё равно приедем.</p>
           <div class="geo-actions">
             <a class="geo-phone" href="tel:{SITE["phone_tel"]}">{icon("phone",18)} {esc(SITE["phone_display"])}</a>
-            <a class="btn geo-btn" href="#zayavka">Оставить заявку</a>
+            <a class="btn geo-btn" href="#zayavka" data-popup-order>Оставить заявку</a>
           </div>
         </div>
       </div>
@@ -2413,32 +2539,7 @@ document.querySelectorAll('.ba').forEach(function(el){{
 <section class="home-bento home-order" id="zayavka">
   <div class="container">
     <div class="bento-panel order-dark">
-      <div class="order-dark-text">
-        <span class="order-pill">Перезвоним за 5 минут</span>
-        <h2>Запишитесь на удобное время</h2>
-        <p class="order-lead">Оставьте заявку — подберём дату и время выезда, перезвоним и подтвердим стоимость.</p>
-        <ul class="order-checks">
-          <li>{icon("check", 18)}<span>Выезд по Калининграду бесплатно</span></li>
-          <li>{icon("check", 18)}<span>Оплата после результата</span></li>
-          <li>{icon("check", 18)}<span>Срочный выезд сегодня — при заказе до 15:00</span></li>
-          <li>{icon("check", 18)}<span>Работаем ежедневно с 9:00 до 21:00</span></li>
-        </ul>
-      </div>
-      <div class="order-card">
-        <form data-order-form>
-          <div class="field">
-            <label for="o-name">Имя</label>
-            <input id="o-name" name="name" type="text" placeholder="Как к вам обращаться" required>
-          </div>
-          <div class="field">
-            <label for="o-phone">Телефон</label>
-            <input id="o-phone" name="phone" type="tel" placeholder="+7 (___) ___-__-__" required>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Оставить заявку</button>
-          <label class="consent" for="o-consent"><input type="checkbox" id="o-consent" name="consent" checked required> <span>Я согласен на <a href="politika-konfidencialnosti.html" target="_blank">обработку персональных данных</a></span></label>
-          <div class="form-success"></div>
-        </form>
-      </div>
+{order_dark_inner("o")}
     </div>
   </div>
 </section>
@@ -2659,50 +2760,127 @@ def render_kontakty():
 # =========================================================================
 # 13. ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ (шаблон)
 # =========================================================================
-def render_privacy():
-    path = "politika-konfidencialnosti.html"
-    breadcrumbs = [("Главная", "index.html"), ("Политика конфиденциальности", None)]
+def _op(key):
+    return esc(OPERATOR[key])
+
+def _op_requisites():
+    return (f'{_op("name")}, ИНН {_op("inn")}, {_op("ogrn_label")} {_op("ogrn")}, '
+            f'адрес: {_op("address")}')
+
+def _legal_page(path, h1, lead, crumb, sections_html, title, description):
+    breadcrumbs = [("Главная", "index.html"), (crumb, None)]
     hero = f"""
 <section class="hero">
   <div class="container">
-    <h1>Политика обработки персональных данных</h1>
-    <p class="hero-lead">Шаблон документа для формы заявки на сайте. Перед публикацией сайта замените данные в квадратных скобках на реквизиты вашей компании или ИП и, при необходимости, согласуйте текст с юристом.</p>
+    <h1>{h1}</h1>
+    <p class="hero-lead">{lead}</p>
   </div>
 </section>
 """
     content = f"""
-<section class="section">
-  <div class="container" style="max-width:820px;">
-    <div class="callout" style="margin-bottom:28px;">
-      <strong>Это шаблон, а не готовый юридический документ.</strong>
-      Заполните реквизиты организации ([Наименование ИП/ООО], [ОГРНИП/ОГРН], [ИНН], [юридический адрес]) и проверьте формулировки с юристом перед публикацией сайта — особенно если вы обрабатываете данные клиентов на постоянной основе.
-    </div>
-    <h2>1. Общие положения</h2>
-    <p>Настоящая Политика определяет порядок обработки персональных данных пользователей сайта {esc(SITE["domain"])} оператором [Наименование ИП/ООО], ОГРНИП/ОГРН [номер], ИНН [номер] (далее — «Оператор»), в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».</p>
-    <h2>2. Какие данные собираются</h2>
-    <p>При заполнении формы заявки на сайте Оператор может получать: имя, номер телефона, адрес для выезда мастера и комментарий к заказу. Данные передаются добровольно самим пользователем.</p>
-    <h2>3. Цели обработки</h2>
-    <p>Персональные данные используются исключительно для связи с клиентом, расчёта стоимости услуг, согласования выезда мастера и оказания услуг химчистки. Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством РФ.</p>
-    <h2>4. Согласие на обработку</h2>
-    <p>Отправляя форму на сайте, пользователь подтверждает согласие на обработку указанных персональных данных на условиях настоящей Политики.</p>
-    <h2 id="cookies">5. Файлы cookie и веб-аналитика</h2>
-    <p>Сайт использует файлы cookie. Необходимые cookie (например, запоминание вашего выбора в баннере) работают всегда. Аналитические сервисы — Яндекс Метрика (ООО «Яндекс») и Google Analytics — подключаются только после того, как вы нажмёте «Принять» в баннере о cookie. Они собирают обезличенные сведения: страницы, которые вы открыли, источник перехода (в том числе UTM-метки), тип устройства и браузера, примерный регион, IP-адрес и идентификатор cookie. Эти данные нужны, чтобы понимать, какие страницы полезны посетителям, и улучшать сайт.</p>
-    <p>Отозвать согласие можно в любой момент: нажмите <a href="#" data-cookie-reset>«Изменить настройки cookie»</a> и выберите «Только необходимые», а также удалите cookie в настройках браузера.</p>
-    <h2>6. Права пользователя</h2>
-    <p>Пользователь вправе запросить удаление или уточнение своих персональных данных, направив запрос на {esc(SITE["email"])}.</p>
-    <h2>7. Контакты Оператора</h2>
-    <p>[Наименование ИП/ООО], телефон {esc(SITE["phone_display"])}, e-mail {esc(SITE["email"])}.</p>
+<section class="section legal">
+  <div class="container">
+{sections_html}
   </div>
 </section>
 """
     body = breadcrumbs_html(breadcrumbs) + hero + content
-    schemas = [breadcrumb_schema(breadcrumbs)]
-    return path, page_shell(
+    return path, page_shell(path, title, description, body, [breadcrumb_schema(breadcrumbs)])
+
+def _analytics_services():
+    """Список аналитики для текста. Если коды ещё не вставлены, указываем оба
+    сервиса как планируемые — баннер всё равно спрашивает согласие."""
+    return "Яндекс Метрика (ООО «Яндекс», Россия) и Google Analytics (Google LLC, США)"
+
+POLICY_PURPOSES_TABLE = """
+<div class="table-wrap"><table class="legal-table">
+  <tr><th>Цель обработки</th><td>приём и обработка заявок на услуги химчистки, расчёт стоимости, согласование выезда мастера, заключение и исполнение договора оказания услуг</td></tr>
+  <tr><th>Персональные данные</th><td>имя<br>номер телефона<br>адрес выезда мастера<br>сведения о мебели и загрязнениях, комментарий к заявке, фотографии (если Пользователь их отправил)<br>сведения об источнике перехода на веб-сайт (UTM-метки)</td></tr>
+  <tr><th>Правовые основания</th><td>согласие субъекта персональных данных (п. 1 ч. 1 ст. 6 Закона о персональных данных)<br>заключение и исполнение договора, стороной которого является субъект персональных данных (п. 5 ч. 1 ст. 6 Закона о персональных данных)</td></tr>
+  <tr><th>Виды обработки персональных данных</th><td>Сбор, запись, систематизация, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, уничтожение и обезличивание персональных данных<br>Связь с Пользователем по телефону и через мессенджеры (WhatsApp, Telegram, MAX)</td></tr>
+</table></div>
+<div class="table-wrap"><table class="legal-table">
+  <tr><th>Цель обработки</th><td>информирование Пользователя посредством отправки электронных писем</td></tr>
+  <tr><th>Персональные данные</th><td>фамилия, имя, отчество<br>номера телефонов</td></tr>
+  <tr><th>Правовые основания</th><td>Федеральный закон «Об информации, информационных технологиях и о защите информации» от 27.07.2006 N 149-ФЗ</td></tr>
+  <tr><th>Виды обработки персональных данных</th><td>Сбор, запись, систематизация, накопление, хранение, уничтожение и обезличивание персональных данных<br>Отправка информационных писем на адрес электронной почты</td></tr>
+</table></div>
+<div class="table-wrap"><table class="legal-table">
+  <tr><th>Цель обработки</th><td>сбор статистики посещений и улучшение работы веб-сайта (только при согласии Пользователя на аналитические cookie)</td></tr>
+  <tr><th>Персональные данные</th><td>идентификаторы cookie, IP-адрес, сведения о браузере и устройстве, примерное местоположение, адреса просмотренных страниц, источник перехода, дата и время посещения, действия на веб-сайте</td></tr>
+  <tr><th>Правовые основания</th><td>согласие субъекта персональных данных (п. 1 ч. 1 ст. 6 Закона о персональных данных)</td></tr>
+  <tr><th>Виды обработки персональных данных</th><td>Сбор, запись, хранение, использование, обезличивание, передача (предоставление) сервисам веб-аналитики Яндекс Метрика и Google Analytics</td></tr>
+</table></div>
+"""
+
+def _policy_inline(text):
+    t = esc(text)
+    t = re.sub(r'([\w.+-]+@[\w-]+\.[\w.]+\w)', r'<a href="mailto:\1">\1</a>', t)
+    t = re.sub(r'(https://chistka-39\.ru[\w/-]*)', r'<a href="\1">\1</a>', t)
+    t = t.replace('по ссылке «Настройки cookie»', 'по ссылке <a href="#cookies" data-cookie-reset>«Настройки cookie»</a>')
+    return t
+
+def policy_html():
+    """Текст политики — из content/politika.txt (как прислал владелец).
+    Строки «N. Заголовок» — разделы, строки с «— » — пункты списка."""
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "content", "politika.txt"), encoding="utf-8") as f:
+        lines = [l.strip() for l in f if l.strip()]
+    out, in_list = [], False
+    for line in lines:
+        if line.startswith("— "):
+            if not in_list:
+                out.append("<ul>"); in_list = True
+            out.append(f"<li>{_policy_inline(line[2:])}</li>")
+            continue
+        if in_list:
+            out.append("</ul>"); in_list = False
+        if line == "[TABLE]":
+            out.append(POLICY_PURPOSES_TABLE)
+        elif re.match(r"^\d+\. \S", line):
+            hid = ' id="cookies"' if "cookie" in line else ""
+            out.append(f"<h2{hid}>{esc(line)}</h2>")
+        else:
+            out.append(f"<p>{_policy_inline(line)}</p>")
+    if in_list:
+        out.append("</ul>")
+    return "\n".join(out)
+
+def render_privacy():
+    path = "politika-konfidencialnosti.html"
+    return _legal_page(
         path,
+        "Политика в отношении обработки персональных данных",
+        "Как мы собираем, используем и защищаем ваши персональные данные.",
+        "Политика конфиденциальности",
+        policy_html(),
         "Политика конфиденциальности | " + SITE["short_name"],
-        "Политика обработки персональных данных пользователей сайта.",
-        body,
-        schemas,
+        "Политика в отношении обработки персональных данных пользователей сайта химчистки мебели в Калининграде.",
+    )
+
+def render_soglasie():
+    path = "soglasie-na-obrabotku-personalnyh-dannyh.html"
+    site = esc(SITE["domain"])
+    sections = f"""
+    <p>Отмечая галочку «Я согласен (-а) с политикой конфиденциальности в отношении пользовательских данных и даю свое согласие на обработку персональных данных» и отправляя заявку на сайте {site}, я свободно, своей волей и в своём интересе, конкретно, информированно и сознательно даю согласие {_op("name")} (e-mail: <a href="mailto:{_op("email")}">{_op("email")}</a>; далее — Оператор) на обработку моих персональных данных на следующих условиях.</p>
+    <h2>1. Перечень данных</h2>
+    <p>Имя; номер телефона; адрес выезда мастера; описание мебели и загрязнений; комментарий к заявке; фотографии, если я их отправляю; сведения об источнике перехода на сайт (UTM-метки).</p>
+    <h2>2. Цели</h2>
+    <p>Связь со мной по заявке, расчёт стоимости услуг, согласование времени и адреса выезда, заключение и исполнение договора оказания услуг химчистки, информирование о статусе заказа.</p>
+    <h2>3. Действия с данными</h2>
+    <p>Сбор, запись, систематизация, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, блокирование, удаление и уничтожение — с использованием средств автоматизации и без них. Распространение данных неограниченному кругу лиц не допускается.</p>
+    <h2>4. Срок действия и отзыв</h2>
+    <p>Согласие действует {_op("retention")} с момента последнего обращения или исполнения заказа либо до его отзыва. Я могу отозвать согласие, направив письмо на <a href="mailto:{_op("email")}">{_op("email")}</a> с пометкой «Отзыв согласия на обработку персональных данных». После отзыва Оператор прекращает обработку и уничтожает данные в течение 30 дней, кроме случаев, когда обработка допускается без согласия по закону.</p>
+    <h2>5. Прочее</h2>
+    <p>Подробно порядок обработки описан в <a href="politika-konfidencialnosti.html">Политике обработки персональных данных</a>. Согласие дано в соответствии со ст. 9 Федерального закона от 27.07.2006 № 152-ФЗ «О персональных данных».</p>
+"""
+    return _legal_page(
+        path,
+        "Согласие на обработку персональных данных",
+        "Условия, на которых вы даёте согласие, когда отправляете заявку на сайте.",
+        "Согласие на обработку данных",
+        sections,
+        "Согласие на обработку персональных данных | " + SITE["short_name"],
+        "Согласие пользователя на обработку персональных данных при отправке заявки на химчистку мебели.",
     )
 
 # =========================================================================
@@ -2862,7 +3040,7 @@ def render_karta():
                                ("otzyvy.html", "Отзывы"), ("akcii.html", "Акции и скидки"), ("garantii.html", "Гарантии"),
                                ("voprosy-i-otvety.html", "Вопросы и ответы"), ("geografiya.html", "География выезда"),
                                ("o-nas.html", "О компании"), ("kontakty.html", "Контакты"),
-                               ("politika-konfidencialnosti.html", "Политика конфиденциальности")]),
+                               ("politika-konfidencialnosti.html", "Политика конфиденциальности"), ("soglasie-na-obrabotku-personalnyh-dannyh.html", "Согласие на обработку персональных данных")]),
         ("Основные услуги (в меню)", [(service_filename(x["slug"]), x["nav"]) for x in MAIN_SERVICES]),
         ("Другие услуги", [(service_filename(x["slug"]), x["nav"]) for x in SERVICES if x["category"] == "chistka" and x["slug"] not in main_slugs]),
         ("Устранение запахов", [(service_filename(x["slug"]), x["nav"]) for x in SERVICES if x["category"] == "zapahi" and x["slug"] not in main_slugs]),
@@ -2872,9 +3050,9 @@ def render_karta():
     total = sum(len(items) for _, items in groups) + 1
     cards = []
     for title, items in groups:
-        links = "".join(f'<li><a href="{href}">{esc(label)}</a><span class="sm-url">{esc(href)}</span></li>' for href, label in items)
+        links = "".join(f'<li><a href="{href}">{esc(label)}</a><span class="sm-url">/{esc("" if href == "index.html" else href.removesuffix(".html"))}</span></li>' for href, label in items)
         cards.append(f'<div class="bento-card sm-card"><h3>{esc(title)} <span class="sm-count">{len(items)}</span></h3><ul class="sm-list">{links}</ul></div>')
-    cards.append('<div class="bento-card sm-card"><h3>Служебные <span class="sm-count">1</span></h3><ul class="sm-list"><li><a href="404.html">Страница 404</a><span class="sm-url">404.html (закрыта от индексации)</span></li></ul></div>')
+    cards.append('<div class="bento-card sm-card"><h3>Служебные <span class="sm-count">1</span></h3><ul class="sm-list"><li><a href="404.html">Страница 404</a><span class="sm-url">/404 (закрыта от индексации)</span></li></ul></div>')
     grid = f'<div class="sm-grid">{"".join(cards)}</div>'
     return simple_page(path,
         f"Карта сайта | {SITE['short_name']}",
@@ -3098,7 +3276,7 @@ def render_article(a):
     </div>"""
     others = [x for x in ARTICLES if x is not a]
     sections = [
-        bento_panel(f"Статья · {a['minutes']} мин чтения", a["h1"], inner, cls="home-article"),
+        bento_panel(f"Статья · {a['minutes']} мин чтения", "Разбираемся по порядку", inner, cls="home-article"),
         bento_panel("Вопросы и ответы", "Коротко о главном", faq_block(a["faq"]), cls="home-faq"),
         bento_panel("Статьи", "Читайте также", article_cards(others)),
     ]
@@ -3131,7 +3309,7 @@ def main():
     all_paths = []
 
     def write(path, content):
-        content = typograf(content)
+        content = clean_links(typograf(content))
         with open(os.path.join(OUT, path), "w", encoding="utf-8") as f:
             f.write(content)
         all_paths.append(path)
@@ -3143,7 +3321,7 @@ def main():
         write(p, c)
 
     print("Генерация основных страниц...")
-    for renderer in (render_index, render_uslugi, render_onas, render_ceny, render_kontakty, render_privacy):
+    for renderer in (render_index, render_uslugi, render_onas, render_ceny, render_kontakty, render_privacy, render_soglasie):
         p, c = renderer()
         write(p, c)
 
@@ -3174,8 +3352,8 @@ def main():
 
     # robots.txt (Clean-param — для Яндекса: адреса с метками UTM и т.п. не считать дублями)
     robots = (
-        "User-agent: *\nAllow: /\nDisallow: /404.html\n\n"
-        "User-agent: Yandex\nAllow: /\nDisallow: /404.html\n"
+        "User-agent: *\nAllow: /\nDisallow: /404\n\n"
+        "User-agent: Yandex\nAllow: /\nDisallow: /404\n"
         "Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&gclid&fbclid&_openstat&from\n\n"
         f"Sitemap: {url('sitemap.xml')}\n"
     )
@@ -3192,7 +3370,7 @@ def write_web_assets():
     """Картинка для соцсетей (Open Graph), иконки и Web App Manifest."""
     og = os.path.join(OUT, "assets/img/og-image.jpg")
     if not os.path.exists(og):
-        im = Image.open(os.path.join(OUT, "assets/img/hero-main.jpg")).convert("RGB")
+        im = Image.open(os.path.join(OUT, "assets/img/vyezdnaya-himchistka-mebeli-kaliningrad.jpg")).convert("RGB")
         w, h = im.size
         ch = round(w * 630 / 1200)
         im = im.crop((0, (h - ch) // 2, w, (h - ch) // 2 + ch)).resize((1200, 630), Image.LANCZOS)
