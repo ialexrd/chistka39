@@ -829,3 +829,33 @@ body.page-inner{ background: #eef1f5; }
 /* Выпадающее меню «Услуги»: названия в одну строку, без пустот в сетке */
 .main-nav .dropdown{ min-width: 0; width: max-content; grid-template-columns: repeat(2, max-content); column-gap: 8px; }
 .main-nav .dropdown a{ white-space: nowrap; }
+
+/* Статьи */
+.article-layout{ display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 40px; align-items: start; }
+.article-aside{ position: sticky; top: 100px; display: grid; gap: 16px; }
+.article-aside .bento-card{ min-height: 0; }
+.article-toc h3, .article-cta h3{ margin: 0 0 10px; font-size: 17px; }
+.article-toc ol{ margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 14.5px; line-height: 1.4; }
+.article-toc a{ color: var(--color-ink-soft); }
+.article-toc a:hover{ color: var(--color-primary); }
+.article-cta p{ margin: 0 0 14px; color: var(--color-ink-soft); font-size: 14.5px; line-height: 1.5; }
+.article-cta h3{ margin-top: 12px; }
+.article-cta .info-card-link{ justify-content: center; }
+.article-body{ max-width: 760px; font-size: 17px; line-height: 1.7; color: var(--color-ink-soft); }
+.article-body h2{ margin: 36px 0 12px; font-size: 24px; line-height: 1.25; color: var(--color-ink); scroll-margin-top: 100px; }
+.article-body h2:first-child{ margin-top: 0; }
+.article-body p{ margin: 0 0 16px; }
+.article-body ul, .article-body ol{ margin: 0 0 18px; padding-left: 22px; display: grid; gap: 8px; }
+.article-body li::marker{ color: var(--color-primary); font-weight: 700; }
+.article-note{ display: flex; gap: 14px; align-items: flex-start; margin: 8px 0 22px; padding: 18px 20px; border-radius: 16px; background: var(--color-primary-light); color: var(--color-ink); }
+.article-note p{ margin: 0; }
+.article-note svg{ flex: none; }
+@media (max-width: 900px){
+  .article-layout{ grid-template-columns: 1fr; gap: 24px; }
+  .article-aside{ position: static; order: 2; }
+  .article-body{ font-size: 16px; }
+  .article-body h2{ font-size: 21px; }
+}
+.article-body ul{ list-style: disc; } .article-body ol, .article-toc ol{ list-style: decimal; }
+.article-body li, .article-toc li{ display: list-item; padding-left: 4px; }
+.article-body li::before, .article-toc li::before{ content: none; }
