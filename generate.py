@@ -49,7 +49,7 @@ SITE = {
 # =========================================================================
 ANALYTICS = {
     # Яндекс Вебмастер → «Права доступа» → Мета-тег: content="..."
-    "yandex_verification": "b353a8a29bf8cab9",
+    "yandex_verification": "1b1916da8b7cb7f1",
     # Google Search Console → «Тег HTML»: content="..."
     "google_verification": "",
     # Яндекс Метрика: номер счётчика (только цифры)
