@@ -1,0 +1,12 @@
+# Проверка ответа хостинга (редиректы http/https/www). Запускается вручную.
+name: Проверка сайта
+on: workflow_dispatch
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for u in http://chistka-39.ru/ https://chistka-39.ru/ http://www.chistka-39.ru/ https://www.chistka-39.ru/ http://chistka-39.ru/uslugi.html; do
+            echo "== $u"; curl -sS -o /dev/null -D - -m 20 "$u" | grep -iE '^(HTTP|location|strict)' || true
+          done
+          for u in http://chistka-39.ru/srv-probe.php https://chistka-39.ru/srv-probe.php; do echo "== $u"; curl -sS -m 20 "$u" || true; echo; done
