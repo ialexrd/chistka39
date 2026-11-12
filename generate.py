@@ -1806,6 +1806,39 @@ def faq_block(faq):
     )
     return f'<div class="faq-list">{items}</div>'
 
+# Группы похожих услуг для перекрёстных ссылок: каждая страница ссылается
+# на соседей по группе, чтобы вес не застревал на страницах из меню.
+RELATED_GROUPS = [
+    ["divana", "uglovogo-divana", "kozhanogo-divana", "suhaya-himchistka", "podushek", "kresla", "pufika"],
+    ["matrasa", "krovati", "podushek", "kolyaski"],
+    ["stulev", "kuhonnogo-ugolka", "ofisnoy-mebeli", "kafe-restoranov", "mebeli-dlya-biznesa", "kovrolina", "shtor"],
+    ["nepriyatnogo-zapaha", "zapaha-mochi", "zapaha-koshki", "zapaha-sobaki", "zapaha-sigaret",
+     "zapaha-syrosti-i-pleseni", "pyatna-zapahi"],
+]
+RELATED_MAX = 6
+
+def related_slugs(s):
+    """Ручной список related + соседи по группе, без дублей, не больше RELATED_MAX."""
+    out = []
+    for slug in s["related"]:
+        if slug != s["slug"] and slug in SERVICE_BY_SLUG and slug not in out:
+            out.append(slug)
+    for group in RELATED_GROUPS:
+        if s["slug"] in group:
+            for slug in group:
+                if slug != s["slug"] and slug in SERVICE_BY_SLUG and slug not in out:
+                    out.append(slug)
+    return out[:RELATED_MAX]
+
+def svc_more_block():
+    """Строка ссылок на услуги, которых нет в карточках главной."""
+    main = {x["slug"] for x in MAIN_SERVICES}
+    links = "".join(
+        f'<a href="{service_filename(x["slug"])}">{esc(x["nav"])}</a>'
+        for x in SERVICES if x["slug"] not in main
+    )
+    return f'<div class="svc-more"><span class="svc-more-label">Ещё чистим и выводим запахи:</span>{links}</div>'
+
 def related_block(slugs):
     links = "".join(
         f'<a href="{service_filename(slug)}">{esc(short(SERVICE_BY_SLUG[slug]))} →</a>'
@@ -2206,7 +2239,7 @@ def render_service_page(s):
       <span class="tag">Похожие услуги</span>
       <h2>Также может понадобиться</h2>
     </div>
-    {related_block(s["related"])}
+    {related_block(related_slugs(s))}
   </div>
 </section>
 """
@@ -2393,6 +2426,7 @@ def home_parts():
       <div class="svc-grid">
         {"".join(service_photo_card(s) for s in MAIN_SERVICES if s["slug"] != "mebeli-dlya-biznesa")}
       </div>
+      {svc_more_block()}
     </div>
   </div>
 </section>
@@ -3364,6 +3398,7 @@ def render_article(a):
     sections = [
         bento_panel(f"Статья · {a['minutes']} мин чтения", "Что делать", inner, cls="home-article"),
         bento_panel("Вопросы и ответы", "Коротко о главном", faq_block(a["faq"]), cls="home-faq"),
+        bento_panel("Услуги", "Если не получилось самому", related_block([s["slug"]] + related_slugs(s)[:5])),
         bento_panel("Статьи", "Читайте также", article_cards(others)),
     ]
     return simple_page(path, a["title"], a["description"],
