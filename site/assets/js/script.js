@@ -365,7 +365,7 @@
   // ===================================================================
   // UTM-метки, баннер cookie и счётчики (Яндекс Метрика)
   // Номера счётчиков задаются в generate.py (ANALYTICS) → window.SITE_ANALYTICS.
-  // Счётчики загружаются только после «Принять» в баннере.
+  // Метрика запускается сразу, кроме тех, кто отказался в окне cookie.
   // ===================================================================
   function store(k, v) {
     try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (err) { return null; }
@@ -410,10 +410,10 @@
     box.setAttribute('role', 'dialog');
     box.setAttribute('aria-label', 'Файлы cookie');
     box.innerHTML =
-      '<p>Мы используем файлы cookie и сервисы аналитики (Яндекс Метрика), чтобы сайт работал лучше. ' +
+      '<p>Сайт использует файлы cookie и Яндекс Метрику, чтобы работать лучше. ' +
       'Подробнее — в <a href="politika-konfidencialnosti#cookies">политике конфиденциальности</a>.</p>' +
-      '<div class="cookie-actions"><button type="button" class="btn btn-primary btn-sm" data-cookie="all">Принять</button>' +
-      '<button type="button" class="btn btn-ghost btn-sm" data-cookie="necessary">Только необходимые</button></div>';
+      '<div class="cookie-actions"><button type="button" class="btn btn-primary btn-sm" data-cookie="all">Хорошо</button>' +
+      '<button type="button" class="btn btn-ghost btn-sm" data-cookie="necessary">Отказаться от аналитики</button></div>';
     box.addEventListener('click', function (e) {
       var b = e.target.closest('[data-cookie]');
       if (!b) return;
@@ -436,9 +436,11 @@
 
   // Окно показывается всем, пока посетитель не сделал выбор,
   // даже если коды счётчиков ещё не вставлены.
+  // Метрика работает у всех, кроме тех, кто нажал «Отказаться от аналитики»
+  // (отказ действует со следующей страницы).
   var consent = store('cookie_consent');
-  if (consent === 'all') startAnalytics();
-  else if (consent !== 'necessary') cookieBanner();
+  if (consent !== 'necessary') startAnalytics();
+  if (consent !== 'all' && consent !== 'necessary') cookieBanner();
 })();
 
 /* Нижнее меню: показываем, когда на экране появляется блок услуг */

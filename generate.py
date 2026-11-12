@@ -1633,9 +1633,9 @@ def verification_meta():
 
 def analytics_config():
     """Код счётчиков прямо в <head>, чтобы его видели проверялки сайтов.
-    Сами счётчики по-прежнему запускаются только после согласия в окне cookie:
-    сразу при загрузке, если посетитель уже нажал «Принять», иначе — из
-    assets/js/script.js по нажатию кнопки (window.siteStartAnalytics)."""
+    С 2026-11-12 Метрика запускается сразу при загрузке (решение владельца: без неё
+    Директ не видит заявки). Не запускается только у тех, кто в окне cookie нажал
+    «Отказаться» (localStorage cookie_consent = 'necessary')."""
     ym_id = ANALYTICS["yandex_metrika_id"]
     ga_id = ANALYTICS["ga4_id"]
     cfg = {"ym": ym_id, "ga": ga_id}
@@ -1653,8 +1653,9 @@ def analytics_config():
             "gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted'});"
             f"gtag('js',new Date());gtag('config','{ga_id}');"
             f"var g=document.createElement('script');g.async=1;g.src='https://www.googletagmanager.com/gtag/js?id={ga_id}';document.head.appendChild(g);")
-    parts.append("};try{if(localStorage.getItem('cookie_consent')==='all')window.siteStartAnalytics()}catch(e){}")
-    return "<!-- Яндекс Метрика: запуск только после согласия на cookie -->\n<script>" + "".join(parts) + "</script>"
+    parts.append("};var _c=null;try{_c=localStorage.getItem('cookie_consent')}catch(e){}"
+                 "if(_c!=='necessary')window.siteStartAnalytics();")
+    return "<!-- Яндекс Метрика: запуск сразу, кроме тех, кто отказался в окне cookie -->\n<script>" + "".join(parts) + "</script>"
 
 def page_shell(path, title, description, body, schemas=None):
     canonical = url(path)
