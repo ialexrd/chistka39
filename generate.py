@@ -39,6 +39,8 @@ SITE = {
         "Центральный район", "Московский район", "Ленинградский район",
         "Балтийский район", "Гурьевск", "Светлогорск", "Зеленоградск", "Пионерский",
     ],
+    # Ссылки на карточки в Яндекс Картах и 2ГИС — попадут в разметку (sameAs), когда появятся
+    "yandex_maps": "", "gis2": "",
     "vk": "#", "telegram": "https://t.me/+79323039722", "max": "https://max.ru/u/f9LHodD0cOJ1WI7v2AV8Dr6rBF7oEaKvQdY5tPAMSR5phBrhhIfH0vl_Fx8", "instagram": "#",
     "year_placeholder": "[ГГГГ]",
 }
@@ -1562,15 +1564,23 @@ def local_business_schema():
     return {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
+        "@id": SITE["domain"] + "/#business",
         "name": SITE["name"],
+        "alternateName": SITE["short_name"],
         "image": url("assets/img/og-image.jpg"),
         "telephone": SITE["phone_tel"],
         "email": SITE["email"],
         "url": SITE["domain"] + "/",
-        "areaServed": {"@type": "City", "name": SITE["city"]},
-        "address": {"@type": "PostalAddress", "addressLocality": SITE["city"], "addressCountry": "RU"},
+        "areaServed": [{"@type": "City", "name": SITE["city"]}] + [{"@type": "City", "name": g["city"]} for g in GEO_PAGES],
+        "address": {"@type": "PostalAddress", "addressLocality": SITE["city"], "addressRegion": "Калининградская область", "addressCountry": "RU"},
         "openingHours": "Mo-Su 09:00-21:00",
+        "openingHoursSpecification": {"@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            "opens": "09:00", "closes": "21:00"},
         "priceRange": "от 150 ₽",
+        "currenciesAccepted": "RUB",
+        "sameAs": [v for v in (SITE["telegram"], SITE["max"], SITE["vk"], SITE["instagram"], SITE.get("yandex_maps", ""), SITE.get("gis2", "")) if v.startswith("http")],
+        "parentOrganization": {"@id": SITE["domain"] + "/#organization"},
     }
 
 def organization_schema():
@@ -1799,6 +1809,47 @@ def price_table_block(rows):
     return f"""<div class="table-scroll"><table class="price-table">
 <thead><tr><th>Услуга</th><th>Стоимость</th></tr></thead>
 <tbody>{trs}</tbody></table></div>"""
+
+# Дата реального изменения страницы (из lastmod.json) подставляется в конце сборки:
+# в шаблоне стоят метки, хэш страницы считается по меткам, поэтому сама дата
+# не меняет хэш и не сдвигает lastmod по кругу.
+LASTMOD_ISO = "%%LASTMOD_ISO%%"
+LASTMOD_RU = "%%LASTMOD_RU%%"
+
+def price_updated_line():
+    return f'<p class="price-updated">Цены актуальны на <time datetime="{LASTMOD_ISO}">{LASTMOD_RU}</time></p>'
+
+def webpage_schema(path, name):
+    return {
+        "@context": "https://schema.org", "@type": "WebPage",
+        "url": url(path), "name": name, "inLanguage": "ru",
+        "dateModified": LASTMOD_ISO,
+        "isPartOf": {"@id": SITE["domain"] + "/#website"},
+    }
+
+def _price_number(text):
+    m = re.search(r"(\d[\d\s]*)\s*₽", text)
+    return int(re.sub(r"\s", "", m.group(1))) if m else None
+
+def offer_catalog_schema(services):
+    """Прайс в разметке: каталог услуг с ценой «от» для каждой строки с суммой в рублях."""
+    groups = []
+    for sv in services:
+        offers = []
+        for name, price in sv["price_rows"]:
+            n = _price_number(price)
+            if n is None:
+                continue
+            offers.append({
+                "@type": "Offer", "name": f'{short(sv)}: {name}', "url": url(service_filename(sv["slug"])),
+                "priceSpecification": {"@type": "PriceSpecification", "minPrice": n, "priceCurrency": "RUB"},
+            })
+        if offers:
+            groups.append({"@type": "OfferCatalog", "name": sv["nav"], "itemListElement": offers})
+    return {
+        **local_business_schema(),
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Цены на химчистку мебели", "itemListElement": groups},
+    }
 
 def faq_block(faq):
     items = "".join(
@@ -2102,6 +2153,7 @@ def service_prices(s):
       </div>
       {type_cards}
       <div class="pc-list">{rows}</div>
+      {price_updated_line()}
     </div>
   </div>
 </section>
@@ -2330,6 +2382,7 @@ def render_service_page(s):
 
     schemas = [
         service_schema(s),
+        webpage_schema(path, s["h1"]),
         breadcrumb_schema(breadcrumbs),
         faq_schema(s["faq"]),
     ]
@@ -2791,10 +2844,10 @@ def render_ceny():
     body = (
         breadcrumbs_html(breadcrumbs)
         + hero
-        + f'<section class="section"><div class="container">{callout}{tables}</div></section>'
+        + f'<section class="section"><div class="container">{callout}{price_updated_line()}{tables}</div></section>'
         + home_parts()["order"]
     )
-    schemas = [breadcrumb_schema(breadcrumbs)]
+    schemas = [breadcrumb_schema(breadcrumbs), webpage_schema(path, "Цены на химчистку мебели в Калининграде"), offer_catalog_schema(MAIN_SERVICES)]
     return path, page_shell(
         path,
         "Цены на химчистку мебели в Калининграде — прайс-лист 2026 | " + SITE["short_name"],
@@ -3483,6 +3536,16 @@ def main():
             lastmod[p] = {"hash": page_hashes[p], "date": today}
     with open(LASTMOD_FILE, "w", encoding="utf-8") as f:
         json.dump(lastmod, f, ensure_ascii=False, indent=1, sort_keys=True)
+    # Подставляем настоящую дату изменения на место меток LASTMOD_ISO / LASTMOD_RU
+    for p in all_paths:
+        fp = os.path.join(OUT, p)
+        with open(fp, encoding="utf-8") as f:
+            content = f.read()
+        if LASTMOD_ISO in content or LASTMOD_RU in content:
+            d = lastmod[p]["date"]
+            content = content.replace(LASTMOD_ISO, d).replace(LASTMOD_RU, ru_date(d).replace(" ", "\u00a0", 1))
+            with open(fp, "w", encoding="utf-8") as f:
+                f.write(content)
     urls = "".join(
         f"<url><loc>{url(p)}</loc><lastmod>{lastmod[p]['date']}</lastmod></url>" for p in all_paths if p != "404.html"
     )
