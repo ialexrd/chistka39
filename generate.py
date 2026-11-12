@@ -61,8 +61,9 @@ ANALYTICS = {
     "google_verification": "",
     # Яндекс Метрика: номер счётчика (только цифры)
     "yandex_metrika_id": "114111320",
-    # Google Analytics 4: идентификатор потока вида G-XXXXXXXXXX
-    "ga4_id": "G-JDXMD2TCLW",
+    # Google Analytics 4 отключён 2026-11-12: сбор данных россиян в базах вне РФ
+    # запрещён (152-ФЗ, с 01.07.2025). Не возвращать.
+    "ga4_id": "",
 }
 
 # =========================================================================
@@ -1643,7 +1644,7 @@ def analytics_config():
             f"gtag('js',new Date());gtag('config','{ga_id}');"
             f"var g=document.createElement('script');g.async=1;g.src='https://www.googletagmanager.com/gtag/js?id={ga_id}';document.head.appendChild(g);")
     parts.append("};try{if(localStorage.getItem('cookie_consent')==='all')window.siteStartAnalytics()}catch(e){}")
-    return "<!-- Яндекс Метрика и Google Analytics: запуск только после согласия на cookie -->\n<script>" + "".join(parts) + "</script>"
+    return "<!-- Яндекс Метрика: запуск только после согласия на cookie -->\n<script>" + "".join(parts) + "</script>"
 
 def page_shell(path, title, description, body, schemas=None):
     canonical = url(path)
@@ -2880,7 +2881,7 @@ def _legal_page(path, h1, lead, crumb, sections_html, title, description):
 def _analytics_services():
     """Список аналитики для текста. Если коды ещё не вставлены, указываем оба
     сервиса как планируемые — баннер всё равно спрашивает согласие."""
-    return "Яндекс Метрика (ООО «Яндекс», Россия) и Google Analytics (Google LLC, США)"
+    return "Яндекс Метрика (ООО «Яндекс», Россия)"
 
 POLICY_PURPOSES_TABLE = """
 <div class="table-wrap"><table class="legal-table">
@@ -2899,7 +2900,7 @@ POLICY_PURPOSES_TABLE = """
   <tr><th>Цель обработки</th><td>сбор статистики посещений и улучшение работы веб-сайта (только при согласии Пользователя на аналитические cookie)</td></tr>
   <tr><th>Персональные данные</th><td>идентификаторы cookie, IP-адрес, сведения о браузере и устройстве, примерное местоположение, адреса просмотренных страниц, источник перехода, дата и время посещения, действия на веб-сайте</td></tr>
   <tr><th>Правовые основания</th><td>согласие субъекта персональных данных (п. 1 ч. 1 ст. 6 Закона о персональных данных)</td></tr>
-  <tr><th>Виды обработки персональных данных</th><td>Сбор, запись, хранение, использование, обезличивание, передача (предоставление) сервисам веб-аналитики Яндекс Метрика и Google Analytics</td></tr>
+  <tr><th>Виды обработки персональных данных</th><td>Сбор, запись, хранение, использование, обезличивание, передача (предоставление) сервису веб-аналитики Яндекс Метрика</td></tr>
 </table></div>
 """
 

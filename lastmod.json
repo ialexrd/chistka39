@@ -1,218 +1,218 @@
 {
  "404.html": {
-  "date": "2026-11-10",
-  "hash": "6f892bdd4f8fd365a7a246442ca9d8df172b27d4"
+  "date": "2026-11-12",
+  "hash": "f72ab9501a2780e705e963cd7606e6dc3f0db49e"
  },
  "akcii.html": {
-  "date": "2026-11-10",
-  "hash": "72e4cf5bc2409f7655ea687894e821edce6f8898"
+  "date": "2026-11-12",
+  "hash": "f4e68b3fe3209644f3822e35a69ece52cf1e625a"
  },
  "ceny.html": {
-  "date": "2026-11-10",
-  "hash": "f6a5121a5b99ccf5de428d407dd8e11436e50311"
+  "date": "2026-11-12",
+  "hash": "57fcb1814f1ce43f089ddd9cfce8fa12ded9aa63"
  },
  "garantii.html": {
-  "date": "2026-11-10",
-  "hash": "233b004103e92b5b4f49a318e6dc6a9c6731ce6f"
+  "date": "2026-11-12",
+  "hash": "f64bb2dfb6dcb70f58470252750597a0c1fa0afc"
  },
  "geografiya.html": {
-  "date": "2026-11-10",
-  "hash": "4f7e301fd6a42aee39c81ae4710b3ba8656dafc2"
+  "date": "2026-11-12",
+  "hash": "5672910adc49b68f48aca50fb099c40f93860a41"
  },
  "himchistka-divana.html": {
   "date": "2026-11-12",
-  "hash": "2c0a5d01b6aa0bcbb69ad1ad7da9e1ef0e2d9ba3"
+  "hash": "849658c663f5fadd066e4dfd443815d96aacf2d9"
  },
  "himchistka-kolyaski.html": {
   "date": "2026-11-12",
-  "hash": "f749162ec21907f32f2941404f9a0b04682d5cdb"
+  "hash": "0e2c55ecb7ad1a5f3aeeead023605634cedef4e6"
  },
  "himchistka-kovrolina.html": {
   "date": "2026-11-12",
-  "hash": "0484ab27504a6a9f6f52f83c77c3059a90b5a31e"
+  "hash": "62ff94b148a3990f7173b98769cd8acb298b0ac2"
  },
  "himchistka-kozhanogo-divana.html": {
   "date": "2026-11-12",
-  "hash": "8a9b14b42e9939d1de563a85628177724179de3a"
+  "hash": "f80b12dc2ebe5633ef756080fc99954af80b3dd3"
  },
  "himchistka-kresla.html": {
   "date": "2026-11-12",
-  "hash": "afb2a6e71c80ed5dc18e0df8497f5a8735dcc17d"
+  "hash": "e70c4fdbcb889d75c1366fdaa5d764f2746d29ab"
  },
  "himchistka-krovati.html": {
   "date": "2026-11-12",
-  "hash": "fab7853313d832af389c98d564a3ba573199a6bd"
+  "hash": "255e5bae6c224000622dc31ee5e315226db17167"
  },
  "himchistka-kuhonnogo-ugolka.html": {
   "date": "2026-11-12",
-  "hash": "1e1055c9d234314289c6affa3a796d90d811d1d3"
+  "hash": "eb4063ac55b360ad0e76d65eab001ab6687fb390"
  },
  "himchistka-matrasa.html": {
   "date": "2026-11-12",
-  "hash": "cf2ff5a60add6f552f2b36aa718456b8acdcc77f"
+  "hash": "16254bebf88b8e1091860ae4ac19b5ba3f0c9219"
  },
  "himchistka-mebeli-bagrationovsk.html": {
   "date": "2026-11-12",
-  "hash": "72929a4e5a01a4db4d7a19f9dc29a3dbce707317"
+  "hash": "10c4de02b4d5b1ff799fc770b55107d7ece7d504"
  },
  "himchistka-mebeli-baltiysk.html": {
   "date": "2026-11-12",
-  "hash": "cd745fcc1d782ed1c7e9c34b2b9d597f8ececb9c"
+  "hash": "1846680eed8b9276b463792525338cbd47147bb5"
  },
  "himchistka-mebeli-chernyahovsk.html": {
   "date": "2026-11-12",
-  "hash": "27dd87cfd5e259219e182613be80c8a558f76bcb"
+  "hash": "4547418c1ef8e56ade563f6aab0cadc8d7496064"
  },
  "himchistka-mebeli-dlya-biznesa.html": {
   "date": "2026-11-12",
-  "hash": "7b6dc29d049bc56467c1efc4d65a0d38ce45c727"
+  "hash": "cb1a4d7673b40c9ef10b139ce297c867700799a7"
  },
  "himchistka-mebeli-gurevsk.html": {
   "date": "2026-11-12",
-  "hash": "9ddb8f7343cde274feabfa1f0559e5c3f5c03cd2"
+  "hash": "e05b1283e24f826d7f65c4d5986a6e081c58c393"
  },
  "himchistka-mebeli-gusev.html": {
   "date": "2026-11-12",
-  "hash": "333c2da97707415973796d1d71a2fb6a06b0149f"
+  "hash": "152ca90e3f3c4759bc287e97faecf78dbbee1df1"
  },
  "himchistka-mebeli-pionerskiy.html": {
   "date": "2026-11-12",
-  "hash": "e652d8b4f6a3e768a0cd9a12adea881447bf82da"
+  "hash": "0cf9ffa1fa6d24c01617d440e305adc53a2eda48"
  },
  "himchistka-mebeli-polessk.html": {
   "date": "2026-11-12",
-  "hash": "5829a660e8c6536c7c4dee5744b463e788d2cb9a"
+  "hash": "9a384a5d644a3884ac13e2002a115eb90986df9d"
  },
  "himchistka-mebeli-sovetsk.html": {
   "date": "2026-11-12",
-  "hash": "476bb9054181ae78604424fcc422b41f391f8817"
+  "hash": "5a136b3cf3677e9810d3d768e783a7fb02975451"
  },
  "himchistka-mebeli-svetlogorsk.html": {
   "date": "2026-11-12",
-  "hash": "dc8708a2d4afde4ef7c519ca0a1ddb487a599150"
+  "hash": "f4e6bf95282d24889ec5653c8101dda2d7689290"
  },
  "himchistka-mebeli-svetlyy.html": {
   "date": "2026-11-12",
-  "hash": "d34b3963be689151d3f900e7aac32a80a7e3a1b1"
+  "hash": "c29c8a3b1a1b1cd2e120dc8cac17d3b58821c476"
  },
  "himchistka-mebeli-v-kafe-i-restoranah.html": {
   "date": "2026-11-12",
-  "hash": "a226926fbd68d8ade0c3352d96af3a5d72445220"
+  "hash": "a299f1ad34872ba232b85bd61bae44179214c935"
  },
  "himchistka-mebeli-yantarnyy.html": {
   "date": "2026-11-12",
-  "hash": "92d50cfc9425cdda667bf7a112f39f1e7492634c"
+  "hash": "6bfe34bdcfc07a821e29996557e919bf459df3fd"
  },
  "himchistka-mebeli-zelenogradsk.html": {
   "date": "2026-11-12",
-  "hash": "1be7d408ceca59dd7ac0391ae8ae821f28ac00a3"
+  "hash": "4c08cc2a3d40c12b1d7e680916d781f8cbf1472d"
  },
  "himchistka-ofisnoy-mebeli.html": {
   "date": "2026-11-12",
-  "hash": "818511ea7c16a3f38827a80b02c99d759a1c349f"
+  "hash": "cb6f9420c6823331ad5f9c071acdbac0c42e7c85"
  },
  "himchistka-podushek.html": {
   "date": "2026-11-12",
-  "hash": "35b477c015359549a8d00fe9c9d83df5f2fdff60"
+  "hash": "6436c1d4f5513866deec270601e633601008993d"
  },
  "himchistka-pufika.html": {
   "date": "2026-11-12",
-  "hash": "8268bdf537e072dbc31a5a58498b5a023a603dbb"
+  "hash": "001eb81d64812e673ff651d06a1fa9962376436a"
  },
  "himchistka-shtor.html": {
   "date": "2026-11-12",
-  "hash": "df41e653e22f2c886b4693b5b709bcb2e78d23a6"
+  "hash": "dc3bdd8d27b981e3a2ed42c84f202acee8129f5f"
  },
  "himchistka-stulev.html": {
   "date": "2026-11-12",
-  "hash": "43e8e457935e998a5dfb53f67521da7509b0608a"
+  "hash": "079eee3c1c0d2ec05a24d50e2507da2ad8b117bd"
  },
  "himchistka-uglovogo-divana.html": {
   "date": "2026-11-12",
-  "hash": "c0b04590e61be8674c43a64f29eb513235f1f393"
+  "hash": "9918b8a9df976a617b4be57c21d871efa4a5b095"
  },
  "index.html": {
   "date": "2026-11-12",
-  "hash": "23fd1dbdd94d436a8904ebe2b0b10abb6b8194a2"
+  "hash": "7e5d1a0dc70e97f047d4620a2bef32ab64b3b3a6"
  },
  "kak-pochistit-divan-v-domashnih-usloviyah.html": {
   "date": "2026-11-12",
-  "hash": "2521322eeb6cbbf40b73aebdefb0bbbdd39610f4"
+  "hash": "3194de02f6dc21c5c2d3b4956b8fce8078e500aa"
  },
  "kak-ubrat-zapah-koshachej-mochi.html": {
   "date": "2026-11-12",
-  "hash": "12aed70865eacc35f5db3683c024724f2db32add"
+  "hash": "db055e461493ca3453e24b38f0d2eaad5c275254"
  },
  "kak-ubrat-zapah-mochi-s-divana.html": {
   "date": "2026-11-12",
-  "hash": "84e003942bde3a3c2e7afb28e6d5cc6a465d20be"
+  "hash": "105197555d1c1893f40e614637bd50f5e13c9d22"
  },
  "karta-sajta.html": {
-  "date": "2026-11-10",
-  "hash": "78ab76c6265db858084fced2febc2561a5e8926a"
+  "date": "2026-11-12",
+  "hash": "d4d13c78994f56f0c09461e175afa2d55225b4c3"
  },
  "kontakty.html": {
-  "date": "2026-11-10",
-  "hash": "df8b557edc571d018ed63dab1c1096cb8e67d707"
+  "date": "2026-11-12",
+  "hash": "f9972c4e3f49399bacc82ba86b621d1dff6c4210"
  },
  "o-nas.html": {
-  "date": "2026-11-10",
-  "hash": "de6faf1899ba50fb196caf0c467974b40e90259a"
+  "date": "2026-11-12",
+  "hash": "b045a3a13c8bf5841384e42beb85eb11a61c7582"
  },
  "otzyvy.html": {
-  "date": "2026-11-10",
-  "hash": "ea26efaa972411f734705af0b88a1679733d2df2"
+  "date": "2026-11-12",
+  "hash": "0cb655967be5e5f2504ca7569d1145f4083abb38"
  },
  "politika-konfidencialnosti.html": {
-  "date": "2026-11-10",
-  "hash": "f616f9494816b6ba5634f441461b2b90d51631ac"
+  "date": "2026-11-12",
+  "hash": "1a780b857279031e0ac034b389098ca4ae76cf6f"
  },
  "soglasie-na-obrabotku-personalnyh-dannyh.html": {
-  "date": "2026-11-10",
-  "hash": "322d1b37849e7360f8010a4fd07c472a36fc9b61"
+  "date": "2026-11-12",
+  "hash": "f1d3404d68ec9758ed8bea7acef54537b5a8f633"
  },
  "stati.html": {
-  "date": "2026-11-10",
-  "hash": "8b476f1348f6fd166a676f029a45521392442419"
+  "date": "2026-11-12",
+  "hash": "f8f3596efaa4beadef499250f309fe9b1e35bd0d"
  },
  "suhaya-himchistka-mebeli.html": {
   "date": "2026-11-12",
-  "hash": "5f3bea2a3483b625b4d7fbf0b8874d3e643d8762"
+  "hash": "e33f1ae81e7f501e4c535969ddb37c55af17cc50"
  },
  "udalenie-nepriyatnogo-zapaha-s-mebeli.html": {
   "date": "2026-11-12",
-  "hash": "aa13cd1c77fd5956bb06f51021c371b96995abff"
+  "hash": "486e53590d1c0b88a9db1c7059fa3200a0d7fffb"
  },
  "uslugi.html": {
-  "date": "2026-11-10",
-  "hash": "ba16f21c7ad8d2b6db3c884eab9c2a6ed7bada64"
+  "date": "2026-11-12",
+  "hash": "3d30c5d12cad4247b2178eaad082c5e610f920f1"
  },
  "voprosy-i-otvety.html": {
-  "date": "2026-11-10",
-  "hash": "672265ce52f25ddfd49ad7016f673dae45126310"
+  "date": "2026-11-12",
+  "hash": "98671a9ff19b0ccaa760511f543d5839ed848f6b"
  },
  "vyvedenie-pyaten-i-zapahov.html": {
   "date": "2026-11-12",
-  "hash": "117bfd6c25dfa8161131bb0b31032d134a32e92b"
+  "hash": "d26404f49650c01a8f4fc1a4204315de308c1330"
  },
  "vyvedenie-zapaha-koshki.html": {
   "date": "2026-11-12",
-  "hash": "1313fa6fb044da069e7dc7f65886d0a5197e035a"
+  "hash": "46e03bfa3581031538aaaa56f185ee74fec6dda6"
  },
  "vyvedenie-zapaha-mochi.html": {
   "date": "2026-11-12",
-  "hash": "ba60da65ee89f61ac5f14ac784b8cf5638db1938"
+  "hash": "e50ef7934b0888274cd20a84d15679c692150341"
  },
  "vyvedenie-zapaha-sigaret.html": {
   "date": "2026-11-12",
-  "hash": "3dcd41c125bf00bb26be820f90c9c8e645bfa9b2"
+  "hash": "129238b023b8799d160b8cf4df5a1c60a4641ea7"
  },
  "vyvedenie-zapaha-sobaki.html": {
   "date": "2026-11-12",
-  "hash": "c288c3964ee9494c8ff622c6fd5ad5990c373d90"
+  "hash": "97a312d81c62cdc96b344c32b8fe13cbfff4bfb1"
  },
  "vyvedenie-zapaha-syrosti-i-pleseni.html": {
   "date": "2026-11-12",
-  "hash": "a48855cf5936ab503c469f844703e08020c4be4e"
+  "hash": "a8406097a0661f8756a6fd750eb463c991c945bc"
  }
 }

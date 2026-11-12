@@ -320,7 +320,7 @@
   }
   bindTel(document);
 
-  // Клики по телефону и мессенджерам — цели в Метрике и события в GA4
+  // Клики по телефону и мессенджерам — цели в Метрике
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
     if (!a) return;
@@ -363,7 +363,7 @@
     update();
   });
   // ===================================================================
-  // UTM-метки, баннер cookie и счётчики (Яндекс Метрика, Google Analytics 4)
+  // UTM-метки, баннер cookie и счётчики (Яндекс Метрика)
   // Номера счётчиков задаются в generate.py (ANALYTICS) → window.SITE_ANALYTICS.
   // Счётчики загружаются только после «Принять» в баннере.
   // ===================================================================
@@ -410,7 +410,7 @@
     box.setAttribute('role', 'dialog');
     box.setAttribute('aria-label', 'Файлы cookie');
     box.innerHTML =
-      '<p>Мы используем файлы cookie и сервисы аналитики (Яндекс Метрика, Google Analytics), чтобы сайт работал лучше. ' +
+      '<p>Мы используем файлы cookie и сервисы аналитики (Яндекс Метрика), чтобы сайт работал лучше. ' +
       'Подробнее — в <a href="politika-konfidencialnosti#cookies">политике конфиденциальности</a>.</p>' +
       '<div class="cookie-actions"><button type="button" class="btn btn-primary btn-sm" data-cookie="all">Принять</button>' +
       '<button type="button" class="btn btn-ghost btn-sm" data-cookie="necessary">Только необходимые</button></div>';
