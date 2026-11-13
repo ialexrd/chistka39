@@ -690,9 +690,27 @@ body.page-home{ background: #fff linear-gradient(#eef1f5, #eef1f5) no-repeat top
 .pc-list{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; }
 .pc-row{ background: #f3f5f8; border-radius: 14px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 15px; }
 .pc-row b{ white-space: nowrap; color: var(--color-primary); font-size: 16px; }
+table.pc-list{ display: block; width: 100%; border-collapse: separate; }
+table.pc-list tbody{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; }
+table.pc-list th{ padding: 0; text-align: left; font-weight: 400; }
+table.pc-list td{ padding: 0; white-space: nowrap; color: var(--color-primary); font-size: 16px; font-weight: 700; }
+/* «Коротко»: факты об услуге под первым экраном */
+.qa-facts{ margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; }
+.qa-fact{ background: #f3f5f8; border-radius: 14px; padding: 16px 20px; }
+.qa-fact dt{ font-size: 13px; font-weight: 600; color: var(--color-ink-soft); margin-bottom: 4px; }
+.qa-fact dd{ margin: 0; font-size: 15.5px; font-weight: 600; line-height: 1.4; }
+.qa-note{ display: block; margin-top: 2px; font-size: 13px; font-weight: 400; color: var(--color-ink-soft); }
+.qa-facts:has(> :nth-child(3):last-child){ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1100px){ .qa-facts, .qa-facts:has(> :nth-child(3):last-child){ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px){
+  .qa-facts, .qa-facts:has(> :nth-child(3):last-child){ grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .qa-fact{ padding: 12px 14px; }
+  .qa-fact:nth-child(n+3), .qa-facts:has(> :nth-child(3):last-child) > .qa-fact:first-child{ grid-column: 1 / -1; }
+  .qa-fact dd{ font-size: 14.5px; }
+}
 @media (min-width: 1600px){ .pc-grid, .pc-list{ zoom: 1.1; } }
 @media (max-width: 1100px){ .pc-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 760px){ .pc-list{ grid-template-columns: 1fr; } }
+@media (max-width: 760px){ .pc-list, table.pc-list tbody{ grid-template-columns: 1fr; } }
 @media (max-width: 640px){ .pc-grid{ grid-template-columns: 1fr; } .hero-service .hero-banner{ min-height: 0; } .pc-row{ padding: 14px 16px; font-size: 14px; } }
 @media (min-width: 1101px){ .pc-grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); } .pc-grid-3 .pc-media{ aspect-ratio: 16 / 10; } }
 @media (max-width: 640px){

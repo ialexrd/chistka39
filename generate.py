@@ -1563,10 +1563,11 @@ def faq_schema(faq_list):
 def local_business_schema():
     return {
         "@context": "https://schema.org",
-        "@type": "LocalBusiness",
+        "@type": "DryCleaningOrLaundry",
         "@id": SITE["domain"] + "/#business",
         "name": SITE["name"],
         "alternateName": SITE["short_name"],
+        "description": "Выездная химчистка мягкой мебели на дому в Калининграде и области: диваны, матрасы, кресла, стулья, ковролин; выведение пятен и запахов.",
         "image": url("assets/img/og-image.jpg"),
         "telephone": SITE["phone_tel"],
         "email": SITE["email"],
@@ -1613,14 +1614,14 @@ def service_schema(s):
         "serviceType": s["h1"],
         "name": s["h1"],
         "description": s["description"],
-        "provider": {"@type": "LocalBusiness", "name": SITE["name"], "telephone": SITE["phone_tel"]},
+        "provider": {"@id": SITE["domain"] + "/#business"},
         "areaServed": {"@type": "City", "name": s.get("area", SITE["city"])},
-        "offers": {
-            "@type": "Offer",
-            "priceCurrency": "RUB",
-            "price": s["price_from"],
-            "url": url(service_filename(s["slug"])),
-        },
+        "offers": [
+            {"@type": "Offer", "name": name, "url": url(service_filename(s["slug"])),
+             "priceCurrency": "RUB", "price": _price_number(price),
+             "priceSpecification": {"@type": "PriceSpecification", "minPrice": _price_number(price), "priceCurrency": "RUB"}}
+            for name, price in s["price_rows"] if _price_number(price) is not None
+        ],
     }
 
 def verification_meta():
@@ -2141,7 +2142,7 @@ def service_prices(s):
         type_cards = f'<div class="pc-grid{cols}">{"".join(cards)}</div>'
     type_names = {t[0].lower() for t in s.get("types") or []}
     rows = "".join(
-        f'<div class="pc-row"><span>{esc(n)}</span><b>{esc(pr)}</b></div>' for n, pr in s["price_rows"]
+        f'<tr class="pc-row"><th scope="row">{esc(n)}</th><td>{esc(pr)}</td></tr>' for n, pr in s["price_rows"]
         if n.lower() not in type_names)
     return f"""
 <section class="home-bento home-prices" id="ceny">
@@ -2153,12 +2154,97 @@ def service_prices(s):
         <p class="bento-sub">{esc(s["price_note"])}</p>
       </div>
       {type_cards}
-      <div class="pc-list">{rows}</div>
+      <table class="pc-list"><caption class="visually-hidden">Цены на {esc(s["acc"])}</caption><tbody>{rows}</tbody></table>
       {price_updated_line()}
     </div>
   </div>
 </section>
 """
+
+# Время сушки — только то, что уже написано на страницах услуг (FAQ, этапы, description).
+# Нет данных по услуге — в «Коротко» и FAQ про сушку не пишем.
+DRY_TIME = {
+    "divana": "3–5 часов", "uglovogo-divana": "от 4 часов", "kresla": "2–4 часа",
+    "matrasa": "3–4 часа", "pufika": "1,5–3 часа", "kovrolina": "2–4 часа", "shtor": "1–3 часа",
+    "kolyaski": "2–3 часа", "kuhonnogo-ugolka": "3–5 часов", "mebeli-dlya-biznesa": "3–5 часов",
+    "kozhanogo-divana": "30–60 минут", "krovati": "3–5 часов", "suhaya-himchistka": "1–2 часа",
+}
+SAFE_TEXT = "Сертифицированные и гипоаллергенные, безопасны для детей и животных"
+
+def dry_time(s):
+    return "3–5 часов" if s.get("category") == "geo" else DRY_TIME.get(s["slug"])
+
+def service_name(s):
+    """Название услуги в именительном падеже: «химчистка дивана», «выведение запаха мочи»."""
+    n = s["acc"].replace("сухую химчистку", "сухая химчистка").replace("химчистку", "химчистка")
+    return n if s.get("category") == "geo" else f"{n} в {SITE['city']}е"
+
+def first_price(s):
+    for name, price in s["price_rows"]:
+        if _price_number(price) is not None:
+            return name, price
+    return None, f'от {s["price_from"]} ₽'
+
+def visit_text(s):
+    return {"near": "В день обращения или на следующий день",
+            "resort": "В день обращения или на следующий день, в сезон лучше записаться заранее",
+            "far": "По записи, обычно в течение 1–3 дней"}.get(s.get("kind"), "В день обращения, по Калининграду и области")
+
+def lc_first(t):
+    """Строчная первая буква, но аббревиатуры (УФ, П-образный) не трогаем."""
+    return t[0].lower() + t[1:] if len(t) > 1 and t[1].islower() else t
+
+def quick_facts(s):
+    """(название, значение, пояснение мелким шрифтом)."""
+    name, price = first_price(s)
+    facts = [("Цена", price, name or "")]
+    if dry_time(s):
+        facts.append(("Сушка", dry_time(s), ""))
+    facts += [("Выезд мастера", visit_text(s), ""), ("Средства", SAFE_TEXT, "")]
+    return facts
+
+def quick_answer_block(s):
+    """«Коротко»: факты об услуге одним блоком сразу под первым экраном,
+    чтобы их легко было прочитать и процитировать (в том числе нейроответам поиска)."""
+    items = "".join(
+        f'<div class="qa-fact"><dt>{esc(k)}</dt><dd>{esc(v)}'
+        + (f'<span class="qa-note">{esc(n)}</span>' if n else "") + '</dd></div>'
+        for k, v, n in quick_facts(s))
+    nm = service_name(s)
+    return f"""
+<section class="home-bento home-quick">
+  <div class="container">
+    <div class="bento-panel">
+      <div class="bento-head">
+        <span class="bento-label">Коротко</span>
+        <h2>{esc(nm[0].upper() + nm[1:])}: главное</h2>
+      </div>
+      <dl class="qa-facts">{items}</dl>
+    </div>
+  </div>
+</section>
+"""
+
+def service_faq(s):
+    """FAQ страницы услуги: свои вопросы + недостающие базовые (цена, сушка, безопасность).
+    На странице «Вопросы и ответы» остаются только свои вопросы услуг, без повторов."""
+    base = list(s["faq"])
+    text = " ".join(q.lower() for q, _ in base)
+    extra_top, extra_end = [], []
+    if not any(w in text for w in ("стоит", "цена", "стоимост")):
+        rows = [(n, p) for n, p in s["price_rows"] if _price_number(p) is not None][:3]
+        listed = "; ".join(f"{lc_first(n)} — {p}" for n, p in rows)
+        extra_top.append((f"Сколько стоит {service_name(s)}?",
+            f"{listed[0].upper() + listed[1:]}. Точную сумму мастер называет на месте до начала работ, "
+            "а по фото в мессенджере посчитаем заранее."))
+    if dry_time(s) and "сох" not in text and "суш" not in text:
+        extra_end.append(("Сколько сохнет после чистки?",
+            f"Обычно {dry_time(s)}, зависит от ткани и влажности воздуха. Сушку ускоряем профессиональными турбинами."))
+    if "безопас" not in text:
+        extra_end.append(("Безопасна ли чистка для детей и животных?",
+            "Да. Работаем сертифицированными гипоаллергенными средствами, после чистки они удаляются из обивки "
+            "вместе с грязью. Пока мебель сохнет, детей и животных лучше на неё не пускать."))
+    return extra_top + base + extra_end
 
 B2B_SLUGS = ("ofisnoy-mebeli", "mebeli-dlya-biznesa", "kafe-restoranov")
 
@@ -2334,6 +2420,7 @@ def render_service_page(s):
 """
 
     h = home_parts()
+    page_faq = service_faq(s)
     faq_new = f"""
 <section class="home-bento home-faq">
   <div class="container">
@@ -2342,7 +2429,7 @@ def render_service_page(s):
         <span class="bento-label">Вопросы и ответы</span>
         <h2>Частые вопросы про {esc(s["acc"])}</h2>
       </div>
-      {faq_block(s["faq"])}
+      {faq_block(page_faq)}
     </div>
   </div>
 </section>
@@ -2374,6 +2461,7 @@ def render_service_page(s):
         services_html = ""
     body = (
         service_hero(s, breadcrumbs)
+        + quick_answer_block(s)
         + (b2b_docs_block() if s["slug"] in B2B_SLUGS else "")
         + prices_html
         + ("" if s["slug"] in B2B_SLUGS else quiz_block(s["slug"], bento=True))
@@ -2385,7 +2473,8 @@ def render_service_page(s):
         service_schema(s),
         webpage_schema(path, s["h1"]),
         breadcrumb_schema(breadcrumbs),
-        faq_schema(s["faq"]),
+        faq_schema(page_faq),
+        local_business_schema(),
     ]
     return path, page_shell(path, s["title"], s["description"], body, schemas)
 
