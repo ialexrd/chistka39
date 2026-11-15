@@ -1,0 +1,17 @@
+# Проверка приёма заявок на живом сайте (запускается вручную или пушем в ветку claude/*)
+name: Проверка заявок
+on:
+  workflow_dispatch:
+  push:
+    branches: ['claude/**']
+    paths: ['.github/workflows/lead-check.yml']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "--- GET lead.php"; curl -sS -i https://chistka-39.ru/lead.php | head -30; echo
+          echo "--- GET lead-config.php (должно быть 403)"; curl -sS -o /dev/null -w '%{http_code}\n' https://chistka-39.ru/lead-config.php
+          echo "--- POST тестовая заявка"
+          curl -sS -i -X POST https://chistka-39.ru/lead.php -H 'Origin: https://chistka-39.ru' -H 'Content-Type: application/json' \
+            -d '{"form":"Тестовая заявка (проверка)","name":"Проверка","phone":"+7 (900) 000-00-00","comment":"Тест приёма заявок, отвечать не нужно"}' | head -30
