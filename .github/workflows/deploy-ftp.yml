@@ -2,6 +2,9 @@
 # Нужны секреты репозитория: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD,
 # FTP_DIR (папка сайта на хостинге, например chistka-39.ru/public_html/).
 # Пока секретов нет, загрузка пропускается.
+# Заявки с сайта (site/lead.php → Telegram): секреты TG_BOT_TOKEN и TG_CHAT_ID
+# (несколько chat_id через запятую), по желанию LEAD_EMAIL — запасной адрес почты.
+# Из них перед загрузкой пишется site/lead-config.php (в git его нет).
 name: Загрузка на хостинг
 
 on:
@@ -24,6 +27,24 @@ jobs:
         run: echo "Добавьте FTP_SERVER, FTP_USERNAME, FTP_PASSWORD, FTP_DIR в Settings → Secrets → Actions"
       - uses: actions/checkout@v4
         if: env.FTP_SERVER != ''
+      - name: Настройки приёма заявок (lead-config.php из секретов)
+        if: env.FTP_SERVER != ''
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          LEAD_EMAIL: ${{ secrets.LEAD_EMAIL }}
+        run: |
+          python3 - <<'PY'
+          import os
+          def q(v):
+              return "'" + v.strip().replace("\\", "\\\\").replace("'", "\\'") + "'"
+          cfg = {"tg_token": os.environ.get("TG_BOT_TOKEN", ""),
+                 "tg_chat": os.environ.get("TG_CHAT_ID", ""),
+                 "email": os.environ.get("LEAD_EMAIL", "")}
+          body = ",\n".join(f"    {q(k)} => {q(v)}" for k, v in cfg.items())
+          open("site/lead-config.php", "w").write("<?php\nreturn [\n" + body + "\n];\n")
+          print("Telegram:", "задан" if cfg["tg_token"] else "НЕ задан (добавьте TG_BOT_TOKEN и TG_CHAT_ID)")
+          PY
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         if: env.FTP_SERVER != ''
         with:
