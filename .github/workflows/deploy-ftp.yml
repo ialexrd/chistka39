@@ -3,7 +3,8 @@
 # FTP_DIR (папка сайта на хостинге, например chistka-39.ru/public_html/).
 # Пока секретов нет, загрузка пропускается.
 # Заявки с сайта (site/lead.php → Telegram): секреты TG_BOT_TOKEN и TG_CHAT_ID
-# (несколько chat_id через запятую), по желанию LEAD_EMAIL — запасной адрес почты.
+# (несколько chat_id через запятую), TG_RELAY_URL — адрес пересылки (tools/telegram-relay.gs:
+# с хостинга в РФ api.telegram.org недоступен), по желанию LEAD_EMAIL — запасной адрес почты.
 # Из них перед загрузкой пишется site/lead-config.php (в git его нет).
 name: Загрузка на хостинг
 
@@ -33,6 +34,7 @@ jobs:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           LEAD_EMAIL: ${{ secrets.LEAD_EMAIL }}
+          TG_RELAY_URL: ${{ secrets.TG_RELAY_URL }}
         run: |
           python3 - <<'PY'
           import os
@@ -40,6 +42,7 @@ jobs:
               return "'" + v.strip().replace("\\", "\\\\").replace("'", "\\'") + "'"
           cfg = {"tg_token": os.environ.get("TG_BOT_TOKEN", ""),
                  "tg_chat": os.environ.get("TG_CHAT_ID", ""),
+                 "tg_relay": os.environ.get("TG_RELAY_URL", ""),
                  "email": os.environ.get("LEAD_EMAIL", "")}
           body = ",\n".join(f"    {q(k)} => {q(v)}" for k, v in cfg.items())
           open("site/lead-config.php", "w").write("<?php\nreturn [\n" + body + "\n];\n")

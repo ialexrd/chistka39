@@ -91,15 +91,20 @@ $row = [date('Y-m-d H:i:s'), $f['form'], $f['name'], $f['phone'], $f['service'],
 $fh = @fopen($dataDir . '/leads.csv', 'a');
 if ($fh) { flock($fh, LOCK_EX); fputcsv($fh, $row, ';'); flock($fh, LOCK_UN); fclose($fh); }
 
-function tg_send($token, $chat, $text) {
-    $url = 'https://api.telegram.org/bot' . $token . '/sendMessage';
-    $body = http_build_query(['chat_id' => $chat, 'text' => $text, 'disable_web_page_preview' => 'true']);
+// С хостинга в РФ api.telegram.org недоступен, поэтому сообщение идёт через
+// пересылку (Google Apps Script, tools/telegram-relay.gs), если задан tg_relay.
+function tg_send($token, $chat, $text, $relay = '') {
+    $url = $relay !== '' ? $relay : 'https://api.telegram.org/bot' . $token . '/sendMessage';
+    $fields = ['chat_id' => $chat, 'text' => $text, 'disable_web_page_preview' => 'true'];
+    if ($relay !== '') $fields['token'] = $token;
+    $body = http_build_query($fields);
     $err = '';
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_POST => true, CURLOPT_POSTFIELDS => $body, CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 10,
+            CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 20,
+            CURLOPT_FOLLOWLOCATION => true, CURLOPT_MAXREDIRS => 3,
         ]);
         $res = curl_exec($ch);
         if ($res === false) $err = 'curl ' . curl_errno($ch) . ': ' . curl_error($ch);
@@ -126,7 +131,7 @@ if ($token === '') $errors[] = 'нет TG_BOT_TOKEN';
 elseif (!$chats) $errors[] = 'нет TG_CHAT_ID';
 else {
     foreach ($chats as $chat) {
-        $e = tg_send($token, $chat, $text);
+        $e = tg_send($token, $chat, $text, trim($cfg['tg_relay'] ?? ''));
         if ($e === '') $sent = true; else $errors[] = $e;
     }
 }
