@@ -86,8 +86,11 @@
 
   // Отправка заявок: POST на /lead.php (основной хостинг) → Telegram-бот.
   // Если сервер не ответил (например, сайт открыт с GitHub Pages), показываем
-  // кнопку WhatsApp с готовым текстом заявки, чтобы клиент не потерялся.
-  var WHATSAPP_NUMBER = '79323039722';
+  // кнопки Telegram и MAX; текст заявки копируется, клиенту остаётся вставить.
+  var FALLBACK_CHATS = [
+    ['Telegram', 'https://t.me/+79323039722'],
+    ['MAX', 'https://max.ru/u/f9LHodD0cOJ1WI7v2AV8Dr6rBF7oEaKvQdY5tPAMSR5phBrhhIfH0vl_Fx8']
+  ];
   var LEAD_LABELS = { service: 'Услуга', details: 'Что чистим', price: 'Предварительно', name: 'Имя', phone: 'Телефон', comment: 'Комментарий', source: 'Источник' };
 
   function sendLead(data, successBox, form) {
@@ -109,11 +112,17 @@
       } else {
         var lines = [data.form];
         Object.keys(LEAD_LABELS).forEach(function (k) { if (data[k]) lines.push(LEAD_LABELS[k] + ': ' + data[k]); });
-        successBox.innerHTML = 'Не получилось отправить заявку. Позвоните нам или отправьте её в WhatsApp: ' +
-          '<a class="btn btn-primary btn-block" target="_blank" rel="noopener" href="https://wa.me/' + WHATSAPP_NUMBER +
-          '?text=' + encodeURIComponent(lines.join('\n')) + '">Отправить в WhatsApp</a>';
-        var wa = successBox.querySelector('a');
-        if (wa) wa.addEventListener('click', function () { goal('lead_form', { form: data.form, via: 'whatsapp' }); });
+        var text = lines.join('\n');
+        successBox.innerHTML = 'Не получилось отправить заявку. Позвоните нам или напишите в мессенджер — текст заявки скопируем, останется вставить его в чат:' +
+          FALLBACK_CHATS.map(function (c) {
+            return '<a class="btn btn-primary btn-block" style="margin-top:10px" target="_blank" rel="noopener" href="' + c[1] + '">Написать в ' + c[0] + '</a>';
+          }).join('');
+        successBox.querySelectorAll('a').forEach(function (a) {
+          a.addEventListener('click', function () {
+            try { if (navigator.clipboard) navigator.clipboard.writeText(text); } catch (err) {}
+            goal('lead_form', { form: data.form, via: 'messenger' });
+          });
+        });
       }
       typograf(successBox);
     }

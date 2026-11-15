@@ -94,6 +94,7 @@ if ($fh) { flock($fh, LOCK_EX); fputcsv($fh, $row, ';'); flock($fh, LOCK_UN); fc
 function tg_send($token, $chat, $text) {
     $url = 'https://api.telegram.org/bot' . $token . '/sendMessage';
     $body = http_build_query(['chat_id' => $chat, 'text' => $text, 'disable_web_page_preview' => 'true']);
+    $err = '';
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
         curl_setopt_array($ch, [
@@ -101,6 +102,7 @@ function tg_send($token, $chat, $text) {
             CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 10,
         ]);
         $res = curl_exec($ch);
+        if ($res === false) $err = 'curl ' . curl_errno($ch) . ': ' . curl_error($ch);
         curl_close($ch);
     } else {
         $ctx = stream_context_create(['http' => [
@@ -108,16 +110,24 @@ function tg_send($token, $chat, $text) {
             'content' => $body, 'timeout' => 10, 'ignore_errors' => true,
         ]]);
         $res = @file_get_contents($url, false, $ctx);
+        if ($res === false) $err = 'http: ' . (error_get_last()['message'] ?? 'нет ответа');
     }
     $j = json_decode((string)$res, true);
-    return is_array($j) && !empty($j['ok']);
+    if (is_array($j) && !empty($j['ok'])) return '';
+    if ($err === '') $err = 'telegram: ' . (is_array($j) ? ($j['description'] ?? 'ok=false') : mb_substr((string)$res, 0, 120, 'UTF-8'));
+    return $err;
 }
 
 $sent = false;
-$token = $cfg['tg_token'] ?? '';
-if ($token !== '') {
-    foreach (preg_split('/[\s,;]+/', (string)($cfg['tg_chat'] ?? ''), -1, PREG_SPLIT_NO_EMPTY) as $chat) {
-        if (tg_send($token, $chat, $text)) $sent = true;
+$errors = [];
+$token = trim($cfg['tg_token'] ?? '');
+$chats = preg_split('/[\s,;]+/', (string)($cfg['tg_chat'] ?? ''), -1, PREG_SPLIT_NO_EMPTY);
+if ($token === '') $errors[] = 'нет TG_BOT_TOKEN';
+elseif (!$chats) $errors[] = 'нет TG_CHAT_ID';
+else {
+    foreach ($chats as $chat) {
+        $e = tg_send($token, $chat, $text);
+        if ($e === '') $sent = true; else $errors[] = $e;
     }
 }
 
@@ -126,8 +136,10 @@ $email = $cfg['email'] ?? '';
 if ($email !== '' && (!$sent || !empty($cfg['email_always']))) {
     $subject = '=?UTF-8?B?' . base64_encode('Заявка с сайта chistka-39.ru') . '?=';
     $headers = "Content-Type: text/plain; charset=utf-8\r\nFrom: chistka-39.ru <noreply@chistka-39.ru>";
-    if (@mail($email, $subject, $text, $headers)) $sent = true;
+    if (@mail($email, $subject, $text, $headers)) $sent = true; else $errors[] = 'mail не ушло';
 }
 
-if (!$sent) reply(false, 'send', 502);
+if ($token !== '') $errors = str_replace($token, '***', $errors);
+if ($errors) @file_put_contents($dataDir . '/errors.log', date('Y-m-d H:i:s') . ' ' . implode(' | ', $errors) . "\n", FILE_APPEND | LOCK_EX);
+if (!$sent) reply(false, 'send: ' . implode(' | ', $errors), 502);
 reply(true);
