@@ -46,7 +46,7 @@ jobs:
                  "email": os.environ.get("LEAD_EMAIL", "")}
           body = ",\n".join(f"    {q(k)} => {q(v)}" for k, v in cfg.items())
           open("site/lead-config.php", "w").write("<?php\nreturn [\n" + body + "\n];\n")
-          print("Telegram:", "задан" if cfg["tg_token"] else "НЕ задан (добавьте TG_BOT_TOKEN и TG_CHAT_ID)")
+          print("Заявки, заданы:", ", ".join(k for k, v in cfg.items() if v.strip()) or "ничего", "| пусто:", ", ".join(k for k, v in cfg.items() if not v.strip()) or "—")
           PY
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         if: env.FTP_SERVER != ''
