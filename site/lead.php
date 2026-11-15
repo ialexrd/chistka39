@@ -10,7 +10,9 @@ header('Cache-Control: no-store');
 
 function reply($ok, $error = '', $code = 200) {
     http_response_code($code);
-    echo json_encode($ok ? ['ok' => true] : ['ok' => false, 'error' => $error], JSON_UNESCAPED_UNICODE);
+    $out = $ok ? ['ok' => true] : ['ok' => false, 'error' => $error];
+    if ($ok && $error !== '') $out['warn'] = $error; // ушло запасным путём: причина сбоя основного
+    echo json_encode($out, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -108,6 +110,7 @@ function tg_send($token, $chat, $text, $relay = '') {
         ]);
         $res = curl_exec($ch);
         if ($res === false) $err = 'curl ' . curl_errno($ch) . ': ' . curl_error($ch);
+        $info = 'HTTP ' . curl_getinfo($ch, CURLINFO_HTTP_CODE) . ' ' . parse_url((string)curl_getinfo($ch, CURLINFO_EFFECTIVE_URL), PHP_URL_HOST);
         curl_close($ch);
     } else {
         $ctx = stream_context_create(['http' => [
@@ -119,7 +122,7 @@ function tg_send($token, $chat, $text, $relay = '') {
     }
     $j = json_decode((string)$res, true);
     if (is_array($j) && !empty($j['ok'])) return '';
-    if ($err === '') $err = 'telegram: ' . (is_array($j) ? ($j['description'] ?? 'ok=false') : mb_substr((string)$res, 0, 120, 'UTF-8'));
+    if ($err === '') $err = 'telegram: ' . (is_array($j) ? ($j['description'] ?? 'ok=false') : ($info ?? '') . ' ' . mb_substr(trim(preg_replace('/\s+/', ' ', strip_tags((string)$res))), 0, 200, 'UTF-8'));
     return $err;
 }
 
@@ -147,4 +150,4 @@ if ($email !== '' && (!$sent || !empty($cfg['email_always']))) {
 if ($token !== '') $errors = str_replace($token, '***', $errors);
 if ($errors) @file_put_contents($dataDir . '/errors.log', date('Y-m-d H:i:s') . ' ' . implode(' | ', $errors) . "\n", FILE_APPEND | LOCK_EX);
 if (!$sent) reply(false, 'send: ' . implode(' | ', $errors), 502);
-reply(true);
+reply(true, implode(' | ', $errors));
