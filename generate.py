@@ -3265,6 +3265,48 @@ def render_404():
     return path, html.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, follow">')
 
 
+def render_spasibo():
+    """Страница после успешной отправки заявки (script.js переводит сюда). Не индексируется, нет в sitemap."""
+    path = "spasibo.html"
+    hero = f"""
+<section class="home-bento thanks">
+  <div class="container">
+    <div class="thanks-card">
+      <div class="thanks-check">{icon("check", 46)}</div>
+      <span class="eyebrow">{icon("mappin", 15)} Заявка отправлена</span>
+      <h1>Спасибо, заявка принята</h1>
+      <p class="thanks-lead">Менеджер перезвонит в ближайшее время, уточнит детали и назовёт стоимость. Работаем ежедневно с 9:00 до 21:00.</p>
+      <div class="thanks-cta">
+        <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary">{icon("phone", 18)} {esc(SITE["phone_display"])}</a>
+        <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="Значок MAX" width="24" height="24"> Max</a>
+        <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="Значок Telegram" width="24" height="24"> Telegram</a>
+      </div>
+      <p class="thanks-note">Если срочно, позвоните или напишите сами — ответим быстрее.</p>
+    </div>
+  </div>
+</section>
+"""
+    reviews = (home_parts()["reviews"]
+               .replace('<span class="bento-label">Отзывы</span>', '<span class="bento-label">Отзывы клиентов</span>')
+               .replace("<h2>Что говорят наши клиенты</h2>", "<h2>Клиенты довольны результатом. Вот что они пишут</h2>"))
+    steps = info_cards([
+        ("phone", "1. Звонок менеджера", "Уточним, какая мебель, ткань и пятна. Назовём стоимость до выезда мастера."),
+        ("clock", "2. Время приезда", "Договоримся о дне и часе. Работаем без выходных, по Калининграду и области."),
+        ("sofa", "3. Чистка на месте", "Мастер привозит оборудование и средства, от вас нужны розетка 220 В и доступ к воде. Мебель сохнет 3–5 часов."),
+    ])
+    links = """
+<div class="container thanks-links">
+  <a class="btn btn-ghost" href="index.html">На главную</a>
+  <a class="btn btn-ghost" href="ceny.html">Цены</a>
+  <a class="btn btn-ghost" href="akcii.html">Акции</a>
+  <a class="btn btn-ghost" href="otzyvy.html">Отзывы</a>
+</div>
+"""
+    body = hero + reviews + bento_panel("Что дальше", "Как пройдёт заказ", steps) + links
+    html = page_shell(path, f"Спасибо за заявку | {SITE['short_name']}", "Заявка на химчистку мебели принята, менеджер перезвонит в ближайшее время.", body)
+    return path, html.replace('<meta name="robots" content="index, follow">', '<meta name="robots" content="noindex, follow">')
+
+
 def render_karta():
     path = "karta-sajta.html"
     bc = [("Главная", "index.html"), ("Карта сайта", None)]
@@ -3604,7 +3646,7 @@ def main():
         p, c = render_article(a)
         write(p, c)
 
-    for renderer in (render_otzyvy, render_akcii, render_garantii, render_voprosy, render_geografiya, render_stati, render_karta, render_404):
+    for renderer in (render_otzyvy, render_akcii, render_garantii, render_voprosy, render_geografiya, render_stati, render_karta, render_404, render_spasibo):
         p, c = renderer()
         write(p, c)
 
@@ -3637,7 +3679,7 @@ def main():
             with open(fp, "w", encoding="utf-8") as f:
                 f.write(content)
     urls = "".join(
-        f"<url><loc>{url(p)}</loc><lastmod>{lastmod[p]['date']}</lastmod></url>" for p in all_paths if p != "404.html"
+        f"<url><loc>{url(p)}</loc><lastmod>{lastmod[p]['date']}</lastmod></url>" for p in all_paths if p not in ("404.html", "spasibo.html")
     )
     with open(os.path.join(OUT, INDEXNOW_KEY + ".txt"), "w", encoding="utf-8") as f:
         f.write(INDEXNOW_KEY)

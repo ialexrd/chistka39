@@ -106,7 +106,8 @@
       if (!successBox) return;
       successBox.classList.add('show');
       if (ok) {
-        goal('lead_form', { form: data.form });
+        // После успешной отправки — на страницу благодарности (сначала отдаём цель в Метрику)
+        goal('lead_form', { form: data.form }, function () { location.href = '/spasibo'; });
         successBox.textContent = 'Спасибо! Заявка принята, перезвоним в ближайшее время. Если срочно — позвоните нам.';
         if (form && form.hasAttribute('data-order-form')) form.reset();
       } else {
@@ -436,10 +437,16 @@
   var CFG = window.SITE_ANALYTICS || {};
   var analyticsOn = false;
 
-  function goal(name, params) {
-    if (!analyticsOn) return;
-    if (CFG.ym && window.ym) window.ym(+CFG.ym, 'reachGoal', name, params || {});
+  // cb (необязательно) вызывается после того, как Метрика приняла цель, но не позже чем через 1,2 с
+  function goal(name, params, cb) {
+    var called = false;
+    function fire() { if (!called && cb) { called = true; cb(); } }
+    if (!analyticsOn) { fire(); return; }
     if (CFG.ga && window.gtag) window.gtag('event', name, params || {});
+    if (CFG.ym && window.ym) {
+      window.ym(+CFG.ym, 'reachGoal', name, params || {}, fire);
+      setTimeout(fire, 1200);
+    } else fire();
   }
 
   // Сам код счётчиков стоит в <head> каждой страницы (generate.py → analytics_config)
