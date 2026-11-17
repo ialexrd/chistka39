@@ -27,7 +27,6 @@ SITE = {
     "tagline": "Выездная химчистка мягкой мебели и текстиля на дому и в офисе",
     "phone_display": "+7 (932) 303-97-22",
     "phone_tel": "+79323039722",
-    "whatsapp": "https://wa.me/79323039722",
     "email": "info@chistka-39.ru",
     # Адрес сайта без «/» на конце
     "domain": "https://chistka-39.ru",
@@ -99,7 +98,6 @@ def icon(name, size=24, cls=""):
     inner = {
         "check": '<path d="M4 12.5l4.5 4.5L20 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
         "phone": '<path d="M6 3h3l2 5-2.5 2A12 12 0 0014 16.5l2-2.5 5 2v3a2 2 0 01-2.2 2A17 17 0 014 5.2 2 2 0 016 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
-        "whatsapp": '<path d="M7 17l-3.2 1L5 15A8 8 0 1112 20a8 8 0 01-5-1.7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 9.3c0 3.7 3 6.7 6.7 6.7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
         "clock": '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3.2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
         "shield": '<path d="M12 3l7 3v5c0 5-3 8.5-7 10-4-1.5-7-5-7-10V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
         "drop": '<path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>',
@@ -1471,7 +1469,6 @@ def footer(current_path=""):
         <p>{esc(SITE["tagline"])}. Работаем по {esc(SITE["city"])} и области, выезд мастера в день обращения.</p>
         <div class="footer-social">
           <a href="{SITE["max"]}" target="_blank" rel="noopener" aria-label="Написать в MAX"><img src="{asset("assets/img/icon-max.png")}" alt="MAX" width="40" height="40" loading="lazy"></a>
-          <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" aria-label="Написать в WhatsApp"><img src="{asset("assets/img/icon-whatsapp.png")}" alt="WhatsApp" width="40" height="40" loading="lazy"></a>
           <a href="{SITE["telegram"]}" target="_blank" rel="noopener" aria-label="Написать в Telegram"><img src="{asset("assets/img/icon-telegram.png")}" alt="Telegram" width="40" height="40" loading="lazy"></a>
         </div>
       </div>
@@ -1498,7 +1495,8 @@ def footer(current_path=""):
       <div>
         <h4>Контакты</h4>
         <p>{icon("phone", 15)} <a href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a></p>
-        <p>{icon("whatsapp", 15)} <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener">Написать в WhatsApp</a></p>
+        <p class="footer-msg"><img src="{asset("assets/img/icon-max.png")}" alt="" width="16" height="16" loading="lazy"> <a href="{SITE["max"]}" target="_blank" rel="noopener">Написать в Max</a></p>
+        <p class="footer-msg"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="16" height="16" loading="lazy"> <a href="{SITE["telegram"]}" target="_blank" rel="noopener">Написать в Telegram</a></p>
         <p>{icon("clock", 15)} {esc(SITE["work_hours"])}</p>
         <p>{icon("mappin", 15)} {esc(SITE["address_text"])}</p>
         <a href="#zayavka" class="btn btn-green footer-order-btn" data-popup-order>Оставить заявку и получить скидку</a>
@@ -1523,7 +1521,8 @@ def sticky_cta(current_path):
 </div>"""
     return f"""<div class="sticky-cta">
   <a href="tel:{SITE["phone_tel"]}" class="btn btn-primary" data-track-call>{icon("phone", 16)} Позвонить</a>
-  <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" class="btn btn-accent">{icon("whatsapp", 16)} WhatsApp</a>
+  <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="Значок MAX" width="22" height="22"> Max</a>
+  <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="Значок Telegram" width="22" height="22"> Telegram</a>
 </div>"""
 
 def breadcrumbs_html(items):
@@ -1976,7 +1975,8 @@ def cta_banner(title_text="Готовы избавить мебель от пя�
   </div>
   <div class="hero-cta-row" style="margin:0">
     <a href="tel:{SITE["phone_tel"]}" class="btn btn-ghost" data-track-call>{icon("phone", 17)} {SITE["phone_display"]}</a>
-    <a href="{SITE["whatsapp"]}" target="_blank" rel="noopener" class="btn btn-accent">{icon("whatsapp", 17)} Написать в WhatsApp</a>
+    <a href="{SITE["max"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-max.png")}" alt="Значок MAX" width="24" height="24"> Max</a>
+    <a href="{SITE["telegram"]}" target="_blank" rel="noopener" class="btn btn-ghost btn-messenger"><img src="{asset("assets/img/icon-telegram.png")}" alt="Значок Telegram" width="24" height="24"> Telegram</a>
   </div>
 </div>
 """
@@ -2357,7 +2357,7 @@ def render_service_page(s):
       <h2>Цены на {esc(s["acc"])}</h2>
     </div>
     {price_table_block(s["price_rows"])}
-    <p class="price-note">{esc(s["price_note"])} Хотите узнать точную цену заранее — пришлите фото в WhatsApp, посчитаем стоимость до приезда мастера.</p>
+    <p class="price-note">{esc(s["price_note"])} Хотите узнать точную цену заранее — пришлите фото в Max или Telegram, посчитаем стоимость до приезда мастера.</p>
   </div>
 </section>
 """
@@ -2943,7 +2943,7 @@ def render_ceny():
     callout = f"""
 <div class="callout" style="margin-top:10px;">
   <strong>Нужна точная цена заранее?</strong>
-  Пришлите нам фото мебели в WhatsApp — рассчитаем стоимость до приезда мастера, без сюрпризов на месте.
+  Пришлите нам фото мебели в Max или Telegram — рассчитаем стоимость до приезда мастера, без сюрпризов на месте.
 </div>
 """
     body = (
@@ -2978,9 +2978,10 @@ def render_kontakty():
 </section>
 """
     info_cards = f"""
-<div class="grid grid-3">
+<div class="grid grid-4">
   <div class="card"><div class="service-icon">{icon("phone",22)}</div><h3>Телефон</h3><p><a href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a></p></div>
-  <div class="card"><div class="service-icon">{icon("whatsapp",22)}</div><h3>WhatsApp</h3><p><a href="{SITE["whatsapp"]}" target="_blank" rel="noopener">Написать сообщение</a></p></div>
+  <div class="card"><div class="service-icon"><img src="{asset("assets/img/icon-max.png")}" alt="" width="26" height="26"></div><h3>Max</h3><p><a href="{SITE["max"]}" target="_blank" rel="noopener">Написать в Max</a></p></div>
+  <div class="card"><div class="service-icon"><img src="{asset("assets/img/icon-telegram.png")}" alt="" width="26" height="26"></div><h3>Telegram</h3><p><a href="{SITE["telegram"]}" target="_blank" rel="noopener">Написать в Telegram</a></p></div>
   <div class="card"><div class="service-icon">{icon("clock",22)}</div><h3>Режим работы</h3><p>{esc(SITE["work_hours"])}</p></div>
 </div>
 """
@@ -3001,7 +3002,7 @@ def render_kontakty():
     return path, page_shell(
         path,
         "Контакты — химчистка мебели в Калининграде | " + SITE["short_name"],
-        "Телефон, WhatsApp и форма заявки для заказа выездной химчистки мебели в Калининграде. Работаем ежедневно, выезд в день обращения.",
+        "Телефон, Max, Telegram и форма заявки для заказа выездной химчистки мебели в Калининграде. Работаем ежедневно, выезд в день обращения.",
         body,
         schemas,
     )
@@ -3046,7 +3047,7 @@ POLICY_PURPOSES_TABLE = """
   <tr><th>Цель обработки</th><td>приём и обработка заявок на услуги химчистки, расчёт стоимости, согласование выезда мастера, заключение и исполнение договора оказания услуг</td></tr>
   <tr><th>Персональные данные</th><td>имя<br>номер телефона<br>адрес выезда мастера<br>сведения о мебели и загрязнениях, комментарий к заявке, фотографии (если Пользователь их отправил)<br>сведения об источнике перехода на веб-сайт (UTM-метки)</td></tr>
   <tr><th>Правовые основания</th><td>согласие субъекта персональных данных (п. 1 ч. 1 ст. 6 Закона о персональных данных)<br>заключение и исполнение договора, стороной которого является субъект персональных данных (п. 5 ч. 1 ст. 6 Закона о персональных данных)</td></tr>
-  <tr><th>Виды обработки персональных данных</th><td>Сбор, запись, систематизация, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, уничтожение и обезличивание персональных данных<br>Связь с Пользователем по телефону и через мессенджеры (WhatsApp, Telegram, MAX)</td></tr>
+  <tr><th>Виды обработки персональных данных</th><td>Сбор, запись, систематизация, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, уничтожение и обезличивание персональных данных<br>Связь с Пользователем по телефону и через мессенджеры (MAX, Telegram)</td></tr>
 </table></div>
 <div class="table-wrap"><table class="legal-table">
   <tr><th>Цель обработки</th><td>информирование Пользователя посредством отправки электронных писем</td></tr>
@@ -3234,8 +3235,8 @@ def render_raboty():
         videos = f"""<div class="bento-card work-video-empty">
           <div class="why-icon">{gicon("spark", 28)}</div>
           <h3>Скоро здесь появятся видео</h3>
-          <p>Снимаем процесс чистки на выездах. Пока видео не выложены, попросите мастера показать примеры похожих работ в WhatsApp или Telegram.</p>
-          <a class="info-card-link" href="{SITE["whatsapp"]}" target="_blank" rel="noopener">Написать в WhatsApp {icon("chevron", 15)}</a>
+          <p>Снимаем процесс чистки на выездах. Пока видео не выложены, попросите мастера показать примеры похожих работ в Max или Telegram.</p>
+          <a class="info-card-link" href="{SITE["max"]}" target="_blank" rel="noopener">Написать в Max {icon("chevron", 15)}</a>
         </div>"""
         vsub = ""
     more = info_cards([
@@ -3260,7 +3261,7 @@ def render_otzyvy():
     h = home_parts()
     grid = f'<div class="rv-grid rv-grid-all">{h["rev_cards"]}</div>'
     leave = info_cards([
-        ("sofa", "Оставьте отзыв", "Расскажите, как прошла чистка: это помогает другим выбрать мастера, а нам — работать лучше.", SITE["whatsapp"], "Написать отзыв в WhatsApp"),
+        ("sofa", "Оставьте отзыв", "Расскажите, как прошла чистка: это помогает другим выбрать мастера, а нам — работать лучше.", SITE["max"], "Написать отзыв в Max"),
         ("shield", "Что-то не понравилось?", "Напишите нам. Если результат не устроил, приедем и оценим ситуацию повторно.", "garantii.html", "Наши гарантии"),
         ("spark", "Скидка 10% на первый заказ", "Пройдите калькулятор стоимости и получите скидку на первую химчистку.", "index.html#kalkulyator", "Рассчитать стоимость"),
     ])

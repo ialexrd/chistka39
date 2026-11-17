@@ -3,7 +3,7 @@
 // Токен бота и chat_id лежат в lead-config.php — его пишет GitHub Actions
 // (deploy-ftp.yml) из секретов TG_BOT_TOKEN, TG_CHAT_ID, LEAD_EMAIL. В git его нет.
 // Ответ: {"ok":true} или {"ok":false,"error":"..."}; при ошибке скрипт на сайте
-// показывает кнопку WhatsApp с готовым текстом заявки.
+// показывает кнопки Telegram и MAX с готовым текстом заявки.
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');

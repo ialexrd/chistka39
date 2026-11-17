@@ -372,7 +372,6 @@
     if (!a) return;
     var href = a.getAttribute('href');
     if (/^tel:/.test(href)) goal('call_click');
-    else if (/wa\.me|whatsapp/i.test(href)) goal('whatsapp_click');
     else if (/t\.me|telegram|max\.ru/i.test(href)) goal('messenger_click');
   });
 
