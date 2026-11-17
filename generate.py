@@ -1295,6 +1295,7 @@ NAV_LINKS = [
     ("index.html", "Главная"),
     ("uslugi.html", "Услуги"),
     ("ceny.html", "Цены"),
+    ("nashi-raboty.html", "Наши работы"),
     ("otzyvy.html", "Отзывы"),
     ("o-nas.html", "О компании"),
     ("kontakty.html", "Контакты"),
@@ -1484,6 +1485,7 @@ def footer(current_path=""):
           <li><a href="uslugi.html">Все услуги</a></li>
           <li><a href="ceny.html">Цены</a></li>
           <li><a href="o-nas.html">О компании</a></li>
+          <li><a href="nashi-raboty.html">Наши работы</a></li>
           <li><a href="otzyvy.html">Отзывы</a></li>
           <li><a href="akcii.html">Акции</a></li>
           <li><a href="garantii.html">Гарантии</a></li>
@@ -2502,6 +2504,29 @@ REVIEWS = [
 
 REV_SIZES = [(1, 260), (2, 486), (3, 364), (4, 334), (5, 424), (6, 424)]
 
+# Пары фото «до/после»: assets/img/himchistka-mebeli-do-i-posle-<N>-do/posle.(jpg|webp), N с 1
+BA_NAMES = ["Угловой диван", "Матрас", "Детский диванчик", "Диван", "Диван", "Тахта", "Диван-книжка", "Детский матрас"]
+
+def ba_card(i, n, caption=None):
+    return f"""
+        <figure class="ba-card">
+          <div class="ba" style="--pos:50%">
+            <picture><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.jpg")}" alt="{esc(n)} после химчистки" width="900" height="600" loading="lazy"></picture>
+            <picture class="ba-before"><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.jpg")}" alt="{esc(n)} до химчистки" width="900" height="600" loading="lazy"></picture>
+            <span class="ba-tag ba-tag-do">До</span><span class="ba-tag ba-tag-posle">После</span>
+            <span class="ba-line" aria-hidden="true"><span class="ba-knob">{icon("chevron", 14)}{icon("chevron", 14)}</span></span>
+            <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Сравнить до и после: {esc(n)}">
+          </div>
+          {caption if caption is not None else f"<figcaption>{esc(n)}</figcaption>"}
+        </figure>"""
+
+BA_SCRIPT = """<script>
+document.querySelectorAll('.ba').forEach(function(el){
+  var r = el.querySelector('.ba-range');
+  r.addEventListener('input', function(){ el.style.setProperty('--pos', r.value + '%'); });
+});
+</script>"""
+
 def home_parts():
     """Блоки главной: используются на главной и на страницах услуг."""
     hero = f"""
@@ -2633,18 +2658,7 @@ def home_parts():
 </section>
 """
 
-    ba_names = ["Угловой диван", "Матрас", "Детский диванчик", "Диван", "Диван", "Тахта", "Диван-книжка", "Детский матрас"]
-    ba_cards = "".join(f"""
-        <figure class="ba-card">
-          <div class="ba" style="--pos:50%">
-            <picture><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-posle.jpg")}" alt="{esc(n)} после химчистки" width="900" height="600" loading="lazy"></picture>
-            <picture class="ba-before"><source srcset="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.webp")}" type="image/webp"><img class="ba-img" src="{asset(f"assets/img/himchistka-mebeli-do-i-posle-{i}-do.jpg")}" alt="{esc(n)} до химчистки" width="900" height="600" loading="lazy"></picture>
-            <span class="ba-tag ba-tag-do">До</span><span class="ba-tag ba-tag-posle">После</span>
-            <span class="ba-line" aria-hidden="true"><span class="ba-knob">{icon("chevron", 14)}{icon("chevron", 14)}</span></span>
-            <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Сравнить до и после: {esc(n)}">
-          </div>
-          <figcaption>{esc(n)}</figcaption>
-        </figure>""" for i, n in enumerate(ba_names, 1))
+    ba_cards = "".join(ba_card(i, n) for i, n in enumerate(BA_NAMES, 1))
 
     benefits = f"""
 <section class="home-bento home-why">
@@ -2667,6 +2681,7 @@ def home_parts():
       </div>
       <div class="ba-grid">{ba_cards}
       </div>
+      <p class="ba-more"><a class="btn btn-ghost" href="nashi-raboty.html">Все работы с описанием {icon("chevron", 16)}</a></p>
     </div>
   </div>
 </section>
@@ -3159,6 +3174,86 @@ def simple_page(path, title, description, hero_dict, sections, breadcrumbs, sche
         body += h["order"]
     return path, page_shell(path, title, description, body, [breadcrumb_schema(breadcrumbs)] + (schemas or []))
 
+# =========================================================================
+# НАШИ РАБОТЫ
+# =========================================================================
+# Описание по фото «до/после» (номер пары = номер в BA_NAMES, с 1).
+# (номер, заголовок, что было, что сделали, slug услуги)
+WORKS = [
+    (1, "Угловой диван со светлой рогожкой", "На сиденьях тёмные засаленные пятна и разводы там, где сидят чаще всего.",
+     "Засаленные места заранее обработали средством для жировых загрязнений, затем промыли обивку экстрактором от шва до шва.", "uglovogo-divana"),
+    (2, "Матрас", "Жёлтые пятна у края и общая серость ткани.",
+     "Пятна обработали отдельно, весь верх матраса промыли экстрактором и сразу вытянули воду, чтобы влага не ушла в наполнитель.", "matrasa"),
+    (3, "Детский диванчик с каретной стяжкой", "Голубой велюр посерел, на сиденье пятна и следы рук.",
+     "Для велюра взяли pH-нейтральный шампунь, складки стяжки прошли мягкой щёткой, затем экстракция.", "divana"),
+    (4, "Диван с розовой обивкой", "Сиденья и подлокотники потемнели и засалились, ворс свалялся.",
+     "Подлокотники и сиденья обработали от жира, промыли экстрактором, ворс после чистки расчесали щёткой.", "divana"),
+    (5, "Прямой диван", "На сиденье большие разводы от пролитой жидкости.",
+     "Промыли всю плоскость от шва до шва. Если чистить только пятно, вокруг остаётся новый развод.", "divana"),
+    (6, "Тахта", "На сиденье бурое пятно с ореолом.",
+     "Пятно обработали пятновыводителем под тип загрязнения, затем промыли всю тахту экстрактором.", "divana"),
+    (7, "Диван-книжка", "На спальном месте пятна и общее загрязнение ткани.",
+     "Спальное место и спинку промыли экстрактором, пятна обработали заранее.", "divana"),
+    (8, "Детский матрас", "Жёлтые разводы и пятна по всей поверхности.",
+     "Органические пятна обработали энзимным средством, затем промыли матрас экстрактором и вытянули воду.", "matrasa"),
+]
+
+# Видео с выездов. Каждый элемент: dict(title=..., text=..., file="assets/video/<имя>.mp4", poster="assets/video/<имя>.jpg")
+# или dict(title=..., text=..., embed="https://vk.com/video_ext.php?...") для VK Видео / Rutube / YouTube.
+WORK_VIDEOS = []
+
+def work_card(w):
+    i, title, problem, done, slug = w
+    svc = next((x for x in SERVICES if x["slug"] == slug), None)
+    link = f'<a class="info-card-link" href="{service_filename(slug)}">{esc(svc["nav"])} {icon("chevron", 15)}</a>' if svc else ""
+    cap = f"""<figcaption class="work-body">
+            <h3>{esc(title)}</h3>
+            <p><b>Что было.</b> {esc(problem)}</p>
+            <p><b>Что сделали.</b> {esc(done)}</p>
+            {link}
+          </figcaption>"""
+    return ba_card(i, title, cap)
+
+def video_card(v):
+    if v.get("embed"):
+        media = f'<div class="work-video-frame"><iframe src="{esc(v["embed"])}" title="{esc(v["title"])}" loading="lazy" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe></div>'
+    else:
+        poster = f' poster="{asset(v["poster"])}"' if v.get("poster") else ""
+        media = f'<div class="work-video-frame"><video controls preload="none" playsinline{poster}><source src="{asset(v["file"])}" type="video/mp4"></video></div>'
+    text = f'<p>{esc(v["text"])}</p>' if v.get("text") else ""
+    return f'<figure class="work-video">{media}<figcaption><h3>{esc(v["title"])}</h3>{text}</figcaption></figure>'
+
+def render_raboty():
+    path = "nashi-raboty.html"
+    bc = [("Главная", "index.html"), ("Наши работы", None)]
+    grid = f'<div class="work-grid">{"".join(work_card(w) for w in WORKS)}</div>{BA_SCRIPT}'
+    if WORK_VIDEOS:
+        videos = f'<div class="work-video-grid">{"".join(video_card(v) for v in WORK_VIDEOS)}</div>'
+        vsub = "Как проходит химчистка на выезде: от осмотра мебели до результата."
+    else:
+        videos = f"""<div class="bento-card work-video-empty">
+          <div class="why-icon">{gicon("spark", 28)}</div>
+          <h3>Скоро здесь появятся видео</h3>
+          <p>Снимаем процесс чистки на выездах. Пока видео не выложены, попросите мастера показать примеры похожих работ в WhatsApp или Telegram.</p>
+          <a class="info-card-link" href="{SITE["whatsapp"]}" target="_blank" rel="noopener">Написать в WhatsApp {icon("chevron", 15)}</a>
+        </div>"""
+        vsub = ""
+    more = info_cards([
+        ("sofa", "Узнать цену на свою мебель", "Ответьте на несколько вопросов в калькуляторе и получите скидку 10% на первый заказ.", "index.html#kalkulyator", "Рассчитать стоимость"),
+        ("shield", "Если результат не устроил", "Сообщите нам. Приедем и оценим ситуацию повторно.", "garantii.html", "Наши гарантии"),
+        ("spark", "Отзывы клиентов", "Что пишут о чистке клиенты из Калининграда и области.", "otzyvy.html", "Читать отзывы"),
+    ])
+    schema = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "Наши работы",
+              "url": url(path), "description": "Фото мебели до и после выездной химчистки в Калининграде."}
+    return simple_page(path,
+        f"Наши работы: фото до и после химчистки мебели | {SITE['short_name']}",
+        "Фото диванов и матрасов до и после выездной химчистки в Калининграде: что было, что сделал мастер и какой получился результат.",
+        dict(slug="nashi-raboty", h1="Наши работы", lead="Фото мебели до и после химчистки с описанием: что было и что сделал мастер."),
+        [bento_panel("До и после", "Результаты химчистки", grid, sub="Потяните ползунок на фото, чтобы сравнить мебель до и после чистки."),
+         bento_panel("Видео", "Видео с выездов", videos, sub=vsub, sec_id="video"),
+         bento_panel("Ваша мебель", "Хотите такой же результат?", more)],
+        bc, [schema])
+
 def render_otzyvy():
     path = "otzyvy.html"
     bc = [("Главная", "index.html"), ("Отзывы", None)]
@@ -3312,7 +3407,7 @@ def render_karta():
     bc = [("Главная", "index.html"), ("Карта сайта", None)]
     main_slugs = {x["slug"] for x in MAIN_SERVICES}
     groups = [
-        ("Основные страницы", [("index.html", "Главная"), ("uslugi.html", "Все услуги"), ("ceny.html", "Цены"),
+        ("Основные страницы", [("index.html", "Главная"), ("uslugi.html", "Все услуги"), ("ceny.html", "Цены"), ("nashi-raboty.html", "Наши работы"),
                                ("otzyvy.html", "Отзывы"), ("akcii.html", "Акции и скидки"), ("garantii.html", "Гарантии"),
                                ("voprosy-i-otvety.html", "Вопросы и ответы"), ("geografiya.html", "География выезда"),
                                ("o-nas.html", "О компании"), ("kontakty.html", "Контакты"),
@@ -3646,7 +3741,7 @@ def main():
         p, c = render_article(a)
         write(p, c)
 
-    for renderer in (render_otzyvy, render_akcii, render_garantii, render_voprosy, render_geografiya, render_stati, render_karta, render_404, render_spasibo):
+    for renderer in (render_raboty, render_otzyvy, render_akcii, render_garantii, render_voprosy, render_geografiya, render_stati, render_karta, render_404, render_spasibo):
         p, c = renderer()
         write(p, c)
 
