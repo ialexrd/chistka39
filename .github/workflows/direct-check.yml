@@ -1,0 +1,19 @@
+# Проверка токена API Яндекс.Директа. Только чтение (campaigns.get), в кабинете ничего не меняет.
+# Нужен секрет репозитория YANDEX_DIRECT_TOKEN. Запуск вручную: Actions → «Проверка API Директа».
+name: Проверка API Директа
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: campaigns.get (боевой API и песочница)
+        env:
+          YANDEX_DIRECT_TOKEN: ${{ secrets.YANDEX_DIRECT_TOKEN }}
+        run: python3 tools/direct_check.py

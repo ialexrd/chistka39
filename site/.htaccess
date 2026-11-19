@@ -4,6 +4,12 @@ AddDefaultCharset utf-8
 DirectoryIndex index.html
 ErrorDocument 404 /404.html
 
+# Приём заявок: настройки бота и сохранённые заявки закрыты от браузера
+<FilesMatch "^(lead-config\.php|leads\.csv|rate\.json)$">
+Require all denied
+</FilesMatch>
+RedirectMatch 404 ^/lead-data(/|$)
+
 <IfModule mod_rewrite.c>
 RewriteEngine On
 # Переход на https. SSL на SpaceWeb снимает фронтенд-сервер, Apache видит обычный http.

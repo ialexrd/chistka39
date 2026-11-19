@@ -84,22 +84,67 @@
     });
   }
 
-  // Обработка форм заявки — локально формируем сообщение для WhatsApp
-  // (на сайте нет бэкенда; после подключения хостинга форму можно
-  // переключить на отправку в CRM/почту/Telegram-бота).
-  var WHATSAPP_NUMBER = '79323039722';
+  // Отправка заявок: POST на /lead.php (основной хостинг) → Telegram-бот.
+  // Если сервер не ответил (например, сайт открыт с GitHub Pages), показываем
+  // кнопки Telegram и MAX; текст заявки копируется, клиенту остаётся вставить.
+  var FALLBACK_CHATS = [
+    ['Telegram', 'https://t.me/+79323039722'],
+    ['MAX', 'https://max.ru/u/f9LHodD0cOJ1WI7v2AV8Dr6rBF7oEaKvQdY5tPAMSR5phBrhhIfH0vl_Fx8']
+  ];
+  var LEAD_LABELS = { service: 'Услуга', details: 'Что чистим', price: 'Предварительно', name: 'Имя', phone: 'Телефон', comment: 'Комментарий', source: 'Источник' };
 
-  function sendLead(lines, successBox) {
-    var src = trafficSource();
-    if (src) lines.push('Источник: ' + src);
-    goal('lead_form', { form: lines[0] });
-    var message = encodeURIComponent(lines.join('\n'));
-    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + message, '_blank', 'noopener');
-    if (successBox) {
+  function sendLead(data, successBox, form) {
+    data.source = trafficSource() || '';
+    data.page = location.pathname;
+    var hp = form && form.querySelector('[name="website"]');
+    if (hp) data.website = hp.value;
+    var btn = form && form.querySelector('[type="submit"]');
+    if (btn) { btn.disabled = true; btn.setAttribute('data-label', btn.textContent); btn.textContent = 'Отправляем…'; }
+
+    function done(ok) {
+      if (btn) { btn.disabled = false; btn.textContent = btn.getAttribute('data-label'); }
+      if (!successBox) return;
       successBox.classList.add('show');
-      successBox.textContent = 'Спасибо! Заявка сформирована, мы свяжемся с вами в ближайшее время. Также можно позвонить нам напрямую.';
+      if (ok) {
+        // После успешной отправки — на страницу благодарности (сначала отдаём цель в Метрику)
+        goal('lead_form', { form: data.form }, function () { location.href = '/spasibo'; });
+        successBox.textContent = 'Спасибо! Заявка принята, перезвоним в ближайшее время. Если срочно — позвоните нам.';
+        if (form && form.hasAttribute('data-order-form')) form.reset();
+      } else {
+        var lines = [data.form];
+        Object.keys(LEAD_LABELS).forEach(function (k) { if (data[k]) lines.push(LEAD_LABELS[k] + ': ' + data[k]); });
+        var text = lines.join('\n');
+        successBox.innerHTML = 'Не получилось отправить заявку. Позвоните нам или напишите в мессенджер — текст заявки скопируем, останется вставить его в чат:' +
+          FALLBACK_CHATS.map(function (c) {
+            return '<a class="btn btn-primary btn-block" style="margin-top:10px" target="_blank" rel="noopener" href="' + c[1] + '">Написать в ' + c[0] + '</a>';
+          }).join('');
+        successBox.querySelectorAll('a').forEach(function (a) {
+          a.addEventListener('click', function () {
+            try { if (navigator.clipboard) navigator.clipboard.writeText(text); } catch (err) {}
+            goal('lead_form', { form: data.form, via: 'messenger' });
+          });
+        });
+      }
       typograf(successBox);
     }
+
+    fetch('/lead.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function (r) { return r.json(); })
+      .then(function (j) { done(!!(j && j.ok)); })
+      .catch(function () { done(false); });
+  }
+
+  // Невидимое поле-ловушка для спам-ботов в каждой форме
+  function addHoneypot(form) {
+    if (form.querySelector('[name="website"]')) return;
+    var hp = document.createElement('input');
+    hp.type = 'text'; hp.name = 'website'; hp.tabIndex = -1; hp.autocomplete = 'off';
+    hp.setAttribute('aria-hidden', 'true');
+    hp.style.cssText = 'position:absolute;left:-9999px;width:1px;height:1px;opacity:0';
+    form.appendChild(hp);
   }
 
   function phoneOk(phone) {
@@ -114,6 +159,7 @@
   }
 
   document.querySelectorAll('[data-order-form]').forEach(function (form) {
+    addHoneypot(form);
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -124,14 +170,13 @@
 
       if (phone && !phoneOk(phone)) return;
 
-      var lines = ['Заявка с сайта himchistka-mebel-kaliningrad'];
-      if (service && service.value) lines.push('Услуга: ' + service.value);
-      if (name && name.value) lines.push('Имя: ' + name.value);
-      if (phone && phone.value) lines.push('Телефон: ' + phone.value);
-      if (comment && comment.value) lines.push('Комментарий: ' + comment.value);
-
-      sendLead(lines, form.parentElement.querySelector('.form-success'));
-      form.reset();
+      sendLead({
+        form: 'Заявка с сайта',
+        name: name ? name.value : '',
+        phone: phone ? phone.value : '',
+        service: service ? service.value : '',
+        comment: comment ? comment.value : ''
+      }, form.parentElement.querySelector('.form-success'), form);
     });
   });
 
@@ -254,6 +299,7 @@
       root.innerHTML = html;
       typograf(root);
       bindTel(root);
+      root.querySelectorAll('form').forEach(addHoneypot);
     }
     function next() { step = Math.min(step + 1, steps().length - 1); render(); }
 
@@ -289,13 +335,13 @@
       var form = e.target, phone = form.querySelector('[name="phone"]');
       if (!phoneOk(phone)) return;
       var p = price();
-      sendLead([
-        'Заявка из калькулятора на сайте',
-        'Что чистим: ' + summary(),
-        'Предварительно: ' + range(p[0], p[1]) + ', со скидкой 10%: ' + range(r10(p[0] * 0.9), r10(p[1] * 0.9)),
-        'Имя: ' + form.querySelector('[name="name"]').value,
-        'Телефон: ' + phone.value
-      ], form.querySelector('.form-success'));
+      sendLead({
+        form: 'Заявка из калькулятора',
+        details: summary(),
+        price: range(p[0], p[1]) + ', со скидкой 10%: ' + range(r10(p[0] * 0.9), r10(p[1] * 0.9)),
+        name: form.querySelector('[name="name"]').value,
+        phone: phone.value
+      }, form.querySelector('.form-success'), form);
     });
 
     if (cfg.preselect && items[cfg.preselect]) { st.item = cfg.preselect; step = 1; }
@@ -326,7 +372,6 @@
     if (!a) return;
     var href = a.getAttribute('href');
     if (/^tel:/.test(href)) goal('call_click');
-    else if (/wa\.me|whatsapp/i.test(href)) goal('whatsapp_click');
     else if (/t\.me|telegram|max\.ru/i.test(href)) goal('messenger_click');
   });
 
@@ -391,10 +436,16 @@
   var CFG = window.SITE_ANALYTICS || {};
   var analyticsOn = false;
 
-  function goal(name, params) {
-    if (!analyticsOn) return;
-    if (CFG.ym && window.ym) window.ym(+CFG.ym, 'reachGoal', name, params || {});
+  // cb (необязательно) вызывается после того, как Метрика приняла цель, но не позже чем через 1,2 с
+  function goal(name, params, cb) {
+    var called = false;
+    function fire() { if (!called && cb) { called = true; cb(); } }
+    if (!analyticsOn) { fire(); return; }
     if (CFG.ga && window.gtag) window.gtag('event', name, params || {});
+    if (CFG.ym && window.ym) {
+      window.ym(+CFG.ym, 'reachGoal', name, params || {}, fire);
+      setTimeout(fire, 1200);
+    } else fire();
   }
 
   // Сам код счётчиков стоит в <head> каждой страницы (generate.py → analytics_config)

@@ -1,4 +1,4 @@
-# Проверка ответа хостинга (редиректы http/https/www). Запускается вручную.
+# Проверка ответа хостинга (редиректы http/https/www, ответ роботам). Запускается вручную.
 name: Проверка сайта
 on: workflow_dispatch
 jobs:
@@ -9,4 +9,11 @@ jobs:
           for u in http://chistka-39.ru/ https://chistka-39.ru/ http://www.chistka-39.ru/ https://www.chistka-39.ru/ http://chistka-39.ru/uslugi.html; do
             echo "== $u"; curl -sS -o /dev/null -D - -m 20 "$u" | grep -iE '^(HTTP|location|strict)' || true
           done
-
+          YA='Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)'
+          GO='Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+          for p in / /uslugi /ceny /himchistka-divana /himchistka-kresla /robots.txt /sitemap.xml; do
+            for ua in "$YA" "$GO"; do
+              echo "== $p [${ua:26:9}]"; curl -sS -o /tmp/b -D - -m 20 -A "$ua" "https://chistka-39.ru$p" | grep -iE '^(HTTP|location|content-type|x-robots|content-length)' || true
+              grep -oiE '<meta name="robots"[^>]*>|<link rel="canonical"[^>]*>' /tmp/b | head -2; wc -c < /tmp/b
+            done
+          done
