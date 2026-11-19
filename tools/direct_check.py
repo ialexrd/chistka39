@@ -38,6 +38,16 @@ def call(url):
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
             return r.status, json.load(r), r.headers.get("Units")
+    except urllib.error.URLError as e:
+        if not isinstance(e, urllib.error.HTTPError):
+            host = url.split("/")[2]
+            return 0, {"error": {"error_code": "сеть", "error_string": f"не удалось подключиться к {host}",
+                                 "error_detail": str(e.reason)}}, None
+        try:
+            data = json.load(e)
+        except Exception:
+            data = {"error": {"error_code": e.code, "error_string": str(e), "error_detail": ""}}
+        return e.code, data, e.headers.get("Units")
     except urllib.error.HTTPError as e:
         try:
             data = json.load(e)
