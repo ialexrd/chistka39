@@ -121,7 +121,6 @@
         successBox.querySelectorAll('a').forEach(function (a) {
           a.addEventListener('click', function () {
             try { if (navigator.clipboard) navigator.clipboard.writeText(text); } catch (err) {}
-            goal('lead_form', { form: data.form, via: 'messenger' });
           });
         });
       }
@@ -353,6 +352,7 @@
   scope.querySelectorAll('input[type="tel"]:not([data-tel-bound])').forEach(function (input) {
     input.setAttribute('data-tel-bound', '');
     input.addEventListener('input', function () {
+      input.setCustomValidity('');
       var digits = input.value.replace(/\D/g, '').replace(/^7/, '').replace(/^8/, '');
       digits = digits.substring(0, 10);
       var out = '+7';
